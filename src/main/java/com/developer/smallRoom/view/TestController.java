@@ -1,4 +1,4 @@
-package com.developer.smallRoom;
+package com.developer.smallRoom.view;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
