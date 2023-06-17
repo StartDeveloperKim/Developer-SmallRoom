@@ -25,7 +25,7 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
     }
 
     private OAuth2User saveOrUpdate(OAuth2User oAuth2User) {
-        CustomOAuth2Member customOAuth2Member = new CustomOAuth2Member(oAuth2User);
+        CustomOAuth2Member customOAuth2Member = new CustomOAuth2Member(oAuth2User.getAttributes());
         Optional<Member> member = memberRepository.findByGitHubId(customOAuth2Member.getId());
         if (member.isEmpty()) {
             Member savedMember = memberRepository.save(customOAuth2Member.toMember());

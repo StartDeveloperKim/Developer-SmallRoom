@@ -22,8 +22,8 @@ public class CustomOAuth2Member implements OAuth2User{
     private Collection<? extends GrantedAuthority> authorities;
     private final Map<String, Object> attributes;
 
-    public CustomOAuth2Member(OAuth2User oAuth2User) {
-        this.attributes = oAuth2User.getAttributes();
+    public CustomOAuth2Member(Map<String, Object> attributes) {
+        this.attributes = attributes;
 
         this.id = (String) attributes.get("login");
         this.name = (String) attributes.get("name");
