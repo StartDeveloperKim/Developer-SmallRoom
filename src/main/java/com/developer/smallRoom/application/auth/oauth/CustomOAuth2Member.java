@@ -51,4 +51,8 @@ public class CustomOAuth2Member implements OAuth2User{
     public void setRole(Role role) {
         this.authorities = Collections.singleton(new SimpleGrantedAuthority(role.getKey()));
     }
+
+    public String getRole() {
+        return authorities.iterator().next().getAuthority();
+    }
 }

@@ -1,5 +1,7 @@
 package com.developer.smallRoom.config;
 
+import com.developer.smallRoom.application.auth.jwt.TokenAuthenticationFilter;
+import com.developer.smallRoom.application.auth.jwt.TokenProvider;
 import com.developer.smallRoom.application.auth.oauth.OAuth2SuccessHandler;
 import com.developer.smallRoom.application.auth.oauth.OAuth2UserCustomService;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -18,6 +21,7 @@ public class WebSecurityConfig {
 
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
     private final OAuth2UserCustomService oAuth2UserCustomService;
+    private final TokenProvider tokenProvider;
 
     @Bean
     public WebSecurityCustomizer configure() {
@@ -46,6 +50,13 @@ public class WebSecurityConfig {
                 .userInfoEndpoint()
                 .userService(oAuth2UserCustomService);
 
+        http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
+    }
+
+    @Bean
+    public TokenAuthenticationFilter tokenAuthenticationFilter() {
+        return new TokenAuthenticationFilter(tokenProvider);
     }
 }

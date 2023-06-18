@@ -1,9 +1,11 @@
 package com.developer.smallRoom.jwt;
 
 import com.developer.smallRoom.application.auth.jwt.JwtProperties;
+import com.developer.smallRoom.application.auth.jwt.MemberPrincipal;
 import com.developer.smallRoom.application.auth.jwt.TokenProvider;
 import com.developer.smallRoom.application.auth.oauth.CustomOAuth2Member;
 import com.developer.smallRoom.domain.member.Member;
+import com.developer.smallRoom.domain.member.Role;
 import com.developer.smallRoom.domain.member.repository.MemberRepository;
 import io.jsonwebtoken.Jwts;
 import org.assertj.core.api.Assertions;
@@ -11,6 +13,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.Authentication;
 
 import java.time.Duration;
 import java.util.Date;
@@ -78,5 +81,25 @@ public class TokenProviderTest {
 
         //then
         assertThat(result).isTrue();
+    }
+
+    @DisplayName("getAuthentication() : 토큰 기반으로 인증정보를 가져온다.")
+    @Test
+    void getAuthentication() {
+        //given
+        String subject = "gitHubId";
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("name", "memberName");
+        claims.put("role", Role.USER.getKey());
+
+        String accessToken = JwtFactory.builder()
+                .subject("gitHubId")
+                .claims(claims).build().createToken(jwtProperties);
+        //when
+        Authentication authentication = tokenProvider.getAuthentication(accessToken);
+
+        //then
+        assertThat(((MemberPrincipal) authentication.getPrincipal()).getUsername()).isEqualTo(subject);
+        assertThat(((MemberPrincipal) authentication.getPrincipal()).getRole()).isEqualTo(Role.USER.getKey());
     }
 }

@@ -1,15 +1,22 @@
 package com.developer.smallRoom.application.auth.jwt;
 
 import com.developer.smallRoom.application.auth.oauth.CustomOAuth2Member;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
@@ -32,6 +39,7 @@ public class TokenProvider {
                 .setExpiration(expiry)
                 .setSubject(oAuth2Member.getId())
                 .claim("name", oAuth2Member.getName())
+                .claim("role", oAuth2Member.getRole())
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
                 .compact();
     }
@@ -45,6 +53,29 @@ public class TokenProvider {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public Authentication getAuthentication(String token) {
+        Claims claims = getClaims(token);
+        String memberId = getMemberId(claims);
+        String role = getRole(claims);
+        Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority(role));
+
+        return new UsernamePasswordAuthenticationToken(new MemberPrincipal(memberId, role, authorities), token, authorities);
+    }
+
+    private String getMemberId(Claims claims) {
+        return claims.getSubject();
+    }
+    private String getRole(Claims claims) {
+        return claims.get("role", String.class);
+    }
+
+    private Claims getClaims(String token) {
+        return Jwts.parser()
+                .setSigningKey(jwtProperties.getSecretKey())
+                .parseClaimsJws(token)
+                .getBody();
     }
 
 }
