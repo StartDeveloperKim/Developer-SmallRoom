@@ -38,3 +38,4 @@ out/
 
 application-oauth.properties
 application-jwt.properties
+application-s3.properties

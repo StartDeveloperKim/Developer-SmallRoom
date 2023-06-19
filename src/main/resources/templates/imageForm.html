@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!--    테스트 파일이다. -->
+    <title>이미지 업로드</title>
+</head>
+<body>
+<form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" id="imageInput" name="image">
+    <button type="submit">업로드</button>
+</form>
+
+<script>
+    const form = document.getElementById('uploadForm');
+    const imageInput = document.getElementById('imageInput');
+
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const formData = new FormData();
+        formData.append('image', imageInput.files[0]);
+
+        fetch('/api/image', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (response.ok) {
+                    console.log('이미지 업로드 성공');
+                } else {
+                    console.log('이미지 업로드 실패');
+                }
+            })
+            .catch(error => {
+                console.log('이미지 업로드 오류', error);
+            });
+    });
+</script>
+</body>
+</html>
