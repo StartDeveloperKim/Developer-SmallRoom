@@ -26,6 +26,8 @@ public class Article {
     @Column(name = "title", nullable = false, length = 255)
     private String title;
 
+    // TODO :: subTitle을 두어 메인페이지에서 해당프로젝트를 간단히 설명할 수 있도록하자
+
     @Column(name = "content", nullable = false)
     private String content;
 
@@ -42,6 +44,13 @@ public class Article {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    // TODO :: 좋아요 수, 댓글 수 통계컬럼을 두고 성능을 최적화하자.
+    @Column(name = "like_count", nullable = false)
+    private int likeCount;
+
+    @Column(name = "comment_count", nullable = false)
+    private int commentCount;
+
     @Builder
     public Article(String title, String content, String thumbnailUrl, Member member) {
         this.title = title;
@@ -49,6 +58,8 @@ public class Article {
         this.thumbnailUrl = thumbnailUrl;
         this.member = member;
         this.hit = 0;
+        this.likeCount = 0;
+        this.commentCount = 0;
     }
 
     public void update(ArticleUpdateRequest request) {
