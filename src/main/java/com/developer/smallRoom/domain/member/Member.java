@@ -25,10 +25,10 @@ public class Member {
     @Column(name = "gitHub_id", nullable = false)
     private String gitHubId;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "image_url", nullable = false)
+    @Column(name = "image_url")
     private String imageUrl;
 
     @Enumerated(EnumType.STRING)
