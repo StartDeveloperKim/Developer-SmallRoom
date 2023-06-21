@@ -1,10 +1,12 @@
 package com.developer.smallRoom.application.auth.jwt;
 
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
+@ToString
 public class MemberPrincipal implements UserDetails {
 
     private final String memberGitHubId;

@@ -1,5 +1,7 @@
 package com.developer.smallRoom.domain.article;
 
+import com.developer.smallRoom.domain.comment.Comment;
+import com.developer.smallRoom.domain.like.ArticleLike;
 import com.developer.smallRoom.domain.member.Member;
 import com.developer.smallRoom.dto.article.request.ArticleUpdateRequest;
 import jakarta.persistence.*;
@@ -11,6 +13,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -45,11 +49,17 @@ public class Article {
     private Member member;
 
     // TODO :: 좋아요 수, 댓글 수 통계컬럼을 두고 성능을 최적화하자.
-    @Column(name = "like_count", nullable = false)
-    private int likeCount;
+//    @Column(name = "like_count", nullable = false)
+//    private int likeCount;
+//
+//    @Column(name = "comment_count", nullable = false)
+//    private int commentCount;
 
-    @Column(name = "comment_count", nullable = false)
-    private int commentCount;
+    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<ArticleLike> articleLikes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Comment> comments = new ArrayList<>();
 
     @Builder
     public Article(String title, String content, String thumbnailUrl, Member member) {
@@ -58,8 +68,8 @@ public class Article {
         this.thumbnailUrl = thumbnailUrl;
         this.member = member;
         this.hit = 0;
-        this.likeCount = 0;
-        this.commentCount = 0;
+//        this.likeCount = 0;
+//        this.commentCount = 0;
     }
 
     public void update(ArticleUpdateRequest request) {
@@ -73,5 +83,19 @@ public class Article {
         this.hit++;
     }
 
+    public void addArticleLike(ArticleLike articleLike) {
+        this.articleLikes.add(articleLike);
+    }
 
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
+    }
+
+//    public void addLikeCount() {
+//        this.likeCount++;
+//    }
+//
+//    public void addCommentCount() {
+//        this.commentCount++;
+//    }
 }

@@ -23,6 +23,8 @@ import java.time.Duration;
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final String REFRESH_TOKEN_COOKIE_NAME = "refresh_token";
+    private final String ACCESS_TOKEN_COOKIE_NAME = "access_token";
+
     private final Duration REFRESH_TOKEN_DURATION = Duration.ofDays(14);
     private final Duration ACCESS_TOKEN_DURATION = Duration.ofDays(1);
     private final String REDIRECT_PATH = "/";
@@ -40,11 +42,10 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         addRefreshTokenToCookie(request, response, refreshToken);
 
         String accessToken = tokenProvider.generateToken(oAuth2Member, ACCESS_TOKEN_DURATION);
-        String targetUrl = getTargetUrl(accessToken);
+        addAccessTokenToCookie(request, response, accessToken);
 
         clearAuthenticationAttributes(request, response);
-
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+        getRedirectStrategy().sendRedirect(request, response, REDIRECT_PATH);
     }
 
     private void saveRefreshToken(String memberId, String newRefreshToken) {
@@ -60,6 +61,13 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         CookieUtil.deleteCookie(request, response, REFRESH_TOKEN_COOKIE_NAME);
         CookieUtil.addCookie(response, REFRESH_TOKEN_COOKIE_NAME, refreshToken, cookieMaxAge);
+    }
+
+    private void addAccessTokenToCookie(HttpServletRequest request, HttpServletResponse response, String accessToken) {
+        int cookieMaxAge = (int) ACCESS_TOKEN_DURATION.toSeconds();
+
+        CookieUtil.deleteCookie(request, response, ACCESS_TOKEN_COOKIE_NAME);
+        CookieUtil.addCookie(response, ACCESS_TOKEN_COOKIE_NAME, accessToken, cookieMaxAge);
     }
 
     private void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {

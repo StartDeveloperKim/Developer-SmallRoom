@@ -1,11 +1,464 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
-    <title>로그인 테스트</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+
+    <link href="https://unpkg.com/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/@yaireo/tagify"></script>
+
+    <title>토이프로젝트 저장소</title>
+
+    <!-- 나중에 css, js 분리 -->
+    <link rel="stylesheet" href="/css/index.css">
 </head>
 <body>
-<h1>홈페이지</h1>
-<a href="/oauth2/authorization/github">깃허브 로그인</a>
+<header class="h-20">
+    <nav class="bg-slate-200 border-gray-200 px-4 lg:px-6 py-5 dark:bg-gray-800">
+        <div class="flex flex-wrap justify-center my-auto py-10">
+            <div class="flex items-center">
+                <div class="flex items-center justify-center mr-3 h-12 sm:h-16">
+                    <a href="/"><img src="/image/logo.png" alt="Flowbite Logo" /></a>
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-wrap justify-end items-center mx-auto max-w-screen-xl">
+            <div class="flex items-center lg:order-3">
+                <a href="/oauth2/authorization/github" sec:authorize="isAnonymous()"
+                   class="text-gray-800 dark:text-white hover:bg-orange-50 focus:ring-4 focus:ring-orange-50 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
+                    <i class="fab fa-brands fa-github fa-2xl"></i>
+                    <strong class="text-xl">로그인</strong>
+                </a>
+                 <a href="/newpost" sec:authorize="isAuthenticated()"
+                    class="text-gray-800 dark:text-white hover:bg-orange-50 focus:ring-4 focus:ring-orange-50 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
+                    <i class="fas fa-light fa-pen fa-2xl"></i>
+                    <strong class="text-xl">글 작성</strong>
+                </a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main class="container mx-auto px-10 mt-40">
+    <div class="flex mb-4">
+        <div class="grow h-14 items-center">
+            <h1 class="text-2xl font-semibold px-3  mt-2">이번 주 인기 프로젝트</h1>
+        </div>
+
+    </div>
+    <div class="flex flex-wrap justify-center overflow-x-auto">
+        <div class="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 mb-4 px-2">
+            <div class="bg-white rounded-lg shadow-lg transition duration-500 transform hover:-translate-y-1 hover:shadow-xl">
+                <div
+                        class="block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
+                    <a href="#!">
+                        <img class="rounded-t-lg" src="https://tecdn.b-cdn.net/img/new/standard/nature/184.jpg" alt="" />
+                    </a>
+                    <div class="p-6">
+                        <h5 class="mb-2 text-xl font-bold leading-normal text-neutral-800 dark:text-neutral-50 truncate">
+                            블로그 프로젝트
+                        </h5>
+                        <p class="mb-4 text-base text-neutral-600 dark:text-neutral-200 truncate">
+                            Some quick example text to build on the card title and make up the
+                            bulk of the card's content.
+                        </p>
+                        <a href="/">
+                            <p class="text-black font-extralight">
+                                <i class="fab fa-brands fa-github"></i>
+                                <span>StartDeveloperKim</span>
+                            </p>
+                        </a>
+                        <div class="flex mt-2">
+                            <div class="flex-auto text-black font-light text-xs">
+                                2023월3월4일
+                            </div>
+                            <div class="flex-auto text-black font-thin text-sm flex items-center justify-end">
+                                <div class="flex">
+                                    <div class="flex-auto items-center justify-end">
+                                        <i class="fas fa-regular fa-eye"></i><span> 10 </span>
+                                    </div>
+                                    <div class="flex-auto">
+                                        <i class="fas fa-thin fa-heart"></i><span> 15 </span>
+                                    </div>
+                                    <div class="flex-auto">
+                                        <i class="fas fa-regular fa-comment fa-sm"></i><span> 255 </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 mb-4 px-2">
+            <div class="bg-white rounded-lg shadow-lg transition duration-300 transform hover:-translate-y-1 hover:shadow-xl">
+                <div
+                        class="block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
+                    <a href="#!">
+                        <img class="rounded-t-lg" src="https://tecdn.b-cdn.net/img/new/standard/nature/184.jpg" alt="" />
+                    </a>
+                    <div class="p-6">
+                        <h5 class="mb-2 text-xl font-bold leading-normal text-neutral-800 dark:text-neutral-50 truncate">
+                            블로그 프로젝트
+                        </h5>
+                        <p class="mb-4 text-base text-neutral-600 dark:text-neutral-200 truncate">
+                            Some quick example text to build on the card title and make up the
+                            bulk of the card's content.
+                        </p>
+                        <a href="/">
+                            <p class="text-black font-extralight">
+                                <i class="fab fa-brands fa-github"></i>
+                                <span>StartDeveloperKim</span>
+                            </p>
+                        </a>
+                        <div class="flex mt-2">
+                            <div class="flex-auto text-black font-light text-xs">
+                                2023월3월4일
+                            </div>
+                            <div class="flex-auto text-black font-thin text-sm flex items-center justify-end">
+                                <div class="flex">
+                                    <div class="flex-auto items-center justify-end">
+                                        <i class="fas fa-regular fa-eye"></i><span> 10 </span>
+                                    </div>
+                                    <div class="flex-auto">
+                                        <i class="fas fa-thin fa-heart"></i><span> 15 </span>
+                                    </div>
+                                    <div class="flex-auto">
+                                        <i class="fas fa-regular fa-comment fa-sm"></i><span> 255 </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 mb-4 px-2">
+            <div class="bg-white rounded-lg shadow-lg transition duration-300 transform hover:-translate-y-1 hover:shadow-xl">
+                <div
+                        class="block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
+                    <a href="#!">
+                        <img class="rounded-t-lg" src="https://tecdn.b-cdn.net/img/new/standard/nature/184.jpg" alt="" />
+                    </a>
+                    <div class="p-6">
+                        <h5 class="mb-2 text-xl font-bold leading-normal text-neutral-800 dark:text-neutral-50 truncate">
+                            블로그 프로젝트
+                        </h5>
+                        <p class="mb-4 text-base text-neutral-600 dark:text-neutral-200 truncate">
+                            Some quick example text to build on the card title and make up the
+                            bulk of the card's content.
+                        </p>
+                        <a href="/">
+                            <p class="text-black font-extralight">
+                                <i class="fab fa-brands fa-github"></i>
+                                <span>StartDeveloperKim</span>
+                            </p>
+                        </a>
+                        <div class="flex mt-2">
+                            <div class="flex-auto text-black font-light text-xs">
+                                2023월3월4일
+                            </div>
+                            <div class="flex-auto text-black font-thin text-sm flex items-center justify-end">
+                                <div class="flex">
+                                    <div class="flex-auto items-center justify-end">
+                                        <i class="fas fa-regular fa-eye"></i><span> 10 </span>
+                                    </div>
+                                    <div class="flex-auto">
+                                        <i class="fas fa-thin fa-heart"></i><span> 15 </span>
+                                    </div>
+                                    <div class="flex-auto">
+                                        <i class="fas fa-regular fa-comment fa-sm"></i><span> 255 </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 mb-4 px-2">
+            <div class="bg-white rounded-lg shadow-lg transition duration-300 transform hover:-translate-y-1 hover:shadow-xl">
+                <div
+                        class="block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
+                    <a href="#!">
+                        <img class="rounded-t-lg" src="https://tecdn.b-cdn.net/img/new/standard/nature/184.jpg" alt="" />
+                    </a>
+                    <div class="p-6">
+                        <h5 class="mb-2 text-xl font-bold leading-normal text-neutral-800 dark:text-neutral-50 truncate">
+                            블로그 프로젝트
+                        </h5>
+                        <p class="mb-4 text-base text-neutral-600 dark:text-neutral-200 truncate">
+                            Some quick example text to build on the card title and make up the
+                            bulk of the card's content.
+                        </p>
+                        <a href="/">
+                            <p class="text-black font-extralight">
+                                <i class="fab fa-brands fa-github"></i>
+                                <span>StartDeveloperKim</span>
+                            </p>
+                        </a>
+                        <div class="flex mt-2">
+                            <div class="flex-auto text-black font-light text-xs">
+                                2023월3월4일
+                            </div>
+                            <div class="flex-auto text-black font-thin text-sm flex items-center justify-end">
+                                <div class="flex">
+                                    <div class="flex-auto items-center justify-end">
+                                        <i class="fas fa-regular fa-eye"></i><span> 10 </span>
+                                    </div>
+                                    <div class="flex-auto">
+                                        <i class="fas fa-thin fa-heart"></i><span> 15 </span>
+                                    </div>
+                                    <div class="flex-auto">
+                                        <i class="fas fa-regular fa-comment fa-sm"></i><span> 255 </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="border-t border-gray-300 my-4">
+
+    <h1 class="text-2xl font-semibold mb-4 mx-auto px-3">최근 프로젝트</h1>
+    <!-- 이 아래는 무한스크롤 기능으로 최신순으로 조회하자 -->
+
+    <div class="container">
+        <div class="grow h-12">
+            <form>
+                <label for="default-search"
+                       class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+                <div class="relative">
+                    <input type="search" id="default-search" class="w-full p-2 border border-gray-300 rounded-md pl-10"
+                           placeholder="기술스택 검색" required>
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor"
+                             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+    <div class="flex flex-wrap justify-center mt-5">
+        <div class="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 mb-4 px-2">
+            <div
+                    class="bg-white rounded-lg shadow-lg transition duration-300 transform hover:-translate-y-1 hover:shadow-xl">
+                <div
+                        class="block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
+                    <a href="#!">
+                        <img class="rounded-t-lg" src="https://tecdn.b-cdn.net/img/new/standard/nature/184.jpg" alt="" />
+                    </a>
+                    <div class="p-6">
+                        <h5 class="mb-2 text-xl font-bold leading-normal text-neutral-800 dark:text-neutral-50 truncate">
+                            블로그 프로젝트
+                        </h5>
+                        <p class="mb-4 text-base text-neutral-600 dark:text-neutral-200 truncate">
+                            Some quick example text to build on the card title and make up the
+                            bulk of the card's content.
+                        </p>
+                        <a href="/">
+                            <p class="text-black font-extralight">
+                                <i class="fab fa-brands fa-github"></i>
+                                <span>StartDeveloperKim</span>
+                            </p>
+                        </a>
+                        <div class="flex mt-2">
+                            <div class="flex-auto text-black font-light text-xs">
+                                2023월3월4일
+                            </div>
+                            <div class="flex-auto text-black font-thin text-sm flex items-center justify-end">
+                                <div class="flex">
+                                    <div class="flex-auto items-center justify-end">
+                                        <i class="fas fa-regular fa-eye"></i><span> 10 </span>
+                                    </div>
+                                    <div class="flex-auto">
+                                        <i class="fas fa-thin fa-heart"></i><span> 15 </span>
+                                    </div>
+                                    <div class="flex-auto">
+                                        <i class="fas fa-regular fa-comment fa-sm"></i><span> 255 </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 mb-4 px-2">
+            <div
+                    class="bg-white rounded-lg shadow-lg transition duration-300 transform hover:-translate-y-1 hover:shadow-xl">
+                <div
+                        class="block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
+                    <a href="#!">
+                        <img class="rounded-t-lg" src="https://tecdn.b-cdn.net/img/new/standard/nature/184.jpg" alt="" />
+                    </a>
+                    <div class="p-6">
+                        <h5 class="mb-2 text-xl font-bold leading-normal text-neutral-800 dark:text-neutral-50 truncate">
+                            블로그 프로젝트
+                        </h5>
+                        <p class="mb-4 text-base text-neutral-600 dark:text-neutral-200 truncate">
+                            Some quick example text to build on the card title and make up the
+                            bulk of the card's content.
+                        </p>
+                        <a href="/">
+                            <p class="text-black font-extralight">
+                                <i class="fab fa-brands fa-github"></i>
+                                <span>StartDeveloperKim</span>
+                            </p>
+                        </a>
+                        <div class="flex mt-2">
+                            <div class="flex-auto text-black font-light text-xs">
+                                2023월3월4일
+                            </div>
+                            <div class="flex-auto text-black font-thin text-sm flex items-center justify-end">
+                                <div class="flex">
+                                    <div class="flex-auto items-center justify-end">
+                                        <i class="fas fa-regular fa-eye"></i><span> 10 </span>
+                                    </div>
+                                    <div class="flex-auto">
+                                        <i class="fas fa-thin fa-heart"></i><span> 15 </span>
+                                    </div>
+                                    <div class="flex-auto">
+                                        <i class="fas fa-regular fa-comment fa-sm"></i><span> 255 </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 mb-4 px-2">
+            <div
+                    class="bg-white rounded-lg shadow-lg transition duration-300 transform hover:-translate-y-1 hover:shadow-xl">
+                <div
+                        class="block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
+                    <a href="#!">
+                        <img class="rounded-t-lg" src="https://tecdn.b-cdn.net/img/new/standard/nature/184.jpg" alt="" />
+                    </a>
+                    <div class="p-6">
+                        <h5 class="mb-2 text-xl font-bold leading-normal text-neutral-800 dark:text-neutral-50 truncate">
+                            블로그 프로젝트
+                        </h5>
+                        <p class="mb-4 text-base text-neutral-600 dark:text-neutral-200 truncate">
+                            Some quick example text to build on the card title and make up the
+                            bulk of the card's content.
+                        </p>
+                        <a href="/">
+                            <p class="text-black font-extralight">
+                                <i class="fab fa-brands fa-github"></i>
+                                <span>StartDeveloperKim</span>
+                            </p>
+                        </a>
+                        <div class="flex mt-2">
+                            <div class="flex-auto text-black font-light text-xs">
+                                2023월3월4일
+                            </div>
+                            <div class="flex-auto text-black font-thin text-sm flex items-center justify-end">
+                                <div class="flex">
+                                    <div class="flex-auto items-center justify-end">
+                                        <i class="fas fa-regular fa-eye"></i><span> 10 </span>
+                                    </div>
+                                    <div class="flex-auto">
+                                        <i class="fas fa-thin fa-heart"></i><span> 15 </span>
+                                    </div>
+                                    <div class="flex-auto">
+                                        <i class="fas fa-regular fa-comment fa-sm"></i><span> 255 </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 mb-4 px-2">
+            <div
+                    class="bg-white rounded-lg shadow-lg transition duration-300 transform hover:-translate-y-1 hover:shadow-xl">
+                <div
+                        class="block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
+                    <a href="#!">
+                        <img class="rounded-t-lg" src="https://tecdn.b-cdn.net/img/new/standard/nature/184.jpg" alt="" />
+                    </a>
+                    <div class="p-6">
+                        <h5 class="mb-2 text-xl font-bold leading-normal text-neutral-800 dark:text-neutral-50 truncate">
+                            블로그 프로젝트
+                        </h5>
+                        <p class="mb-4 text-base text-neutral-600 dark:text-neutral-200 truncate">
+                            Some quick example text to build on the card title and make up the
+                            bulk of the card's content.
+                        </p>
+                        <a href="/">
+                            <p class="text-black font-extralight">
+                                <i class="fab fa-brands fa-github"></i>
+                                <span>StartDeveloperKim</span>
+                            </p>
+                        </a>
+                        <div class="flex mt-2">
+                            <div class="flex-auto text-black font-light text-xs">
+                                2023월3월4일
+                            </div>
+                            <div class="flex-auto text-black font-thin text-sm flex items-center justify-end">
+                                <div class="flex">
+                                    <div class="flex-auto items-center justify-end">
+                                        <i class="fas fa-regular fa-eye"></i><span> 10 </span>
+                                    </div>
+                                    <div class="flex-auto">
+                                        <i class="fas fa-thin fa-heart"></i><span> 15 </span>
+                                    </div>
+                                    <div class="flex-auto">
+                                        <i class="fas fa-regular fa-comment fa-sm"></i><span> 255 </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div id="scrollToTopButton" class="scroll-to-top" onclick="scrollToTop()">
+    <i class="fas fa-arrow-up"></i>
+</div>
+
+<footer class="bg-gray-100 py-4">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-wrap items-center justify-between">
+            <div class="text-sm text-gray-500">
+                <p>© 2023 TOY PROJECT WORLD. All Rights Reserved.</p>
+                <p>Email: <a href="mailto:your-email@example.com">your-email@example.com</a></p>
+            </div>
+            <ul class="flex space-x-4 mr-16">
+                <li><a href="#" class="text-gray-500 hover:text-gray-700">Blog</a></li>
+                <li><a href="#" class="text-gray-500 hover:text-gray-700">GitHub</a></li>
+            </ul>
+
+        </div>
+    </div>
+</footer>
+
 </body>
+<script src="/js/index.js"></script>
+<script src="/js/scroll.js"></script>
 </html>

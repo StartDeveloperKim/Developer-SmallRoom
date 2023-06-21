@@ -33,6 +33,16 @@ public class CookieUtil {
         }
     }
 
+    public static String getCookie(HttpServletRequest request, String key) {
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies) {
+            if (key.equals(cookie.getName())) {
+                return cookie.getValue();
+            }
+        }
+        return "" ;
+    }
+
     public static String serialize(Object obj) {
         return Base64.getUrlEncoder()
                 .encodeToString(SerializationUtils.serialize(obj));

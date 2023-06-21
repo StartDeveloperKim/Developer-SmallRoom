@@ -1,5 +1,6 @@
 package com.developer.smallRoom.application.auth.jwt;
 
+import com.developer.smallRoom.global.util.CookieUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,16 +19,15 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private final TokenProvider tokenProvider;
 
-    private final static String HEADER_AUTHORIZATION = "Authorization";
-    private final static String TOKEN_PREFIX = "Bearer ";
+    private final static String ACCESS_TOKEN = "access_token";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String authorizationHeader = request.getHeader(HEADER_AUTHORIZATION);
-        String token = getAccessToken(authorizationHeader);
+        String token = getAccessToken(request);
 
-        log.info("tokenAuthenticationFilter start");
-        if (tokenProvider.validToken(token)) {
+        log.info("tokenAuthenticationFilter start : {}", request.getRequestURI());
+
+        if (token.length()!=0 && tokenProvider.validToken(token)) {
             log.info("token : {}", token);
             Authentication authentication = tokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -36,11 +36,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private String getAccessToken(String authorizationHeader) {
-        if (authorizationHeader != null && authorizationHeader.startsWith(TOKEN_PREFIX)) {
-            return authorizationHeader.substring(TOKEN_PREFIX.length());
-        }
-
-        return null;
+    private String getAccessToken(HttpServletRequest request) {
+        return CookieUtil.getCookie(request, ACCESS_TOKEN);
     }
 }

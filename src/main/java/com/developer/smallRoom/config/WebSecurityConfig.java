@@ -25,8 +25,10 @@ public class WebSecurityConfig {
 
     @Bean
     public WebSecurityCustomizer configure() {
-        return (web ->
-                web.ignoring().requestMatchers("/img/**", "/css/**", "/js/**", "/favicon"));
+        return web -> {
+            web.ignoring()
+                    .requestMatchers("/image/**", "/css/**", "/js/**", "/favicon");
+        };
     }
 
     @Bean
@@ -50,13 +52,8 @@ public class WebSecurityConfig {
                 .userInfoEndpoint()
                 .userService(oAuth2UserCustomService);
 
-        http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new TokenAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
-    }
-
-    @Bean
-    public TokenAuthenticationFilter tokenAuthenticationFilter() {
-        return new TokenAuthenticationFilter(tokenProvider);
     }
 }

@@ -2,6 +2,9 @@ package com.developer.smallRoom.application.member;
 
 import com.developer.smallRoom.application.auth.jwt.MemberPrincipal;
 import org.springframework.core.MethodParameter;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -20,10 +23,10 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        MemberPrincipal loginMember = (MemberPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (loginMember == null) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof String && principal.equals("anonymousUser")) {
             return null;
         }
-        return loginMember;
+        return (MemberPrincipal) principal;
     }
 }
