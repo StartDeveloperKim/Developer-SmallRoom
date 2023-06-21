@@ -38,6 +38,9 @@ public class Article {
     @Column(name = "thumbnail_url", nullable = false)
     private String thumbnailUrl;
 
+    @Column(name = "github_link")
+    private String githubLink;
+
     @Column(name = "hit", nullable = false)
     private int hit;
 
@@ -62,10 +65,11 @@ public class Article {
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public Article(String title, String content, String thumbnailUrl, Member member) {
+    public Article(String title, String content, String thumbnailUrl, String githubLink, Member member) {
         this.title = title;
         this.content = content;
         this.thumbnailUrl = thumbnailUrl;
+        this.githubLink = githubLink;
         this.member = member;
         this.hit = 0;
 //        this.likeCount = 0;

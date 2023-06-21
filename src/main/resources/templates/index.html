@@ -33,10 +33,15 @@
                     <i class="fab fa-brands fa-github fa-2xl"></i>
                     <strong class="text-xl">로그인</strong>
                 </a>
-                 <a href="/newpost" sec:authorize="isAuthenticated()"
+                 <a href="/article/post" sec:authorize="isAuthenticated()"
                     class="text-gray-800 dark:text-white hover:bg-orange-50 focus:ring-4 focus:ring-orange-50 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
                     <i class="fas fa-light fa-pen fa-2xl"></i>
                     <strong class="text-xl">글 작성</strong>
+                </a>
+                <a href="/logout" sec:authorize="isAuthenticated()"
+                   class="text-gray-800 dark:text-white hover:bg-orange-50 focus:ring-4 focus:ring-orange-50 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
+                    <i class="fas fa-light fa-arrow-right-from-bracket"></i>
+                    <strong class="text-xl">로그아웃</strong>
                 </a>
             </div>
         </div>
@@ -447,11 +452,11 @@
         <div class="flex flex-wrap items-center justify-between">
             <div class="text-sm text-gray-500">
                 <p>© 2023 TOY PROJECT WORLD. All Rights Reserved.</p>
-                <p>Email: <a href="mailto:your-email@example.com">your-email@example.com</a></p>
+                <p>토이 프로젝트 저장소</p>
             </div>
             <ul class="flex space-x-4 mr-16">
-                <li><a href="#" class="text-gray-500 hover:text-gray-700">Blog</a></li>
-                <li><a href="#" class="text-gray-500 hover:text-gray-700">GitHub</a></li>
+                <li><a href="https://mytempo.tistory.com/" class="text-gray-500 hover:text-gray-700">Blog</a></li>
+                <li><a href="https://github.com/StartDeveloperKim" class="text-gray-500 hover:text-gray-700">GitHub</a></li>
             </ul>
 
         </div>
@@ -459,6 +464,6 @@
 </footer>
 
 </body>
-<script src="/js/index.js"></script>
+<script src="/js/index.js" type="module"></script>
 <script src="/js/scroll.js"></script>
 </html>

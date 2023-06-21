@@ -26,16 +26,16 @@ public class ImageController {
     private final ImageStore imageStore;
 
     @PostMapping
-    public ResponseEntity<ImageResponse> imageUpload(@ModelAttribute ImageRequest request,
+    public ResponseEntity<String> imageUpload(@ModelAttribute ImageRequest request,
                                                      @LoginMember MemberPrincipal memberPrincipal) {
         if (memberPrincipal == null) throw new NotAuthorizationException(); // TODO :: 나중에 수정 필요 중복된 코드가 계속 발생함
 
         try {
             String imageUrl = imageStore.saveImage(request.getImage(), memberPrincipal.getUsername());
             log.info("ImageUrl : {}", imageUrl);
-            return ResponseEntity.ok().body(new ImageResponse(imageUrl, "이미지가 저장되었습니다."));
+            return ResponseEntity.ok().body(imageUrl);
         } catch (FailUploadImageAtS3 | NotHaveImageException | IOException e) {
-            return ResponseEntity.badRequest().body(new ImageResponse("", e.getMessage()));
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

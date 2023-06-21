@@ -86,7 +86,7 @@ class ArticleControllerTest {
     @Test
     void postArticle() throws Exception {
         //given
-        ArticleRequest articleRequest = new ArticleRequest("title", "content", "thumbnail");
+        ArticleRequest articleRequest = new ArticleRequest("title", "subTitle", "content", "githubLink", "thumbnail");
         String requestBody = objectMapper.writeValueAsString(articleRequest);
 
         //when
