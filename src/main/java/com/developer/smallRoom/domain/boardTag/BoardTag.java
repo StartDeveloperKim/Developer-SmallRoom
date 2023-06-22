@@ -1,7 +1,7 @@
-package com.developer.smallRoom.domain.like;
+package com.developer.smallRoom.domain.boardTag;
 
 import com.developer.smallRoom.domain.article.Article;
-import com.developer.smallRoom.domain.member.Member;
+import com.developer.smallRoom.domain.tag.Tag;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -10,12 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-@Table(name = "article_like")
-public class ArticleLike {
+public class BoardTag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "like_id", updatable = false)
+    @Column(name = "board_tag_id", updatable = false)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -23,16 +22,20 @@ public class ArticleLike {
     private Article article;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "tag_id")
+    private Tag tag;
 
-    public ArticleLike(Article article, Member member) {
+    public BoardTag(Article article, Tag tag) {
         setArticle(article);
-        this.member = member;
+        this.tag = tag;
     }
 
     private void setArticle(Article article) {
         this.article = article;
-        article.getArticleLikes().add(this);
+        article.getBoardTags().add(this);
+    }
+
+    public String getTagName() {
+        return this.tag.getName();
     }
 }

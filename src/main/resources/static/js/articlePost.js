@@ -40,11 +40,6 @@ let tagify = new Tagify(tag_input, {
         closeOnSelect: false
     },
     enforceWhitelist: true
-}); // initialize Tagify
-// 태그가 추가되면 이벤트 발생
-tagify.on('add', function () {
-    console.log(tagify.value); // 입력된 태그 정보 객체
-    console.log(tagify.value.length);
 });
 
 
@@ -104,12 +99,16 @@ function saveArticle() {
     const subTitle = $('#sub-title').val();
     const thumbnail = $('#image-url').val();
 
+    const tempTags = tagify.value
+    const tags = tempTags.map(obj => obj.value);
+
     const requestData = {
         title: title,
         subTitle: subTitle,
         content: content, // You'll need to provide the content data
         githubLink: githubLink,
-        thumbnailUrl: thumbnail
+        thumbnailUrl: thumbnail,
+        tags: tags
     };
 
     $.ajax({

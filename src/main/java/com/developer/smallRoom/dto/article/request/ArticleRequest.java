@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.List;
+
 @ToString
 @NoArgsConstructor
 @Getter
@@ -18,13 +20,15 @@ public class ArticleRequest {
     private String content;
     private String githubLink;
     private String thumbnailUrl;
+    private List<String> tags;
 
-    public ArticleRequest(String title, String subTitle, String content, String githubLink, String thumbnailUrl) {
+    public ArticleRequest(String title, String subTitle, String content, String githubLink, String thumbnailUrl, List<String> tags) {
         this.title = title;
         this.subTitle = subTitle;
         this.content = content;
         this.githubLink = githubLink;
         this.thumbnailUrl = thumbnailUrl;
+        this.tags = tags;
     }
 
     public Article toArticle(Member member) {

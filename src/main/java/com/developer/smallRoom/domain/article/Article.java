@@ -1,5 +1,6 @@
 package com.developer.smallRoom.domain.article;
 
+import com.developer.smallRoom.domain.boardTag.BoardTag;
 import com.developer.smallRoom.domain.comment.Comment;
 import com.developer.smallRoom.domain.like.ArticleLike;
 import com.developer.smallRoom.domain.member.Member;
@@ -15,6 +16,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -50,6 +52,9 @@ public class Article {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<BoardTag> boardTags = new ArrayList<>();
 
     // TODO :: 좋아요 수, 댓글 수 통계컬럼을 두고 성능을 최적화하자.
 //    @Column(name = "like_count", nullable = false)
@@ -102,4 +107,9 @@ public class Article {
 //    public void addCommentCount() {
 //        this.commentCount++;
 //    }
+
+    public List<String> getTags() {
+        return this.boardTags.stream().map(BoardTag::getTagName)
+                .collect(Collectors.toList());
+    }
 }

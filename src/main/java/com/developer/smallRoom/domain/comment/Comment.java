@@ -42,6 +42,13 @@ public class Comment {
     public Comment(String content, Member member, Article article) {
         this.content = content;
         this.member = member;
-        this.article = article;
+        setArticle(article);
     }
+
+    private void setArticle(Article article) {
+        this.article = article;
+        article.getComments().add(this);
+    }
+
+
 }

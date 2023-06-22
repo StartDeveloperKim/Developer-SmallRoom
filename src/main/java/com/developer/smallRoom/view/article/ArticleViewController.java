@@ -2,15 +2,18 @@ package com.developer.smallRoom.view.article;
 
 import com.developer.smallRoom.application.article.service.ArticleService;
 import com.developer.smallRoom.application.auth.jwt.MemberPrincipal;
+import com.developer.smallRoom.application.boardTag.BoardTagService;
+import com.developer.smallRoom.application.member.LoginMember;
 import com.developer.smallRoom.dto.article.response.ArticleResponse;
 import com.developer.smallRoom.global.exception.auth.NotAuthorizationException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
@@ -18,24 +21,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ArticleViewController {
 
     private final ArticleService articleService;
+    private final BoardTagService boardTagService;
 
     @GetMapping("/{id}")
-    public String articleViewById(@PathVariable(name = "id") Long id, Model model) {
+    public String articleViewById(@PathVariable(name = "id") Long id,
+                                  @LoginMember MemberPrincipal memberPrincipal,
+                                  Model model) {
         ArticleResponse article = articleService.getArticleById(id);
+        List<String> tags = boardTagService.findBoardTagByArticleId(id);
+        article.setUpdatable(memberPrincipal);
+        article.setTags(tags);
         model.addAttribute("article", article);
 
         return "articleDetail";
     }
 
     @GetMapping("/post")
-    public String articlePostingView(@AuthenticationPrincipal MemberPrincipal memberPrincipal) {
+    public String articlePostingView(@LoginMember MemberPrincipal memberPrincipal) {
         validMember(memberPrincipal);
         return "articlePost";
     }
 
     @GetMapping("/post/{id}")
     public String articleUpdateView(@PathVariable("id") Long id,
-                                    @AuthenticationPrincipal MemberPrincipal memberPrincipal,
+                                    @LoginMember MemberPrincipal memberPrincipal,
                                     Model model) {
         validMember(memberPrincipal);
         ArticleResponse article = articleService.getArticleByIdAndMember(id, memberPrincipal.getUsername());

@@ -2,6 +2,7 @@ package com.developer.smallRoom.view.article;
 
 import com.developer.smallRoom.application.article.service.ArticleService;
 import com.developer.smallRoom.application.auth.jwt.MemberPrincipal;
+import com.developer.smallRoom.application.boardTag.BoardTagService;
 import com.developer.smallRoom.application.member.LoginMember;
 import com.developer.smallRoom.dto.article.request.ArticleRequest;
 import com.developer.smallRoom.dto.article.request.ArticleUpdateRequest;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class ArticleController {
 
     private final ArticleService articleService;
+    private final BoardTagService boardTagService;
 
     /*
     * TODO :: ControllerAdvice를 통해 다른사용자가 다른 사용자의 작성글에 접근하고자하면 이를 예외처리하여 막아야한다.
@@ -28,8 +30,10 @@ public class ArticleController {
     public ResponseEntity<ArticleRetouchResponse<Long>> postArticle(@RequestBody ArticleRequest articleRequest,
                                                               @LoginMember MemberPrincipal memberPrincipal) {
         validMember(memberPrincipal);
-        log.info("ArticleRequest : {} / {}", articleRequest.getTitle(), articleRequest.getThumbnailUrl());
+        log.info("ArticleRequest : {} / {}", articleRequest.getTitle(), articleRequest.getTags());
         Long savedArticleId = articleService.saveArticle(memberPrincipal.getUsername(), articleRequest);
+        boardTagService.saveBoardTag(savedArticleId, articleRequest.getTags());
+
         return ResponseEntity.ok().body(new ArticleRetouchResponse<>("게시글이 등록되었습니다.", savedArticleId));
     }
 
