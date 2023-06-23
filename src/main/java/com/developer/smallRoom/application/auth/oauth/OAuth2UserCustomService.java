@@ -26,13 +26,15 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
 
     private OAuth2User saveOrUpdate(OAuth2User oAuth2User) {
         CustomOAuth2Member customOAuth2Member = new CustomOAuth2Member(oAuth2User.getAttributes());
-        Optional<Member> member = memberRepository.findByGitHubId(customOAuth2Member.getId());
+        Optional<Member> member = memberRepository.findByGitHubId(customOAuth2Member.getGitHubId());
         if (member.isEmpty()) {
             Member savedMember = memberRepository.save(customOAuth2Member.toMember());
             customOAuth2Member.setRole(savedMember.getRole());
+            customOAuth2Member.setMemberId(savedMember.getId());
         }else{
             // TODO :: 만약 사용자가 깃허브에서 닉네임을 변경했다면 여기서 Update 쿼리를 날려야 수정이 가능하다.
             customOAuth2Member.setRole(member.get().getRole());
+            customOAuth2Member.setMemberId(member.get().getId());
         }
         return customOAuth2Member;
     }

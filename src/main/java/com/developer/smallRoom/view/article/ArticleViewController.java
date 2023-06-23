@@ -3,6 +3,7 @@ package com.developer.smallRoom.view.article;
 import com.developer.smallRoom.application.article.service.ArticleService;
 import com.developer.smallRoom.application.auth.jwt.MemberPrincipal;
 import com.developer.smallRoom.application.boardTag.BoardTagService;
+import com.developer.smallRoom.application.like.ArticleLikeService;
 import com.developer.smallRoom.application.member.LoginMember;
 import com.developer.smallRoom.dto.article.response.ArticleResponse;
 import com.developer.smallRoom.global.exception.auth.NotAuthorizationException;
@@ -22,6 +23,7 @@ public class ArticleViewController {
 
     private final ArticleService articleService;
     private final BoardTagService boardTagService;
+    private final ArticleLikeService articleLikeService;
 
     @GetMapping("/{id}")
     public String articleViewById(@PathVariable(name = "id") Long id,
@@ -32,6 +34,11 @@ public class ArticleViewController {
         article.setUpdatable(memberPrincipal);
         article.setTags(tags);
         model.addAttribute("article", article);
+
+        if (memberPrincipal != null) {
+            boolean isLike = articleLikeService.existArticleLike(id, memberPrincipal.getMemberId());
+            model.addAttribute("isLike", isLike);
+        }
 
         return "articleDetail";
     }

@@ -65,7 +65,7 @@
         </div>
 
         <div class="flex items-center justify-between text-sm text-gray-500 mb-2">
-            <div class="grow-0 mr-2" th:text="${article.memberId}">작성자</div>
+            <div class="grow-0 mr-2" th:text="${article.membergithubId}">작성자</div>
             <div class="grow-0 text-right" th:text="${article.createAt}">2023월06월24일</div>
             <div class="flex-auto text-right" th:if="${article.updatable}">
                 <a th:href="'/article/post/' + ${article.articleId}"><span class="mr-2">수정</span></a>
@@ -79,6 +79,17 @@
                 게시글의 본문입니다.
             </div>
         </div>
+
+        <div class="flex justify-center mt-4" sec:authorize="isAuthenticated()">
+            <button class="w-12 h-12 rounded-full text-white flex items-center justify-center"
+                    id="like-button"
+                    th:classappend="${isLike} ? 'bg-red-400' : 'bg-slate-400'"
+                    th:articleId="${article.articleId}"
+                    th:onclick="onclickLikeButton(this.getAttribute('articleId'))">
+                <i class="far fa-heart text-xl"></i>
+            </button>
+        </div>
+
     </div>
 </main>
 

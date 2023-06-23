@@ -13,6 +13,7 @@ import com.developer.smallRoom.jwt.JwtFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.lang.Collections;
+import jakarta.servlet.http.Cookie;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -72,6 +73,7 @@ class ArticleControllerTest {
                 .build());
 
         Map<String, Object> claims = new HashMap<>();
+        claims.put("id", member.getId());
         claims.put("name", member.getName());
         claims.put("role", member.getRole().getKey());
 
@@ -92,7 +94,7 @@ class ArticleControllerTest {
 
         //when
         ResultActions result = mvc.perform(post("/api/article")
-                .header("Authorization", "Bearer " + accessToken)
+                .cookie(getAccessTokenCookie(accessToken))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestBody));
 
@@ -116,7 +118,7 @@ class ArticleControllerTest {
 
         //when
         ResultActions result = mvc.perform(put("/api/article")
-                .header("Authorization", "Bearer " + accessToken)
+                .cookie(getAccessTokenCookie(accessToken))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestBody));
 
@@ -141,7 +143,7 @@ class ArticleControllerTest {
         String otherMemberAccessToken = getOtherMemberAccessToken(otherMember);
         //when
         ResultActions result = mvc.perform(put("/api/article")
-                .header("Authorization", "Bearer " + otherMemberAccessToken)
+                .cookie(getAccessTokenCookie(otherMemberAccessToken))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestBody));
 
@@ -157,7 +159,7 @@ class ArticleControllerTest {
         Article memberArticle = getArticle("title", "content", member);
         //when
         ResultActions result = mvc.perform(delete("/api/article/"+memberArticle.getId())
-                .header("Authorization", "Bearer " + accessToken));
+                .cookie(getAccessTokenCookie(accessToken)));
         //then
         result.andExpect(status().isOk());
         result.andExpect(jsonPath("$.message").value("게시글이 삭제되었습니다."));
@@ -176,7 +178,7 @@ class ArticleControllerTest {
         String otherMemberAccessToken = getOtherMemberAccessToken(otherMember);
         //when
         ResultActions result = mvc.perform(delete("/api/article/"+memberArticle.getId())
-                .header("Authorization", "Bearer " + otherMemberAccessToken));
+                .cookie(getAccessTokenCookie(otherMemberAccessToken)));
         //then
         result.andExpect(status().is4xxClientError());
         result.andExpect(jsonPath("$.message").value("잘못된 접근입니다."));
@@ -207,5 +209,9 @@ class ArticleControllerTest {
                 .content(content)
                 .thumbnailUrl("thumbnail")
                 .member(member).build());
+    }
+
+    private Cookie getAccessTokenCookie(String accessToken) {
+        return new Cookie("access_token", accessToken);
     }
 }

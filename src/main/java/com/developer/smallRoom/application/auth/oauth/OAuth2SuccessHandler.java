@@ -38,7 +38,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         log.info("OAuth2Member : {}", oAuth2Member.getName());
         String refreshToken = tokenProvider.generateToken(oAuth2Member, REFRESH_TOKEN_DURATION);
-        saveRefreshToken(oAuth2Member.getId(), refreshToken);
+        saveRefreshToken(oAuth2Member.getGitHubId(), refreshToken);
         addRefreshTokenToCookie(request, response, refreshToken);
 
         String accessToken = tokenProvider.generateToken(oAuth2Member, ACCESS_TOKEN_DURATION);
@@ -73,11 +73,5 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     private void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
         super.clearAuthenticationAttributes(request);
         authorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
-    }
-
-    private String getTargetUrl(String accessToken) {
-        return UriComponentsBuilder.fromUriString(REDIRECT_PATH)
-                .queryParam("token", accessToken)
-                .build().toUriString();
     }
 }

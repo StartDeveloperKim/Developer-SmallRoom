@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +36,8 @@ public class TokenProvider {
                 .setIssuer(jwtProperties.getIssuer())
                 .setIssuedAt(now)
                 .setExpiration(expiry)
-                .setSubject(oAuth2Member.getId())
+                .setSubject(oAuth2Member.getGitHubId())
+                .claim("id", oAuth2Member.getMemberId())
                 .claim("name", oAuth2Member.getName())
                 .claim("role", oAuth2Member.getRole())
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
@@ -57,18 +57,23 @@ public class TokenProvider {
 
     public Authentication getAuthentication(String token) {
         Claims claims = getClaims(token);
-        String memberId = getMemberId(claims);
+        Long memberId = getMemberId(claims);
+        String gitHubId = getMemberGitHubId(claims);
         String role = getRole(claims);
         Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority(role));
 
-        return new UsernamePasswordAuthenticationToken(new MemberPrincipal(memberId, role, authorities), token, authorities);
+        return new UsernamePasswordAuthenticationToken(new MemberPrincipal(memberId, gitHubId, role, authorities), token, authorities);
     }
 
-    private String getMemberId(Claims claims) {
+    private String getMemberGitHubId(Claims claims) {
         return claims.getSubject();
     }
     private String getRole(Claims claims) {
         return claims.get("role", String.class);
+    }
+
+    private Long getMemberId(Claims claims) {
+        return claims.get("id", Long.class);
     }
 
     private Claims getClaims(String token) {
