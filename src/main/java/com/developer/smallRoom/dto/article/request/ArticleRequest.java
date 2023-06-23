@@ -18,15 +18,15 @@ public class ArticleRequest {
     private String title;
     private String subTitle;
     private String content;
-    private String githubLink;
+    private String gitHubLink;
     private String thumbnailUrl;
     private List<String> tags;
 
-    public ArticleRequest(String title, String subTitle, String content, String githubLink, String thumbnailUrl, List<String> tags) {
+    public ArticleRequest(String title, String subTitle, String content, String gitHubLink, String thumbnailUrl, List<String> tags) {
         this.title = title;
         this.subTitle = subTitle;
         this.content = content;
-        this.githubLink = githubLink;
+        this.gitHubLink = gitHubLink;
         this.thumbnailUrl = thumbnailUrl;
         this.tags = tags;
     }
@@ -34,8 +34,9 @@ public class ArticleRequest {
     public Article toArticle(Member member) {
         return Article.builder()
                 .title(title)
+                .subTitle(subTitle)
                 .content(content)
-                .githubLink(githubLink)
+                .githubLink(gitHubLink)
                 .thumbnailUrl(thumbnailUrl)
                 .member(member)
                 .build();

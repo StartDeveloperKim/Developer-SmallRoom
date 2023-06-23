@@ -113,7 +113,8 @@ class ArticleControllerTest {
 
         String updateTitle = "updateTitle";
         String updateContent = "updateContent";
-        ArticleUpdateRequest articleUpdateRequest = new ArticleUpdateRequest(article.getId(), updateTitle, updateContent, "");
+        ArticleUpdateRequest articleUpdateRequest = new ArticleUpdateRequest(article.getId(), updateTitle, "subTitle", "gitHubLink",
+                updateContent, "", Arrays.asList("태그1", "태그2"));
         String requestBody = objectMapper.writeValueAsString(articleUpdateRequest);
 
         //when
@@ -137,7 +138,10 @@ class ArticleControllerTest {
         Article memberArticle = getArticle("title", "content", member);
         Article otherArticle = getArticle("anotherTitle", "anotherContent", otherMember);
 
-        ArticleUpdateRequest articleUpdateRequest = new ArticleUpdateRequest(memberArticle.getId(), "update", "updateContent", "");
+        String updateTitle = "updateTitle";
+        String updateContent = "updateContent";
+        ArticleUpdateRequest articleUpdateRequest = new ArticleUpdateRequest(memberArticle.getId(), updateTitle, "subTitle", "gitHubLink",
+                updateContent, "", Arrays.asList("태그1", "태그2"));
         String requestBody = objectMapper.writeValueAsString(articleUpdateRequest);
 
         String otherMemberAccessToken = getOtherMemberAccessToken(otherMember);

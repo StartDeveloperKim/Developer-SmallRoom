@@ -39,7 +39,7 @@ class ArticleRepositoryTest {
         //given
         Article savedArticle = savedNewArticle();
         //when
-        Article findArticle = articleRepository.findByIdAndMember(savedArticle.getId(), member).get();
+        Article findArticle = articleRepository.findByIdAndMemberId(savedArticle.getId(), member.getId()).get();
         //then
         assertThat(savedArticle.getId()).isEqualTo(findArticle.getId());
     }
@@ -58,7 +58,9 @@ class ArticleRepositoryTest {
     private Article savedNewArticle() {
         return articleRepository.save(Article.builder()
                 .title("title")
+                .subTitle("subTitle")
                 .content("content")
+                .githubLink("gitHubLink")
                 .thumbnailUrl("thumbnail")
                 .member(member)
                 .build());

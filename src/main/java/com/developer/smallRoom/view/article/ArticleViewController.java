@@ -54,7 +54,11 @@ public class ArticleViewController {
                                     @LoginMember MemberPrincipal memberPrincipal,
                                     Model model) {
         validMember(memberPrincipal);
-        ArticleResponse article = articleService.getArticleByIdAndMember(id, memberPrincipal.getUsername());
+        ArticleResponse article = articleService.getArticleByIdAndMember(id, memberPrincipal.getMemberId());
+        List<String> tags = boardTagService.findBoardTagByArticleId(id);
+        article.setUpdatable(memberPrincipal);
+        article.setTags(tags);
+
         model.addAttribute("article", article);
         return "articlePost";
     }

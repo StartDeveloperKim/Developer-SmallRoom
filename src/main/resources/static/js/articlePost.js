@@ -1,6 +1,6 @@
 import {data} from '/js/stack.js'
 
-var editor = new toastui.Editor({
+let editor = new toastui.Editor({
     el: document.querySelector('#editor'),
     previewStyle: 'vertical',
     height: '600px',
@@ -29,10 +29,9 @@ var editor = new toastui.Editor({
     language: "ko-KR"
 });
 
-const allTechStack = data.techStack;
 const tag_input = document.getElementById("tags-input");
 let tagify = new Tagify(tag_input, {
-    whitelist: allTechStack,
+    whitelist: data.techStack,
     dropdown: {
         maxItems: 20,
         classname: "tags-look",
@@ -43,10 +42,15 @@ let tagify = new Tagify(tag_input, {
 });
 
 
+window.tagify = tagify;
+window.editor = editor;
+
+
 $(document).ready(function() {
     $('#cancel-button').on('click', function() {cancelPost();});
     $('#post-button').on('click', function () {showModal();});
     $('#save-button').on('click', function() {saveArticle()})
+    $('#update-button').on('click', function() {updateArticle()})
 
     $('#dropzone-file').on('change', function (event){
         let file = event.target.files[0];
@@ -91,10 +95,10 @@ function showModal() {
     $('#temp-github').html('<div>' + github_link + '</div>');
 }
 
-function saveArticle() {
-    // TODO :: 태그 배열을 전달할 수 있도록 수정하자
+function getRequestData() {
+    const articleId = $('#article-id').val();
     const title = $('#title').val();
-    const githubLink = $('#gitHub-link').val()
+    const gitHubLink = $('#gitHub-link').val();
     const content = editor.getHTML();
     const subTitle = $('#sub-title').val();
     const thumbnail = $('#image-url').val();
@@ -102,29 +106,42 @@ function saveArticle() {
     const tempTags = tagify.value
     const tags = tempTags.map(obj => obj.value);
 
-    const requestData = {
+    return {
+        articleId: articleId,
         title: title,
         subTitle: subTitle,
         content: content, // You'll need to provide the content data
-        githubLink: githubLink,
+        gitHubLink: gitHubLink,
         thumbnailUrl: thumbnail,
         tags: tags
     };
+}
 
+function saveArticle() {
+    const requestData = getRequestData();
+    toServer(requestData, 'POST');
+}
+
+function updateArticle() {
+    const requestData = getRequestData();
+    toServer(requestData, 'PUT');
+}
+
+function toServer(requestData, method) {
     $.ajax({
         url: '/api/article',
-        method: 'POST',
+        type: method,
         dataType: 'json',
         contentType: 'application/json',
         data: JSON.stringify(requestData),
-        success: function(response) {
+        success: function (response) {
             const message = response.message;
             const responseData = response.responseData;
             alert(message);
 
             window.location.href = '/article/' + responseData;
         },
-        error: function(xhr, textStatus, errorThrown) {
+        error: function (xhr, textStatus, errorThrown) {
             console.log(errorThrown);
         }
     });

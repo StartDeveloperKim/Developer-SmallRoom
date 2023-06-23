@@ -6,5 +6,7 @@ public interface BoardTagService {
 
     void saveBoardTag(Long articleId, List<String> tags);
 
+    void updateBoardTag(Long articleId, List<String> tags);
+
     List<String> findBoardTagByArticleId(Long articleId);
 }

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>글 작성</title>
@@ -18,15 +17,16 @@
 <body>
 <main class="container mx-auto px-4 mt-5">
     <div class="mb-4">
-        <input type="text" class="w-full p-2 border border-gray-300 rounded-md" placeholder="제목을 입력하세요" id="title" required>
+        <input type="text" class="w-full p-2 border border-gray-300 rounded-md" placeholder="제목을 입력하세요" id="title" required th:value="${article != null ? article.title : ''}">
     </div>
     <div class="mb-4">
         <div class="flex">
             <div class="flex-auto px-2">
-                <input type="text" class="w-full p-2 border border-gray-300 rounded-full" id="sub-title" placeholder="간단하게 프로젝트 설명을 적어주세요." required>
+                <input type="text" class="w-full p-2 border border-gray-300 rounded-full" id="sub-title" th:value="${article != null ? article.subTitle : ''}"
+                       placeholder="간단하게 프로젝트 설명을 적어주세요." required>
             </div>
             <div class="flex-auto px-2">
-                <input type="url" class="w-full p-2 border border-gray-300 rounded-full" id="gitHub-link" placeholder="깃허브 링크를 입력하세요">
+                <input type="url" class="w-full p-2 border border-gray-300 rounded-full" id="gitHub-link" placeholder="깃허브 링크를 입력하세요" th:value="${article != null ? article.gitHubLink : ''}">
             </div>
         </div>
     </div>
@@ -87,13 +87,13 @@
                                        class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                                     <div class="flex flex-col items-center justify-center pt-5 pb-6">
                                         <svg id="modal-img" aria-hidden="true" class="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor"
-                                             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" th:classappend="${article!=null} ? 'hidden' : ''">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                   d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
                                         </svg>
-                                        <p id="modal-info1" class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">썸네일을 등록하려면 클릭해주세요(Drag & Drop)</span></p>
-                                        <p id="modal-info2" class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF</p>
-                                        <img id="preview-image" src="" alt="Preview" class="hidden" />
+                                        <p id="modal-info1" class="mb-2 text-sm text-gray-500 dark:text-gray-400" th:classappend="${article!=null} ? 'hidden' : ''"><span class="font-semibold">썸네일을 등록하려면 클릭해주세요(Drag & Drop)</span></p>
+                                        <p id="modal-info2" class="text-xs text-gray-500 dark:text-gray-400" th:classappend="${article!=null} ? 'hidden' : ''">SVG, PNG, JPG or GIF</p>
+                                        <img id="preview-image" alt="Preview" class="" th:src="${article==null ? '' : article.thumbnailUrl}" th:classappend="${article==null} ? 'hidden' : ''"/>
                                     </div>
                                     <input id="dropzone-file" type="file" class="hidden" />
                                 </label>
@@ -102,9 +102,12 @@
                         </div>
                         <!-- Modal footer -->
                         <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
-                            <button data-modal-hide="defaultModal" type="button" id="save-button"
+                            <button data-modal-hide="defaultModal" type="button" id="save-button" th:if="${article==null}"
                                     class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                 저장하기</button>
+                            <button data-modal-hide="defaultModal" type="button" id="update-button" th:if="${article!=null}"
+                                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                수정하기</button>
                         </div>
                     </div>
                 </div>
@@ -115,13 +118,34 @@
             <button type="button" id="cancel-button"
                     class="flex-glow text-white bg-red-400 hover:bg-red-800 focus:outline-double focus:ring-4 focus:ring-red-300 font-bold rounded-full text-sm px-10 py-2.5 text-center mr-2 mb-2">취소</button>
         </div>
-        <input type="hidden" id="image-url" />
+        <input type="hidden" id="image-url" th:value="${article != null ? article.thumbnailUrl : ''}"/>
+        <input type="hidden" id="article-id" th:value="${article != null ? article.articleId : ''}"/>
     </div>
 </footer>
 </body>
 
+<script src="/js/articlePost.js" type="module"></script>
 <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
-<script src="/js/articlePost.js" type="module"></script>
+<script th:inline="javascript">
+    const updateFlag = /*[[${article != null ? article.updatable : false}]]*/ false;
+    if (updateFlag) {
+        const tags = /*[[${article?.tags}]]*/ '[]';
+        const content = /*[[${article?.content}]]*/ '';
+
+        editor.setHTML(content);
+        const tagsInput = $('#tags-input');
+
+        let tagValue = "";
+        for (let i = 0; i < tags.length; i++) {
+            tagValue += tags[i];
+            if (i !== tags.length - 1) {
+                tagValue += ", ";
+            }
+        }
+        tagsInput.val(tagValue);
+
+    }
+</script>
 </html>

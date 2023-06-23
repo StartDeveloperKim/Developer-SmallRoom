@@ -25,12 +25,28 @@ public class BoardTagServiceImpl implements BoardTagService {
     @Transactional
     @Override
     public void saveBoardTag(Long articleId, List<String> tags) {
-        Article article = articleRepository.findById(articleId)
-                .orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다."));
+        Article article = getArticle(articleId);
+        saveBoardTags(tags, article);
+    }
+
+    @Transactional
+    @Override
+    public void updateBoardTag(Long articleId, List<String> tags) {
+        Article article = getArticle(articleId);
+        boardTagRepository.deleteByArticle(article);
+        saveBoardTags(tags, article);
+    }
+
+    private void saveBoardTags(List<String> tags, Article article) {
         for (String tag : tags) {
             Optional<Tag> findTag = tagRepository.findTagByName(tag);
             findTag.ifPresent(value -> boardTagRepository.save(new BoardTag(article, value)));
         }
+    }
+
+    private Article getArticle(Long articleId) {
+        return articleRepository.findById(articleId)
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다."));
     }
 
     @Override

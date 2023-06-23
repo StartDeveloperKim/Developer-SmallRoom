@@ -6,18 +6,17 @@ import com.developer.smallRoom.domain.like.ArticleLike;
 import com.developer.smallRoom.domain.member.Member;
 import com.developer.smallRoom.dto.article.request.ArticleUpdateRequest;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EntityListeners(AuditingEntityListener.class)
@@ -32,7 +31,8 @@ public class Article {
     @Column(name = "title", nullable = false, length = 255)
     private String title;
 
-    // TODO :: subTitle을 두어 메인페이지에서 해당프로젝트를 간단히 설명할 수 있도록하자
+    @Column(name = "sub_title", nullable = false, length = 100)
+    private String subTitle;
 
     @Column(name = "content", nullable = false)
     private String content;
@@ -70,9 +70,10 @@ public class Article {
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public Article(String title, String content, String thumbnailUrl, String githubLink, Member member) {
+    public Article(String title, String subTitle, String content, String thumbnailUrl, String githubLink, Member member) {
         this.title = title;
         this.content = content;
+        this.subTitle = subTitle;
         this.thumbnailUrl = thumbnailUrl;
         this.githubLink = githubLink;
         this.member = member;
@@ -83,6 +84,8 @@ public class Article {
 
     public void update(ArticleUpdateRequest request) {
         this.title = request.getTitle();
+        this.subTitle = request.getSubTitle();
+        this.githubLink = request.getGitHubLink();
         this.content = request.getContent();
         this.thumbnailUrl = request.getThumbnailUrl();
     }
@@ -111,5 +114,9 @@ public class Article {
     public List<String> getTags() {
         return this.boardTags.stream().map(BoardTag::getTagName)
                 .collect(Collectors.toList());
+    }
+
+    public boolean isMemberArticle(Member member) {
+        return Objects.equals(this.member.getId(), member.getId());
     }
 }

@@ -21,22 +21,22 @@ public class ArticleServiceImpl implements ArticleService{
     private final MemberRepository memberRepository;
 
     @Override
-    public Long saveArticle(String memberId, ArticleRequest request) {
+    public Long saveArticle(Long memberId, ArticleRequest request) {
         Member member = findMemberById(memberId);
         Article savedArticle = articleRepository.save(request.toArticle(member));
         return savedArticle.getId();
     }
 
     @Override
-    public Long updateArticle(ArticleUpdateRequest request, String memberId) {
-        Member member = findMemberById(memberId);
-        Article article = findArticleByIdAndMember(request.getArticleId(), member);
+    public Long updateArticle(ArticleUpdateRequest request, Long memberId) {
+        Article article = findArticleByArticleAndMember(request.getArticleId(), memberId);
         article.update(request);
+        System.out.println("article.toString() = " + article.toString());
         return article.getId();
     }
 
     @Override
-    public void deleteArticle(Long articleId, String memberId) {
+    public void deleteArticle(Long articleId, Long memberId) {
         Member member = findMemberById(memberId);
         if (articleRepository.existsByIdAndMember(articleId, member)) {
             articleRepository.deleteById(articleId);
@@ -54,18 +54,17 @@ public class ArticleServiceImpl implements ArticleService{
 
     @Transactional(readOnly = true)
     @Override
-    public ArticleResponse getArticleByIdAndMember(Long articleId, String memberGitHubId) {
-        Member member = findMemberById(memberGitHubId);
-        return new ArticleResponse(findArticleByIdAndMember(articleId, member));
+    public ArticleResponse getArticleByIdAndMember(Long articleId, Long memberId) {
+        return new ArticleResponse(findArticleByArticleAndMember(articleId, memberId));
     }
 
-    private Article findArticleByIdAndMember(Long articleId, Member member) {
-        return articleRepository.findByIdAndMember(articleId, member)
+    private Article findArticleByArticleAndMember(Long articleId, Long memberId) {
+        return articleRepository.findByIdAndMemberId(articleId, memberId)
                 .orElseThrow(() -> new NotAuthorizationException("잘못된 접근입니다."));
     }
 
-    private Member findMemberById(String memberId) {
-        return memberRepository.findByGitHubId(memberId).orElseThrow(() -> new IllegalArgumentException("not found memberId"));
+    private Member findMemberById(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(() -> new IllegalArgumentException("not found memberId"));
     }
 
     private Article findArticleById(Long articleId) {

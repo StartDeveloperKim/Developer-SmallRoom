@@ -6,13 +6,13 @@ import com.developer.smallRoom.dto.article.response.ArticleResponse;
 
 public interface ArticleService {
 
-    Long saveArticle(String memberId, ArticleRequest request);
+    Long saveArticle(Long memberId, ArticleRequest request);
 
-    Long updateArticle(ArticleUpdateRequest request, String memberId);
+    Long updateArticle(ArticleUpdateRequest request, Long memberId);
 
-    void deleteArticle(Long articleId, String memberId);
+    void deleteArticle(Long articleId, Long memberId);
 
     ArticleResponse getArticleById(Long articleId);
 
-    ArticleResponse getArticleByIdAndMember(Long articleId, String memberGitHubId);
+    ArticleResponse getArticleByIdAndMember(Long articleId, Long memberId);
 }

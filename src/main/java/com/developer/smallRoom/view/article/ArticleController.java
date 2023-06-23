@@ -31,7 +31,7 @@ public class ArticleController {
                                                               @LoginMember MemberPrincipal memberPrincipal) {
         validMember(memberPrincipal);
         log.info("ArticleRequest : {} / {}", articleRequest.getTitle(), articleRequest.getTags());
-        Long savedArticleId = articleService.saveArticle(memberPrincipal.getUsername(), articleRequest);
+        Long savedArticleId = articleService.saveArticle(memberPrincipal.getMemberId(), articleRequest);
         boardTagService.saveBoardTag(savedArticleId, articleRequest.getTags());
 
         return ResponseEntity.ok().body(new ArticleRetouchResponse<>("게시글이 등록되었습니다.", savedArticleId));
@@ -42,7 +42,9 @@ public class ArticleController {
                                                                       @LoginMember MemberPrincipal memberPrincipal) {
         validMember(memberPrincipal);
         try {
-            Long articleId = articleService.updateArticle(request, memberPrincipal.getUsername());
+            Long articleId = articleService.updateArticle(request, memberPrincipal.getMemberId());
+            log.info("ArticleUpdateRequest : {} / {}", request.getTitle(), request.getTags());
+            boardTagService.updateBoardTag(request.getArticleId(), request.getTags());
             return ResponseEntity.ok().body(new ArticleRetouchResponse<>("게시글이 수정되었습니다.", articleId));
         } catch (NotAuthorizationException e) {
             return ResponseEntity.badRequest().body(new ArticleRetouchResponse<>(e.getMessage()));
@@ -56,7 +58,7 @@ public class ArticleController {
                                                 @LoginMember MemberPrincipal memberPrincipal) {
         validMember(memberPrincipal);
         try {
-            articleService.deleteArticle(id, memberPrincipal.getUsername());
+            articleService.deleteArticle(id, memberPrincipal.getMemberId());
             return ResponseEntity.ok().body(new ArticleRetouchResponse<>("게시글이 삭제되었습니다."));
         } catch (NotAuthorizationException e) {
             return ResponseEntity.badRequest().body(new ArticleRetouchResponse<>(e.getMessage()));

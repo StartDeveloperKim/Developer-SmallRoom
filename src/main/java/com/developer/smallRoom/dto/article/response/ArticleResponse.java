@@ -13,7 +13,9 @@ public class ArticleResponse {
 
     private final Long articleId;
     private final String title;
+    private final String subTitle;
     private final String content;
+    private final String gitHubLink;
     private final String thumbnailUrl;
     private final String createAt;
     private List<String> tags;
@@ -26,7 +28,9 @@ public class ArticleResponse {
     public ArticleResponse(Article article) {
         this.articleId = article.getId();
         this.title = article.getTitle();
+        this.subTitle = article.getSubTitle();
         this.content = article.getContent();
+        this.gitHubLink = article.getGithubLink();
         this.thumbnailUrl = article.getThumbnailUrl();
         this.createAt = article.getCreateAt().format(DateTimeFormatter.ofPattern("yyyy년MM월dd일"));
         this.membergithubId = article.getMember().getGitHubId();
