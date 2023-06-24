@@ -20,6 +20,10 @@
         body {
             font-family: 'Noto Sans KR', sans-serif;
         }
+
+        .utterances {
+            max-width: 100% !important;
+        }
     </style>
 </head>
 <body>
@@ -75,7 +79,7 @@
             </div>
         </div>
         <div class="flex justify-center">
-            <div id="viewer" class="w-2/3 bg-white rounded-lg p-6">
+            <div id="viewer" class="w-3/4 md:w-4/5 sm:w-full bg-white rounded-lg p-6">
                 게시글의 본문입니다.
             </div>
         </div>
@@ -91,9 +95,19 @@
         </div>
 
     </div>
+
+    <div class="comments">
+        <script src="https://utteranc.es/client.js"
+                repo="StartDeveloperKim/Comments"
+                issue-term="pathname"
+                theme="github-light"
+                crossorigin="anonymous"
+                async>
+        </script>
+    </div>
 </main>
 
-<footer class="bg-gray-100 py-4 fixed bottom-0 w-full">
+<footer class="bg-gray-100 py-4 bottom-0 w-full">
     <div class="container mx-auto px-4">
         <div class="flex flex-wrap items-center justify-between">
             <div class="text-sm text-gray-500">
