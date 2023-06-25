@@ -1,5 +1,6 @@
 package com.developer.smallRoom.domain.member;
 
+import com.developer.smallRoom.domain.article.Article;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -9,6 +10,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -38,6 +41,9 @@ public class Member {
     @CreatedDate
     @Column(name = "create_at", nullable = false, updatable = false)
     private LocalDateTime createAt;
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Article> articles = new ArrayList<>();
 
     @Builder
     public Member(String gitHubId, String name, String imageUrl) {

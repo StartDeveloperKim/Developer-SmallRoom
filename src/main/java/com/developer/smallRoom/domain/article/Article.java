@@ -49,7 +49,7 @@ public class Article {
     @CreatedDate
     private LocalDateTime createAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -76,10 +76,15 @@ public class Article {
         this.subTitle = subTitle;
         this.thumbnailUrl = thumbnailUrl;
         this.githubLink = githubLink;
-        this.member = member;
+        setMember(member);
         this.hit = 0;
 //        this.likeCount = 0;
 //        this.commentCount = 0;
+    }
+
+    private void setMember(Member member) {
+        this.member = member;
+        member.getArticles().add(this);
     }
 
     public void update(ArticleUpdateRequest request) {

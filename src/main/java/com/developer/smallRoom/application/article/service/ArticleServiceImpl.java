@@ -7,10 +7,17 @@ import com.developer.smallRoom.domain.member.repository.MemberRepository;
 import com.developer.smallRoom.dto.article.request.ArticleRequest;
 import com.developer.smallRoom.dto.article.request.ArticleUpdateRequest;
 import com.developer.smallRoom.dto.article.response.ArticleResponse;
+import com.developer.smallRoom.dto.article.response.HomeArticleResponse;
 import com.developer.smallRoom.global.exception.auth.NotAuthorizationException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional
@@ -45,10 +52,10 @@ public class ArticleServiceImpl implements ArticleService{
         }
     }
 
-    @Transactional(readOnly = true)
     @Override
     public ArticleResponse getArticleById(Long articleId) {
         Article article = findArticleById(articleId);
+        article.increaseHit();
         return new ArticleResponse(article);
     }
 
@@ -56,6 +63,13 @@ public class ArticleServiceImpl implements ArticleService{
     @Override
     public ArticleResponse getArticleByIdAndMember(Long articleId, Long memberId) {
         return new ArticleResponse(findArticleByArticleAndMember(articleId, memberId));
+    }
+
+    @Override
+    public List<HomeArticleResponse> getHomeArticleResponses(int page, String standard) {
+        Page<Article> result = articleRepository.findArticlesBy(PageRequest.of(page, 4, Sort.by(standard).descending()));
+        return result.getContent().stream()
+                .map(HomeArticleResponse::new).collect(Collectors.toList());
     }
 
     private Article findArticleByArticleAndMember(Long articleId, Long memberId) {

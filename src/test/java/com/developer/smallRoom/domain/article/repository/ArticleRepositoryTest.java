@@ -8,6 +8,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -53,6 +59,25 @@ class ArticleRepositoryTest {
         boolean result = articleRepository.existsByIdAndMember(savedArticle.getId(), member);
         //then
         assertThat(result).isTrue();
+    }
+
+    @DisplayName("findArticlesByWithPaging() : 게시글목록을 페이징을 활용해서 조회한다.")
+    @Test
+    void findArticlesByWithPaging() {
+        //given
+        Article article1 = savedNewArticle();
+        Article article2 = savedNewArticle();
+        Article article3 = savedNewArticle();
+        Article article4 = savedNewArticle();
+        Pageable pageable = PageRequest.of(0, 4, Sort.by("createAt").descending());
+        //when
+        Page<Article> result = articleRepository.findArticlesBy(pageable);
+        //then
+        List<Article> content = result.getContent();
+        assertThat(content.get(0).getId()).isEqualTo(article4.getId());
+        assertThat(content.get(1).getId()).isEqualTo(article3.getId());
+        assertThat(content.get(2).getId()).isEqualTo(article2.getId());
+        assertThat(content.get(3).getId()).isEqualTo(article1.getId());
     }
 
     private Article savedNewArticle() {

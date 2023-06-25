@@ -7,11 +7,14 @@ import com.developer.smallRoom.application.member.LoginMember;
 import com.developer.smallRoom.dto.article.request.ArticleRequest;
 import com.developer.smallRoom.dto.article.request.ArticleUpdateRequest;
 import com.developer.smallRoom.dto.article.response.ArticleRetouchResponse;
+import com.developer.smallRoom.dto.article.response.HomeArticleResponse;
 import com.developer.smallRoom.global.exception.auth.NotAuthorizationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,6 +28,15 @@ public class ArticleController {
     /*
     * TODO :: ControllerAdvice를 통해 다른사용자가 다른 사용자의 작성글에 접근하고자하면 이를 예외처리하여 막아야한다.
     * */
+
+    // TODO :: 무한스크롤을 위해 게시글 조회 API를 만들어야 한다. 이 떄 파라미터로 page와 standard를 받아야 한다.
+
+    @GetMapping
+    public ResponseEntity<List<HomeArticleResponse>> getaHomeArticle(@RequestParam(value = "page", required = true) int page,
+                                                               @RequestParam(value = "standard", required = false) String standard) {
+        List<HomeArticleResponse> homeArticleResponses = articleService.getHomeArticleResponses(page, "createAt");
+        return ResponseEntity.ok().body(homeArticleResponses);
+    }
 
     @PostMapping
     public ResponseEntity<ArticleRetouchResponse<Long>> postArticle(@RequestBody ArticleRequest articleRequest,

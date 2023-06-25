@@ -3,6 +3,9 @@ package com.developer.smallRoom.application.article.service;
 import com.developer.smallRoom.dto.article.request.ArticleRequest;
 import com.developer.smallRoom.dto.article.request.ArticleUpdateRequest;
 import com.developer.smallRoom.dto.article.response.ArticleResponse;
+import com.developer.smallRoom.dto.article.response.HomeArticleResponse;
+
+import java.util.List;
 
 public interface ArticleService {
 
@@ -15,4 +18,6 @@ public interface ArticleService {
     ArticleResponse getArticleById(Long articleId);
 
     ArticleResponse getArticleByIdAndMember(Long articleId, Long memberId);
+
+    List<HomeArticleResponse> getHomeArticleResponses(int page, String standard);
 }
