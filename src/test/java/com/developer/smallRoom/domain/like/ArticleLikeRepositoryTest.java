@@ -4,6 +4,8 @@ import com.developer.smallRoom.domain.article.Article;
 import com.developer.smallRoom.domain.article.repository.ArticleRepository;
 import com.developer.smallRoom.domain.member.Member;
 import com.developer.smallRoom.domain.member.repository.MemberRepository;
+import com.developer.smallRoom.factory.ArticleFactory;
+import com.developer.smallRoom.factory.MemberFactory;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,17 +37,8 @@ class ArticleLikeRepositoryTest {
         articleRepository.deleteAll();
         memberRepository.deleteAll();
 
-        member = memberRepository.save(Member.builder()
-                .gitHubId("testId")
-                .name("testName")
-                .gitHubId("testImage")
-                .build());
-        article = articleRepository.save(Article.builder()
-                .title("title")
-                .content("content")
-                .thumbnailUrl("thumbnail")
-                .member(member)
-                .build());
+        member = memberRepository.save(MemberFactory.getMemberDefaultValue());
+        article = articleRepository.save(ArticleFactory.getDefaultValueArticle(member));
     }
 
     @DisplayName("existsArticleLikeByArticleAndMember() : Article과 Member로 좋아요가 있는지 찾는다.")

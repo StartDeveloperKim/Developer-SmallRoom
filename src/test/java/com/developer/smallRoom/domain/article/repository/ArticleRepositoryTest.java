@@ -3,6 +3,8 @@ package com.developer.smallRoom.domain.article.repository;
 import com.developer.smallRoom.domain.article.Article;
 import com.developer.smallRoom.domain.member.Member;
 import com.developer.smallRoom.domain.member.repository.MemberRepository;
+import com.developer.smallRoom.factory.ArticleFactory;
+import com.developer.smallRoom.factory.MemberFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,11 +34,7 @@ class ArticleRepositoryTest {
         articleRepository.deleteAll();
         memberRepository.deleteAll();
 
-        member = memberRepository.save(Member.builder()
-                .gitHubId("testId")
-                .name("testName")
-                .gitHubId("testImage")
-                .build());
+        member = memberRepository.save(MemberFactory.getMemberDefaultValue());
     }
 
     @DisplayName("findByIdAndMember() : 게시글ID와 게시자기준으로 게시글을 조회한다.")
@@ -81,13 +79,6 @@ class ArticleRepositoryTest {
     }
 
     private Article savedNewArticle() {
-        return articleRepository.save(Article.builder()
-                .title("title")
-                .subTitle("subTitle")
-                .content("content")
-                .githubLink("gitHubLink")
-                .thumbnailUrl("thumbnail")
-                .member(member)
-                .build());
+        return articleRepository.save(ArticleFactory.getDefaultValueArticle(member));
     }
 }

@@ -1,6 +1,7 @@
 package com.developer.smallRoom.domain.member.repository;
 
 import com.developer.smallRoom.domain.member.Member;
+import com.developer.smallRoom.factory.MemberFactory;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
@@ -18,10 +20,6 @@ class MemberRepositoryTest {
 
     @Autowired
     private MemberRepository memberRepository;
-
-    private final String GITHUB_ID = "githubId";
-    private final String NAME = "name";
-    private final String IMAGE_URL = "imageUrl";
 
     @AfterEach
     void setUp() {
@@ -34,15 +32,12 @@ class MemberRepositoryTest {
         //given
         Member savedMember = saveMember();
         //when
-        Optional<Member> findMember = memberRepository.findByGitHubId(GITHUB_ID);
+        Optional<Member> findMember = memberRepository.findByGitHubId(savedMember.getGitHubId());
         //then
-        Assertions.assertThat(findMember.get().getGitHubId()).isEqualTo(savedMember.getGitHubId());
+        assertThat(findMember.get().getGitHubId()).isEqualTo(savedMember.getGitHubId());
     }
 
     private Member saveMember() {
-        return memberRepository.save(Member.builder()
-                .gitHubId(GITHUB_ID)
-                .name(NAME)
-                .imageUrl(IMAGE_URL).build());
+        return memberRepository.save(MemberFactory.getMemberDefaultValue());
     }
 }

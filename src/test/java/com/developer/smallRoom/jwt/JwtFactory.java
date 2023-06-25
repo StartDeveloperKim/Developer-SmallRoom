@@ -1,6 +1,7 @@
 package com.developer.smallRoom.jwt;
 
 import com.developer.smallRoom.application.auth.jwt.JwtProperties;
+import com.developer.smallRoom.domain.member.Member;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -9,6 +10,7 @@ import lombok.Getter;
 
 import java.time.Duration;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Collections.emptyMap;
@@ -26,18 +28,18 @@ public class JwtFactory {
 
     @Builder
     public JwtFactory(String subject, Date issuedAt, Date expiration,
-                      Map<String, Object> claims) {
+                      Member member) {
         this.subject = subject != null ? subject : this.subject;
         this.issuedAt = issuedAt != null ? issuedAt : this.issuedAt;
         this.expiration = expiration != null ? expiration : this.expiration;
-        this.claims = claims != null ? claims : this.claims;
+        this.claims = member != null ? makeClaims(member) : this.claims;
     }
 
     public static JwtFactory withDefaultValues() {
         return JwtFactory.builder().build();
     }
 
-    public String createToken(JwtProperties jwtProperties) {
+    public String createToken(TestJwtProperties jwtProperties) {
         return Jwts.builder()
                 .setSubject(subject)
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
@@ -47,5 +49,13 @@ public class JwtFactory {
                 .addClaims(claims)
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
                 .compact();
+    }
+
+    private Map<String, Object> makeClaims(Member member) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("id", member.getId());
+        claims.put("name", member.getName());
+        claims.put("role", member.getRole().getKey());
+        return claims;
     }
 }

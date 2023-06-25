@@ -9,18 +9,19 @@ import com.developer.smallRoom.domain.member.Member;
 import com.developer.smallRoom.domain.member.repository.MemberRepository;
 import com.developer.smallRoom.dto.article.request.ArticleRequest;
 import com.developer.smallRoom.dto.article.request.ArticleUpdateRequest;
+import com.developer.smallRoom.factory.ArticleFactory;
+import com.developer.smallRoom.factory.MemberFactory;
 import com.developer.smallRoom.jwt.JwtFactory;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.developer.smallRoom.jwt.TestJwtProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.lang.Collections;
 import jakarta.servlet.http.Cookie;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -30,7 +31,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -52,9 +53,10 @@ class ArticleControllerTest {
     private ArticleRepository articleRepository;
 
     @Autowired
-    private JwtProperties jwtProperties;
-    @Autowired
     private TokenProvider tokenProvider;
+    @MockBean
+    private JwtProperties jwtProperties;
+    private final TestJwtProperties testJwtProperties = new TestJwtProperties();
 
     private Member member;
     private String accessToken;
@@ -66,21 +68,14 @@ class ArticleControllerTest {
         articleRepository.deleteAll();
         memberRepository.deleteAll();
 
-        member = memberRepository.save(Member.builder()
-                .name("testUser")
-                .gitHubId("testId")
-                .imageUrl("image")
-                .build());
+        given(jwtProperties.getIssuer()).willReturn(testJwtProperties.getIssuer());
+        given(jwtProperties.getSecretKey()).willReturn(testJwtProperties.getSecretKey());
 
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("id", member.getId());
-        claims.put("name", member.getName());
-        claims.put("role", member.getRole().getKey());
-
+        member = memberRepository.save(MemberFactory.getMemberDefaultValue());
         accessToken = JwtFactory.builder()
                 .subject(member.getGitHubId())
-                .claims(claims)
-                .build().createToken(jwtProperties);
+                .member(member)
+                .build().createToken(testJwtProperties);
     }
 
     @DisplayName("postArticle() : 로그인한 사용자는 게시글 등록이 가능하다")
@@ -109,7 +104,7 @@ class ArticleControllerTest {
     @Test
     void updateArticle() throws Exception {
         //given
-        Article article = getArticle("title", "content", member);
+        Article article = saveArticle("title", "content", member);
 
         String updateTitle = "updateTitle";
         String updateContent = "updateContent";
@@ -135,8 +130,8 @@ class ArticleControllerTest {
         //given
         Member otherMember = getOtherMember();
 
-        Article memberArticle = getArticle("title", "content", member);
-        Article otherArticle = getArticle("anotherTitle", "anotherContent", otherMember);
+        Article memberArticle = saveArticle("title", "content", member);
+        Article otherArticle = saveArticle("anotherTitle", "anotherContent", otherMember);
 
         String updateTitle = "updateTitle";
         String updateContent = "updateContent";
@@ -160,7 +155,7 @@ class ArticleControllerTest {
     @Test
     void deleteArticle() throws Exception {
         //given
-        Article memberArticle = getArticle("title", "content", member);
+        Article memberArticle = saveArticle("title", "content", member);
         //when
         ResultActions result = mvc.perform(delete("/api/article/"+memberArticle.getId())
                 .cookie(getAccessTokenCookie(accessToken)));
@@ -176,7 +171,7 @@ class ArticleControllerTest {
     @Test
     void notAuthorizationDelete() throws Exception {
         //given
-        Article memberArticle = getArticle("title", "content", member);
+        Article memberArticle = saveArticle("title", "content", member);
 
         Member otherMember = getOtherMember();
         String otherMemberAccessToken = getOtherMemberAccessToken(otherMember);
@@ -189,30 +184,25 @@ class ArticleControllerTest {
     }
 
     private Member getOtherMember() {
-        return memberRepository.save(Member.builder()
-                .gitHubId("anotherMember")
+        return memberRepository.save(MemberFactory.builder()
+                .githubId("anotherMember")
                 .name("anotherMemberName")
                 .imageUrl("image")
-                .build());
+                .build().getMember());
     }
 
     private String getOtherMemberAccessToken(Member otherMember) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("name", otherMember.getName());
-        claims.put("role", otherMember.getRole().getKey());
-
         return JwtFactory.builder()
                 .subject(otherMember.getGitHubId())
-                .claims(claims)
-                .build().createToken(jwtProperties);
+                .member(otherMember)
+                .build().createToken(testJwtProperties);
     }
 
-    private Article getArticle(String title, String content, Member member) {
-        return articleRepository.save(Article.builder()
+    private Article saveArticle(String title, String content, Member member) {
+        return articleRepository.save(ArticleFactory.builder()
                 .title(title)
                 .content(content)
-                .thumbnailUrl("thumbnail")
-                .member(member).build());
+                .member(member).build().getMember());
     }
 
     private Cookie getAccessTokenCookie(String accessToken) {
