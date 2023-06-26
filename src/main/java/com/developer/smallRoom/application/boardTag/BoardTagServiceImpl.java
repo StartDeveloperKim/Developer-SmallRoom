@@ -6,10 +6,15 @@ import com.developer.smallRoom.domain.boardTag.BoardTag;
 import com.developer.smallRoom.domain.boardTag.repository.BoardTagRepository;
 import com.developer.smallRoom.domain.tag.Tag;
 import com.developer.smallRoom.domain.tag.repository.TagRepository;
+import com.developer.smallRoom.dto.article.response.HomeArticleResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -49,9 +54,23 @@ public class BoardTagServiceImpl implements BoardTagService {
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다."));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<String> findBoardTagByArticleId(Long articleId) {
         List<BoardTag> boardTags = boardTagRepository.findBoardTagsByArticleId(articleId);
         return boardTags.stream().map(BoardTag::getTagName).collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<HomeArticleResponse> searchBoardByTag(List<String> tags, int page) {
+        List<BoardTag> boardTags = new ArrayList<>();
+        for (String tag : tags) {
+            boardTags = boardTagRepository.findBoardTagByTagName(PageRequest.of(page, 4), tag);
+        }
+        if (boardTags.isEmpty()) {
+            return null; // TODO :: null 반환 리팩토링 필요
+        }
+        return boardTags.stream().map(boardTag -> new HomeArticleResponse(boardTag.getArticle())).collect(Collectors.toList());
     }
 }

@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class Comment {
 
+    // TODO :: 댓글은 깃허브 기능으로 해결했기에 엔티티가 필요없을것 같다.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id", updatable = false)

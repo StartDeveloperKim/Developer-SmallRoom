@@ -74,7 +74,7 @@ public class Article {
         this.title = title;
         this.content = content;
         this.subTitle = subTitle;
-        this.thumbnailUrl = thumbnailUrl;
+        this.thumbnailUrl = thumbnailUrl.isEmpty() ? "https://yozm.wishket.com/media/news/1674/image001.png" : thumbnailUrl;
         this.githubLink = githubLink;
         setMember(member);
         this.hit = 0;

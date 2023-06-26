@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @EnableJpaAuditing
-@EnableConfigurationProperties(value = {JwtProperties.class, S3Properties.class})
+@EnableConfigurationProperties(value = {S3Properties.class})
 @SpringBootApplication
 public class SmallRoomApplication {
 
