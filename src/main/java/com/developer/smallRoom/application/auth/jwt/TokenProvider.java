@@ -1,10 +1,8 @@
 package com.developer.smallRoom.application.auth.jwt;
 
 import com.developer.smallRoom.application.auth.oauth.CustomOAuth2Member;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Header;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import com.developer.smallRoom.domain.member.Member;
+import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,6 +24,11 @@ public class TokenProvider {
     public String generateToken(OAuth2User oAuth2User, Duration expiredAt) {
         Date now = new Date();
         return makeToken(new Date(now.getTime() + expiredAt.toMillis()), (CustomOAuth2Member) oAuth2User);
+    }
+
+    public String generateToken(Member member, Duration expiredAt) {
+        Date now = new Date();
+        return makeToken(new Date(now.getTime() + expiredAt.toMillis()), new CustomOAuth2Member(member));
     }
 
     private String makeToken(Date expiry, CustomOAuth2Member oAuth2Member) {
@@ -50,9 +53,12 @@ public class TokenProvider {
                     .setSigningKey(jwtProperties.getSecretKey())
                     .parseClaimsJws(token);
             return true;
+        }catch (ExpiredJwtException e) {
+            throw e;
         } catch (Exception e) {
             return false;
         }
+
     }
 
     public Authentication getAuthentication(String token) {

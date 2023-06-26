@@ -4,16 +4,16 @@ import com.developer.smallRoom.application.article.image.ImageStore;
 import com.developer.smallRoom.application.auth.jwt.MemberPrincipal;
 import com.developer.smallRoom.application.member.LoginMember;
 import com.developer.smallRoom.dto.article.request.ImageRequest;
-import com.developer.smallRoom.dto.article.response.ImageResponse;
 import com.developer.smallRoom.global.exception.auth.NotAuthorizationException;
 import com.developer.smallRoom.global.exception.image.FailUploadImageAtS3;
 import com.developer.smallRoom.global.exception.image.NotHaveImageException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 

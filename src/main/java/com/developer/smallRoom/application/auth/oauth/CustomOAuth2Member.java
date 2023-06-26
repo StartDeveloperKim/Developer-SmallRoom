@@ -20,7 +20,7 @@ public class CustomOAuth2Member implements OAuth2User{
     private final String imageUrl;
 
     private Collection<? extends GrantedAuthority> authorities;
-    private final Map<String, Object> attributes;
+    private Map<String, Object> attributes;
 
     public CustomOAuth2Member(Map<String, Object> attributes) {
         this.attributes = attributes;
@@ -29,6 +29,14 @@ public class CustomOAuth2Member implements OAuth2User{
         this.name = (String) attributes.get("name");
         this.imageUrl = (String) attributes.get("avatar_url");
     }
+    public CustomOAuth2Member(Member member) {
+        this.memberId = member.getId();
+        this.gitHubId = member.getGitHubId();
+        this.name = member.getName();
+        this.imageUrl = member.getImageUrl();
+        this.authorities = Collections.singleton(new SimpleGrantedAuthority(member.getRole().getKey()));
+    }
+
 
     public Member toMember() {
         return Member.builder()

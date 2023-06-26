@@ -2,12 +2,11 @@ package com.developer.smallRoom.application.auth.jwt.refreshToken;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-
-import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @Entity
 public class RefreshToken {
 
@@ -16,12 +15,12 @@ public class RefreshToken {
     private Long id;
 
     @Column(name = "member_id", nullable = false, unique = true)
-    private String memberId;
+    private Long memberId;
 
     @Column(name = "refresh_token", nullable = false)
     private String refreshToken;
 
-    public RefreshToken(final String memberId, final String refreshToken) {
+    public RefreshToken(final Long memberId, final String refreshToken) {
         this.memberId = memberId;
         this.refreshToken = refreshToken;
     }

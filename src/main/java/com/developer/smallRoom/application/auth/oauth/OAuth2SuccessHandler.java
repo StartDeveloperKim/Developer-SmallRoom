@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -25,8 +24,11 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     private final String REFRESH_TOKEN_COOKIE_NAME = "refresh_token";
     private final String ACCESS_TOKEN_COOKIE_NAME = "access_token";
 
-    private final Duration REFRESH_TOKEN_DURATION = Duration.ofDays(14);
-    private final Duration ACCESS_TOKEN_DURATION = Duration.ofDays(1);
+    // TODO :: 사용자 경험 테스트
+//    private final Duration REFRESH_TOKEN_DURATION = Duration.ofDays(14);
+//    private final Duration ACCESS_TOKEN_DURATION = Duration.ofHours(2);
+    private final Duration REFRESH_TOKEN_DURATION = Duration.ofMinutes(4);
+    private final Duration ACCESS_TOKEN_DURATION = Duration.ofMinutes(1);
     private final String REDIRECT_PATH = "/";
 
     private final TokenProvider tokenProvider;
@@ -38,7 +40,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         log.info("OAuth2Member : {}", oAuth2Member.getName());
         String refreshToken = tokenProvider.generateToken(oAuth2Member, REFRESH_TOKEN_DURATION);
-        saveRefreshToken(oAuth2Member.getGitHubId(), refreshToken);
+        saveRefreshToken(oAuth2Member.getMemberId(), refreshToken);
         addRefreshTokenToCookie(request, response, refreshToken);
 
         String accessToken = tokenProvider.generateToken(oAuth2Member, ACCESS_TOKEN_DURATION);
@@ -48,7 +50,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         getRedirectStrategy().sendRedirect(request, response, REDIRECT_PATH);
     }
 
-    private void saveRefreshToken(String memberId, String newRefreshToken) {
+    private void saveRefreshToken(Long memberId, String newRefreshToken) {
         RefreshToken refreshToken = refreshTokenRepository.findByMemberId(memberId)
                 .map(entity -> entity.update(newRefreshToken))
                 .orElse(new RefreshToken(memberId, newRefreshToken));

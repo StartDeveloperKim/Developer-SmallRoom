@@ -1,8 +1,6 @@
 package com.developer.smallRoom.dto.article.response;
 
-import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 public class ArticleRetouchResponse<T> {

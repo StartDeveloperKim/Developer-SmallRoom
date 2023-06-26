@@ -3,6 +3,7 @@ package com.developer.smallRoom.view.article;
 import com.developer.smallRoom.application.auth.jwt.JwtProperties;
 import com.developer.smallRoom.application.auth.jwt.TokenAuthenticationFilter;
 import com.developer.smallRoom.application.auth.jwt.TokenProvider;
+import com.developer.smallRoom.application.auth.jwt.refreshToken.RefreshTokenRepository;
 import com.developer.smallRoom.domain.article.Article;
 import com.developer.smallRoom.domain.article.repository.ArticleRepository;
 import com.developer.smallRoom.domain.member.Member;
@@ -51,6 +52,8 @@ class ArticleControllerTest {
     private MemberRepository memberRepository;
     @Autowired
     private ArticleRepository articleRepository;
+    @Autowired
+    private RefreshTokenRepository refreshTokenRepository;
 
     @Autowired
     private TokenProvider tokenProvider;
@@ -64,7 +67,7 @@ class ArticleControllerTest {
     @BeforeEach
     void setup() {
         this.mvc = MockMvcBuilders.webAppContextSetup(context)
-                .addFilter(new TokenAuthenticationFilter(tokenProvider)).build();
+                .addFilter(new TokenAuthenticationFilter(tokenProvider, refreshTokenRepository)).build();
         articleRepository.deleteAll();
         memberRepository.deleteAll();
 

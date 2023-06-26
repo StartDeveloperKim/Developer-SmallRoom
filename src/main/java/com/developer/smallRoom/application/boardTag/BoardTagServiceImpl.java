@@ -9,8 +9,6 @@ import com.developer.smallRoom.domain.tag.repository.TagRepository;
 import com.developer.smallRoom.dto.article.response.HomeArticleResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

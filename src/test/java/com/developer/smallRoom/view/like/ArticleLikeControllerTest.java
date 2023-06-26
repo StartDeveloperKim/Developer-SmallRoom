@@ -3,6 +3,7 @@ package com.developer.smallRoom.view.like;
 import com.developer.smallRoom.application.auth.jwt.JwtProperties;
 import com.developer.smallRoom.application.auth.jwt.TokenAuthenticationFilter;
 import com.developer.smallRoom.application.auth.jwt.TokenProvider;
+import com.developer.smallRoom.application.auth.jwt.refreshToken.RefreshTokenRepository;
 import com.developer.smallRoom.domain.article.Article;
 import com.developer.smallRoom.domain.article.repository.ArticleRepository;
 import com.developer.smallRoom.domain.like.ArticleLike;
@@ -48,6 +49,8 @@ class ArticleLikeControllerTest {
     private ArticleRepository articleRepository;
     @Autowired
     private ArticleLikeRepository articleLikeRepository;
+    @Autowired
+    private RefreshTokenRepository refreshTokenRepository;
 
     @Autowired
     private TokenProvider tokenProvider;
@@ -68,7 +71,7 @@ class ArticleLikeControllerTest {
     @BeforeEach
     void setup() {
         this.mvc = MockMvcBuilders.webAppContextSetup(context)
-                .addFilter(new TokenAuthenticationFilter(tokenProvider)).build();
+                .addFilter(new TokenAuthenticationFilter(tokenProvider, refreshTokenRepository)).build();
         articleRepository.deleteAll();
         memberRepository.deleteAll();
         articleLikeRepository.deleteAll();
