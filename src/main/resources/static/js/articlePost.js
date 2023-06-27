@@ -141,8 +141,15 @@ function toServer(requestData, method) {
 
             window.location.href = '/article/' + responseData;
         },
-        error: function (xhr, textStatus, errorThrown) {
-            console.log(errorThrown);
+        error: function (xhr, testStatus, errorThrown) {
+            if (xhr.responseJSON) {
+                const errors = xhr.responseJSON;
+                const errorMessage = Object.values(errors).join('\n');
+                alert(errorMessage);
+            } else {
+                // 기타 처리
+                alert('An error occurred');
+            }
         }
     });
 }
