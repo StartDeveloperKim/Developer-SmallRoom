@@ -7,6 +7,7 @@ const tag_input = document.getElementById("default-search");
 let tagify = new Tagify(tag_input, {
     whitelist: allTechStack,
     dropdown: {
+        maxItems: 20,
         classname: "tags-look",
         enabled: 0,
         closeOnSelect: false
@@ -15,18 +16,34 @@ let tagify = new Tagify(tag_input, {
 
 // 태그가 추가될 떄 마다 AJAX 통신을 활용해서 태그 기반 검색을 하자
 tagify.on('add', function (e) {
-    const tags = tagify.value.map(obj => obj.value);
-    $('#content').empty();
-    searchFlag = true;
-    dataLoadFlag = true;
-    page = 0;
-    loadSearchData(searchArticleUrl + page, tags.join(','));
-    page++;
-    query = tags.join(',');
-    console.log('추가 전체 검색어:', tags);
+    setSearchResult();
+});
+
+tagify.on('remove', function(e) {
+    setSearchResult();
 });
 
 let query;
+
+function setSearchResult() {
+    const tags = tagify.value.map(obj => obj.value);
+    $('#content').empty();
+    if (tags.length === 0) {
+        searchFlag = false;
+        dataLoadFlag = true;
+        page = 0;
+        loadData(basicArticleUrl + page,);
+        page++;
+    }else{
+        searchFlag = true;
+        dataLoadFlag = true;
+        page = 0;
+        loadSearchData(searchArticleUrl + page, tags.join(','));
+        page++;
+        query = tags.join(',');
+        console.log('추가 전체 검색어:', tags);
+    }
+}
 
 /*===================================================================*/
 

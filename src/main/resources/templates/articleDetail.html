@@ -64,7 +64,7 @@
 
         <hr class="border-t border-gray-300 my-2">
 
-        <div class="flex items-center space-x-2 flex-wrap md:flex-wrap lg:flex-wrap">
+        <div class="flex items-center space-x-2 flex-wrap md:flex-wrap lg:flex-wrap" th:if="${article.tags != null}">
             <span th:each="tag : ${article.tags}" class="inline-block py-1 px-2 rounded-full bg-gray-300 text-sm" th:text="${tag}"></span>
         </div>
 

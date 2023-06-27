@@ -1,3 +1,4 @@
+/*
 import {updateArticleList} from "./card.js";
 import {data} from '/js/stack.js'
 
@@ -28,7 +29,7 @@ tagify.on('add', function (e) {
 
 let query;
 
-/*===================================================================*/
+/!*===================================================================*!/
 
 let dataLoadFlag = true;
 let isLoading = false; // 중복 요청 방지를 위한 플래그 변수
@@ -110,3 +111,4 @@ $(window).scroll(function () {
         }
     }
 });
+*/
