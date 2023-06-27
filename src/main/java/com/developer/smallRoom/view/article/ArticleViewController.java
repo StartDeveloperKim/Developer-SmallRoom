@@ -30,9 +30,12 @@ public class ArticleViewController {
                                   @LoginMember MemberPrincipal memberPrincipal,
                                   Model model) {
         ArticleResponse article = articleService.getArticleById(id);
-        List<String> tags = boardTagService.findBoardTagByArticleId(id);
+
         article.setUpdatable(memberPrincipal);
-        article.setTags(tags);
+
+//        List<String> tags = boardTagService.findBoardTagByArticleId(id);
+//        article.setTags(tags);
+
         model.addAttribute("article", article);
 
         if (memberPrincipal != null) {
@@ -55,8 +58,9 @@ public class ArticleViewController {
                                     Model model) {
         validMember(memberPrincipal);
         ArticleResponse article = articleService.getArticleByIdAndMember(id, memberPrincipal.getMemberId());
-        List<String> tags = boardTagService.findBoardTagByArticleId(id);
         article.setUpdatable(memberPrincipal);
+
+        List<String> tags = boardTagService.findBoardTagByArticleId(id);
         article.setTags(tags);
 
         model.addAttribute("article", article);

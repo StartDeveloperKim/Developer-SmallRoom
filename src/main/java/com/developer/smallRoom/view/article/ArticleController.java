@@ -9,9 +9,11 @@ import com.developer.smallRoom.dto.article.request.ArticleUpdateRequest;
 import com.developer.smallRoom.dto.article.response.ArticleRetouchResponse;
 import com.developer.smallRoom.dto.article.response.HomeArticleResponse;
 import com.developer.smallRoom.global.exception.auth.NotAuthorizationException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,7 +31,7 @@ public class ArticleController {
     * TODO :: ControllerAdvice를 통해 다른사용자가 다른 사용자의 작성글에 접근하고자하면 이를 예외처리하여 막아야한다.
     * */
 
-    // TODO :: 무한스크롤을 위해 게시글 조회 API를 만들어야 한다. 이 떄 파라미터로 page와 standard를 받아야 한다.
+    // TODO :: 무한스크롤로 데이터를 가져올 떄 standard(기준)을 쿼리스트링으로 받아와야 한다.
 
     @GetMapping
     public ResponseEntity<List<HomeArticleResponse>> getaHomeArticle(@RequestParam(value = "page", required = true) int page,
@@ -39,7 +41,7 @@ public class ArticleController {
     }
 
     @PostMapping
-    public ResponseEntity<ArticleRetouchResponse<Long>> postArticle(@RequestBody ArticleRequest articleRequest,
+    public ResponseEntity<ArticleRetouchResponse<Long>> postArticle(@Validated @RequestBody ArticleRequest articleRequest,
                                                               @LoginMember MemberPrincipal memberPrincipal) {
         validMember(memberPrincipal);
         log.info("ArticleRequest : {} / {}", articleRequest.getTitle(), articleRequest.getTags());
@@ -50,7 +52,7 @@ public class ArticleController {
     }
 
     @PutMapping
-    public ResponseEntity<ArticleRetouchResponse<Long>> updateArticle(@RequestBody ArticleUpdateRequest request,
+    public ResponseEntity<ArticleRetouchResponse<Long>> updateArticle(@Validated @RequestBody ArticleUpdateRequest request,
                                                                       @LoginMember MemberPrincipal memberPrincipal) {
         validMember(memberPrincipal);
         try {

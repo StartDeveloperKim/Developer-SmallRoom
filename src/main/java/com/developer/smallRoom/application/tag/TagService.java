@@ -17,20 +17,20 @@ public class TagService {
 //        String[] programmingLanguages = {"JavaScript", "Python", "Java", "C++", "C#", "Ruby", "Go", "Swift",
 //                "Kotlin", "TypeScript", "Rust", "PHP", "Perl", "HTML", "CSS"};
 //        String[] backendTechStack = {"Node.js", "Express", "Ruby on Rails", "Django", "ASP.NET", "Spring Boot", "Flask", "Laravel"};
-//        String[] frontendTechStack = {"React", "Angular", "Vue.js", "Ember.js", "Svelte"};
-//        String[] infrastructureTechStack = {"AWS", "Google Cloud Platform", "Azure", "Docker", "Kubernetes", "Nginx", "Apache", "Redis", "MongoDB", "PostgreSQL"};
+//        String[] frontendTechStack = {"React", "Angular", "Vue.js", "Ember.js", "Svelte", "JSP", "Thymeleaf", "Mustache"};
+//        String[] infrastructureTechStack = {"AWS", "Google Cloud Platform", "Azure", "Docker", "Kubernetes", "Nginx", "Apache", "Redis", "MongoDB", "PostgreSQL"
+//                , "Oracle", "MySQL", "Redis", "Memcached"};
 //
-//        for (String programmingLanguage : programmingLanguages) {
-//            tagRepository.save(new Tag(programmingLanguage));
-//        }
-//        for (String s : backendTechStack) {
-//            tagRepository.save(new Tag(s));
-//        }
-//        for (String s : frontendTechStack) {
-//            tagRepository.save(new Tag(s));
-//        }
-//        for (String s : infrastructureTechStack) {
-//            tagRepository.save(new Tag(s));
+//        saveTag(programmingLanguages);
+//        saveTag(backendTechStack);
+//        saveTag(frontendTechStack);
+//        saveTag(infrastructureTechStack);
+//    }
+//    private void saveTag(String[] tags) {
+//        for (String tag : tags) {
+//            if (!tagRepository.existsByName(tag)){
+//                tagRepository.save(new Tag(tag));
+//            }
 //        }
 //    }
 }

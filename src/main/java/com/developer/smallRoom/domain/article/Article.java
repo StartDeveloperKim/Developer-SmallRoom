@@ -34,13 +34,13 @@ public class Article {
     @Column(name = "sub_title", nullable = false, length = 100)
     private String subTitle;
 
-    @Column(name = "content", nullable = false, length = 10000)
+    @Column(name = "content", nullable = false, length = 20000)
     private String content;
 
     @Column(name = "thumbnail_url", nullable = false)
     private String thumbnailUrl;
 
-    @Column(name = "github_link")
+    @Column(name = "github_link", nullable = false)
     private String githubLink;
 
     @Column(name = "hit", nullable = false)
@@ -52,6 +52,9 @@ public class Article {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @Column(name = "tags")
+    private String tags;
 
     @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<BoardTag> boardTags = new ArrayList<>();
@@ -66,16 +69,18 @@ public class Article {
     @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<ArticleLike> articleLikes = new ArrayList<>();
 
+    // TODO :: 댓글관련 코드 삭제 필요 - 깃허브 이슈 기능 사용함
     @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public Article(String title, String subTitle, String content, String thumbnailUrl, String githubLink, Member member) {
+    public Article(String title, String subTitle, String content, String thumbnailUrl, String githubLink, String tags, Member member) {
         this.title = title;
         this.content = content;
         this.subTitle = subTitle;
         this.thumbnailUrl = thumbnailUrl.isEmpty() ? "https://yozm.wishket.com/media/news/1674/image001.png" : thumbnailUrl;
         this.githubLink = githubLink;
+        this.tags = tags;
         setMember(member);
         this.hit = 0;
 //        this.likeCount = 0;
@@ -93,6 +98,7 @@ public class Article {
         this.githubLink = request.getGitHubLink();
         this.content = request.getContent();
         this.thumbnailUrl = request.getThumbnailUrl();
+        this.tags = request.tagsListToString();
     }
 
     // TODO :: 어느정도 프론트엔드와 백엔드 모두가 구현되고 나면 Jmeter를 통해 성능을 측정해보고 최적화를 해보자
@@ -119,6 +125,10 @@ public class Article {
     public List<String> getTags() {
         return this.boardTags.stream().map(BoardTag::getTagName)
                 .collect(Collectors.toList());
+    }
+
+    public String getTagsString() {
+        return this.tags;
     }
 
     public boolean isMemberArticle(Member member) {
