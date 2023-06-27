@@ -27,8 +27,6 @@ public class TokenService {
         Member member = memberRepository.findById(findRefreshToken.getMemberId()).
                 orElseThrow(() -> new IllegalArgumentException("유효하지 않은 멤버ID입니다."));
 
-        // TODO :: 사용자 경험 테스트
-//        return tokenProvider.generateToken(member, Duration.ofHours(2));
-        return tokenProvider.generateToken(member, Duration.ofMinutes(1));
+        return tokenProvider.generateToken(member, Duration.ofHours(2));
     }
 }

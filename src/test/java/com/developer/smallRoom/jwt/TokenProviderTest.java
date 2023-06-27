@@ -54,7 +54,6 @@ public class TokenProviderTest {
         String token = tokenProvider.generateToken(customOAuth2Member, Duration.ofDays(14));
 
         //then
-        // TODO :: 실제 배포환경에서는 application-jwt 프로퍼티파일을 가져갈 수 없다. 그래서 아마 이 테스트는 실패할 것 같다. 그래서 테스트용 시크릿키를 설정해야한다.
         String name = Jwts.parser()
                 .setSigningKey(testJwtProperties.getSecretKey())
                 .parseClaimsJws(token)

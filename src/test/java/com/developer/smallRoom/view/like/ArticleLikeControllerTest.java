@@ -62,12 +62,6 @@ class ArticleLikeControllerTest {
     private Article article;
     private String accessToken;
 
-    /*
-     * TODO :: 테스트코드 리팩토링 필요함
-     *  - TestJwtProperties 만들어서 사용하기
-     *  - MemberFactory, ArticleFactory 작성해서 중복코드 삭제하기
-     * */
-
     @BeforeEach
     void setup() {
         this.mvc = MockMvcBuilders.webAppContextSetup(context)

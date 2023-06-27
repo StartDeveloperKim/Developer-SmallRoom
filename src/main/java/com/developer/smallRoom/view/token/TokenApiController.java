@@ -1,6 +1,5 @@
 package com.developer.smallRoom.view.token;
 
-import com.developer.smallRoom.application.auth.jwt.TokenProvider;
 import com.developer.smallRoom.application.auth.jwt.TokenService;
 import com.developer.smallRoom.global.util.CookieUtil;
 import jakarta.servlet.http.HttpServletRequest;

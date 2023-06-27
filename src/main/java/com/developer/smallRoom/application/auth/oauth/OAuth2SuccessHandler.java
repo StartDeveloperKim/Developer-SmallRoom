@@ -24,11 +24,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     private final String REFRESH_TOKEN_COOKIE_NAME = "refresh_token";
     private final String ACCESS_TOKEN_COOKIE_NAME = "access_token";
 
-    // TODO :: 사용자 경험 테스트
-//    private final Duration REFRESH_TOKEN_DURATION = Duration.ofDays(14);
-//    private final Duration ACCESS_TOKEN_DURATION = Duration.ofHours(2);
-    private final Duration REFRESH_TOKEN_DURATION = Duration.ofMinutes(4);
-    private final Duration ACCESS_TOKEN_DURATION = Duration.ofMinutes(1);
+    private final Duration REFRESH_TOKEN_DURATION = Duration.ofDays(14);
+    private final Duration ACCESS_TOKEN_DURATION = Duration.ofHours(2);
     private final String REDIRECT_PATH = "/";
 
     private final TokenProvider tokenProvider;
