@@ -17,7 +17,11 @@ public class PerformanceAspect {
     public void articleById() {
     }
 
-    @Around("articleById()")
+    @Pointcut("execution(* com.developer.smallRoom.view.article.ArticleViewController.articleUpdateView(..))")
+    public void getUpdateArticle() {
+    }
+
+    @Around("articleById() || getUpdateArticle()")
     public Object calculatePerformanceTime(ProceedingJoinPoint proceedingJoinPoint) {
         Object result = null;
         StopWatch stopWatch = new StopWatch();
