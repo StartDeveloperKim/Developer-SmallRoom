@@ -60,9 +60,6 @@ public class ArticleViewController {
         ArticleResponse article = articleService.getArticleByIdAndMember(id, memberPrincipal.getMemberId());
         article.setUpdatable(memberPrincipal);
 
-        List<String> tags = boardTagService.findBoardTagByArticleId(id);
-        article.setTags(tags);
-
         model.addAttribute("article", article);
         return "articlePost";
     }
