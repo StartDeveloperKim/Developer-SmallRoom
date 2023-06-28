@@ -72,6 +72,13 @@ public class ArticleServiceImpl implements ArticleService{
                 .map(HomeArticleResponse::new).collect(Collectors.toList());
     }
 
+    @Override
+    public List<HomeArticleResponse> searchArticlesByTags(int page, List<String> tags) {
+        List<Article> articles = articleRepository.
+                findArticlesByTags(tags, PageRequest.of(page, 4, Sort.by(Sort.Direction.DESC, "createAt")));
+        return articles.stream().map(HomeArticleResponse::new).collect(Collectors.toList());
+    }
+
     private Article findArticleByArticleAndMember(Long articleId, Long memberId) {
         return articleRepository.findByIdAndMemberId(articleId, memberId)
                 .orElseThrow(() -> new NotAuthorizationException("잘못된 접근입니다."));

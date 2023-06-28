@@ -1,7 +1,6 @@
 package com.developer.smallRoom.domain.article;
 
 import com.developer.smallRoom.domain.boardTag.BoardTag;
-import com.developer.smallRoom.domain.comment.Comment;
 import com.developer.smallRoom.domain.like.ArticleLike;
 import com.developer.smallRoom.domain.member.Member;
 import com.developer.smallRoom.dto.article.request.ArticleUpdateRequest;
@@ -62,16 +61,11 @@ public class Article {
     // TODO :: 좋아요 수, 댓글 수 통계컬럼을 두고 성능을 최적화하자.
 //    @Column(name = "like_count", nullable = false)
 //    private int likeCount;
-//
-//    @Column(name = "comment_count", nullable = false)
-//    private int commentCount;
 
     @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<ArticleLike> articleLikes = new ArrayList<>();
 
     // TODO :: 댓글관련 코드 삭제 필요 - 깃허브 이슈 기능 사용함
-    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Comment> comments = new ArrayList<>();
 
     @Builder
     public Article(String title, String subTitle, String content, String thumbnailUrl, String githubLink, String tags, Member member) {
@@ -110,16 +104,8 @@ public class Article {
         this.articleLikes.add(articleLike);
     }
 
-    public void addComment(Comment comment) {
-        this.comments.add(comment);
-    }
-
 //    public void addLikeCount() {
 //        this.likeCount++;
-//    }
-//
-//    public void addCommentCount() {
-//        this.commentCount++;
 //    }
 
     public List<String> getTags() {

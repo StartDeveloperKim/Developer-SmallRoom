@@ -20,4 +20,6 @@ public interface ArticleService {
     ArticleResponse getArticleByIdAndMember(Long articleId, Long memberId);
 
     List<HomeArticleResponse> getHomeArticleResponses(int page, String standard);
+
+    List<HomeArticleResponse> searchArticlesByTags(int page, List<String> tags);
 }

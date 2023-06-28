@@ -12,9 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -63,12 +61,18 @@ public class BoardTagServiceImpl implements BoardTagService {
     @Override
     public List<HomeArticleResponse> searchBoardByTag(List<String> tags, int page) {
         List<BoardTag> boardTags = new ArrayList<>();
+
         for (String tag : tags) {
-            boardTags = boardTagRepository.findBoardTagByTagName(PageRequest.of(page, 4), tag);
+            boardTags.addAll(boardTagRepository.findBoardTagByTagName(PageRequest.of(page, 4), tag));
         }
         if (boardTags.isEmpty()) {
-            return null; // TODO :: null 반환 리팩토링 필요
+            return null;
         }
-        return boardTags.stream().map(boardTag -> new HomeArticleResponse(boardTag.getArticle())).collect(Collectors.toList());
+
+        Map<Long, HomeArticleResponse> articles = new HashMap<>();
+        for (BoardTag boardTag : boardTags) {
+            articles.put(boardTag.getArticle().getId(), new HomeArticleResponse(boardTag.getArticle()));
+        }
+        return new ArrayList<>(articles.values());
     }
 }

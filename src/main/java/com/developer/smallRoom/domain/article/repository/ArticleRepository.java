@@ -18,5 +18,10 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     Page<Article> findArticlesBy(Pageable pageable);
 
+    @Query("select distinct a from Article a " +
+            "inner join a.boardTags bt " +
+            "inner join bt.tag t where t.name in :tags")
+    List<Article> findArticlesByTags(@Param("tags") List<String> tags, Pageable pageable);
+
     boolean existsByIdAndMember(Long id, Member member);
 }
