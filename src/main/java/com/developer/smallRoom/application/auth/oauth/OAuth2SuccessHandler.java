@@ -1,5 +1,6 @@
 package com.developer.smallRoom.application.auth.oauth;
 
+import com.developer.smallRoom.application.auth.jwt.TokenInfo;
 import com.developer.smallRoom.application.auth.jwt.TokenProvider;
 import com.developer.smallRoom.application.auth.jwt.refreshToken.RefreshToken;
 import com.developer.smallRoom.application.auth.jwt.refreshToken.RefreshTokenRepository;
@@ -16,16 +17,13 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.time.Duration;
 
+import static com.developer.smallRoom.application.auth.jwt.TokenInfo.*;
+
 @Slf4j
 @RequiredArgsConstructor
 @Component
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private final String REFRESH_TOKEN_COOKIE_NAME = "refresh_token";
-    private final String ACCESS_TOKEN_COOKIE_NAME = "access_token";
-
-    private final Duration REFRESH_TOKEN_DURATION = Duration.ofDays(14);
-    private final Duration ACCESS_TOKEN_DURATION = Duration.ofHours(2);
     private final String REDIRECT_PATH = "/";
 
     private final TokenProvider tokenProvider;
@@ -36,11 +34,11 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         CustomOAuth2Member oAuth2Member = (CustomOAuth2Member) authentication.getPrincipal();
 
         log.info("OAuth2Member : {}", oAuth2Member.getName());
-        String refreshToken = tokenProvider.generateToken(oAuth2Member, REFRESH_TOKEN_DURATION);
+        String refreshToken = tokenProvider.generateToken(oAuth2Member, REFRESH_TOKEN.getExpireDuration());
         saveRefreshToken(oAuth2Member.getMemberId(), refreshToken);
         addRefreshTokenToCookie(request, response, refreshToken);
 
-        String accessToken = tokenProvider.generateToken(oAuth2Member, ACCESS_TOKEN_DURATION);
+        String accessToken = tokenProvider.generateToken(oAuth2Member, ACCESS_TOKEN.getExpireDuration());
         addAccessTokenToCookie(request, response, accessToken);
 
         clearAuthenticationAttributes(request, response);
@@ -56,17 +54,17 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     }
 
     private void addRefreshTokenToCookie(HttpServletRequest request, HttpServletResponse response, String refreshToken) {
-        int cookieMaxAge = (int) REFRESH_TOKEN_DURATION.toSeconds();
+        int cookieMaxAge = (int) REFRESH_TOKEN.getExpireDuration().toSeconds();
 
-        CookieUtil.deleteCookie(request, response, REFRESH_TOKEN_COOKIE_NAME);
-        CookieUtil.addCookie(response, REFRESH_TOKEN_COOKIE_NAME, refreshToken, cookieMaxAge);
+        CookieUtil.deleteCookie(request, response, REFRESH_TOKEN.getCookieName());
+        CookieUtil.addCookie(response, REFRESH_TOKEN.getCookieName(), refreshToken, cookieMaxAge);
     }
 
     private void addAccessTokenToCookie(HttpServletRequest request, HttpServletResponse response, String accessToken) {
-        int cookieMaxAge = (int) ACCESS_TOKEN_DURATION.toSeconds();
+        int cookieMaxAge = (int) ACCESS_TOKEN.getExpireDuration().toSeconds();
 
-        CookieUtil.deleteCookie(request, response, ACCESS_TOKEN_COOKIE_NAME);
-        CookieUtil.addCookie(response, ACCESS_TOKEN_COOKIE_NAME, accessToken, cookieMaxAge);
+        CookieUtil.deleteCookie(request, response, ACCESS_TOKEN.getCookieName());
+        CookieUtil.addCookie(response, ACCESS_TOKEN.getCookieName(), accessToken, cookieMaxAge);
     }
 
     private void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {

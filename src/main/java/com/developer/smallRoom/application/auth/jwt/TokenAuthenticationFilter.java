@@ -10,12 +10,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.el.parser.Token;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Optional;
+
+import static com.developer.smallRoom.application.auth.jwt.TokenInfo.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -24,13 +27,10 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
-    private final static String ACCESS_TOKEN = "access_token";
-    private final static String REFRESH_TOKEN = "refresh_token";
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String accessToken = getCookie(request, ACCESS_TOKEN);
-        String refreshToken = getCookie(request, REFRESH_TOKEN);
+        String accessToken = getCookie(request, ACCESS_TOKEN.getCookieName());
+        String refreshToken = getCookie(request, REFRESH_TOKEN.getCookieName());
 
         log.info("tokenAuthenticationFilter start : {}", request.getRequestURI());
 
@@ -50,7 +50,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private void checkRefreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String refreshToken = getCookie(request, REFRESH_TOKEN);
+        String refreshToken = getCookie(request, REFRESH_TOKEN.getCookieName());
         log.info("Expire AccessToken");
         if (!refreshToken.isEmpty()) {
             Optional<RefreshToken> refreshTokenEntity = refreshTokenRepository.findByRefreshToken(refreshToken);
