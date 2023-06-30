@@ -7,6 +7,7 @@ import com.developer.smallRoom.application.auth.oauth.CustomOAuth2Member;
 import com.developer.smallRoom.domain.member.Member;
 import com.developer.smallRoom.domain.member.Role;
 import com.developer.smallRoom.factory.MemberFactory;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -71,11 +72,8 @@ public class TokenProviderTest {
                 .expiration(new Date(new Date().getTime() - Duration.ofDays(7).toMillis()))
                 .build()
                 .createToken(testJwtProperties);
-        //when
-        boolean result = tokenProvider.validToken(token);
-
-        //then
-        assertThat(result).isFalse();
+        //when,then
+        assertThatThrownBy(() -> tokenProvider.validToken(token)).isInstanceOf(ExpiredJwtException.class);
     }
 
     @DisplayName("validToken() : 유효한 토큰인 경우에 유효성 검증에 성공한다.")

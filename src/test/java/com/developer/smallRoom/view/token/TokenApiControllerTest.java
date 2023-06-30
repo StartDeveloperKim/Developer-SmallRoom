@@ -61,7 +61,7 @@ class TokenApiControllerTest {
         Member member = memberRepository.save(MemberFactory.getMemberDefaultValue());
 
         testRefreshToken = tokenProvider.generateToken(member, Duration.ofDays(14));
-        refreshTokenRepository.save(new RefreshToken(1L, testRefreshToken));
+        refreshTokenRepository.save(new RefreshToken(member.getId(), testRefreshToken));
     }
 
     @DisplayName("generateNewAccessToken() : 해당 url로 접근하면 RefreshToken 확인한 후 새 AccessToken을 발급한다.")
