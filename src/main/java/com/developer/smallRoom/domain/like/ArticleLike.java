@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-@Table(name = "article_like")
+@Table(name = "ARTICLE_LIKE")
 public class ArticleLike {
 
     @Id

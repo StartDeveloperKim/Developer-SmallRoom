@@ -1,8 +1,8 @@
-INSERT INTO MEMBER (MEMBER_ID, CREATE_AT, GIT_HUB_ID, IMAGE_URL, NAME, ROLE)
+INSERT INTO member (MEMBER_ID, CREATE_AT, GIT_HUB_ID, IMAGE_URL, NAME, ROLE)
 VALUES
 (1, '2023-06-26 15:39:11.054002', 'StartDeveloperKim', 'https://avatars.githubusercontent.com/u/97887047?v=4', 'Kims', 'USER');
 
-INSERT INTO ARTICLE (ARTICLE_ID, CONTENT, CREATE_AT, GITHUB_LINK, HIT, SUB_TITLE, TAGS, THUMBNAIL_URL, TITLE, MEMBER_ID)
+INSERT INTO article (ARTICLE_ID, CONTENT, CREATE_AT, GITHUB_LINK, HIT, SUB_TITLE, TAGS, THUMBNAIL_URL, TITLE, MEMBER_ID)
 VALUES
 (1, '<h2>안녕하세요1</h2>', '2023-06-26 15:39:32.646494', '안녕하세요1', 7, '안녕하세요1', 'Python,Kotlin,PHP,CSS,Express', 'https://yozm.wishket.com/media/news/1674/image001.png', '안녕하세요1', 1),
 (2, '<h2>안녕하세요2</h2>', '2023-06-26 15:40:00.131184', '안녕하세요2', 12, '안녕하세요2', 'JavaScript,Go,C++,Rust,HTML', 'https://images.velog.io/images/youngerjesus/post/74ba448d-59f7-486f-b4bf-702e8e124fdd/java.png', '안녕하세요2', 1),
@@ -15,7 +15,7 @@ VALUES
 (9, '<p>asdasd</p>', '2023-06-27 19:49:41.564023', '안녕하세요9', 8, '안녕하세요9', 'JavaScript,Kotlin,CSS,TypeScript,Ruby', 'https://velog.velcdn.com/images/ohzzi/post/0980fac3-7791-4fc0-bd89-007b1dc1472b/image.png', 'ㅁㄴㅇㅁㄴㅇㅁㄴㄴ9', 1);
 
 
-INSERT INTO TAG (TAG_ID, TAG_NAME)
+INSERT INTO tag (TAG_ID, TAG_NAME)
 VALUES
 (1, 'JavaScript'),
 (2, 'Python'),
@@ -63,7 +63,7 @@ VALUES
 (44, 'Memcached');
 
 
-INSERT INTO BOARD_TAG (BOARD_TAG_ID, ARTICLE_ID, TAG_ID)
+INSERT INTO board_tag (BOARD_TAG_ID, ARTICLE_ID, TAG_ID)
 VALUES
 (59, 8, 1),
 (60, 8, 4),

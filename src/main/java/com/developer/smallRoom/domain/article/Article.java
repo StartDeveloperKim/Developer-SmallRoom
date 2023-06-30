@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 @Getter
 @EntityListeners(AuditingEntityListener.class)
 @Entity
+@Table(name = "ARTICLE")
 public class Article {
 
     @Id

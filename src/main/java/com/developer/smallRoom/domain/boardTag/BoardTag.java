@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
+@Table(name = "BOARD_TAG")
 public class BoardTag {
 
     @Id
