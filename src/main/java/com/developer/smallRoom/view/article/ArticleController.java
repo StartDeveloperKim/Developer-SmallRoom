@@ -3,7 +3,9 @@ package com.developer.smallRoom.view.article;
 import com.developer.smallRoom.application.article.service.ArticleService;
 import com.developer.smallRoom.application.auth.jwt.MemberPrincipal;
 import com.developer.smallRoom.application.boardTag.BoardTagService;
+import com.developer.smallRoom.application.like.ArticleLikeService;
 import com.developer.smallRoom.application.member.LoginMember;
+import com.developer.smallRoom.domain.like.ArticleLike;
 import com.developer.smallRoom.dto.article.request.ArticleRequest;
 import com.developer.smallRoom.dto.article.request.ArticleUpdateRequest;
 import com.developer.smallRoom.dto.article.response.ArticleRetouchResponse;
@@ -26,6 +28,7 @@ public class ArticleController {
 
     private final ArticleService articleService;
     private final BoardTagService boardTagService;
+    private final ArticleLikeService articleLikeService;
 
     /*
     * TODO :: ControllerAdvice를 통해 다른사용자가 다른 사용자의 작성글에 접근하고자하면 이를 예외처리하여 막아야한다.
@@ -37,6 +40,10 @@ public class ArticleController {
     public ResponseEntity<List<HomeArticleResponse>> getaHomeArticle(@RequestParam(value = "page", required = true) int page,
                                                                @RequestParam(value = "standard", required = false) String standard) {
         List<HomeArticleResponse> homeArticleResponses = articleService.getHomeArticleResponses(page, "createAt");
+        for (HomeArticleResponse homeArticleResponse : homeArticleResponses) {
+            int count = articleLikeService.countArticleLikeByArticleId(homeArticleResponse.getArticleId());
+            homeArticleResponse.setLikeCount(count);
+        }
         return ResponseEntity.ok().body(homeArticleResponses);
     }
 

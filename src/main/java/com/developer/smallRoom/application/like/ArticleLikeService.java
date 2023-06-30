@@ -8,4 +8,6 @@ public interface ArticleLikeService {
     ArticleLikeResponse saveArticleLike(Long articleId, Long memberId);
 
     ArticleLikeResponse removeArticleLike(Long articleId, Long memberId);
+
+    int countArticleLikeByArticleId(Long articleId);
 }

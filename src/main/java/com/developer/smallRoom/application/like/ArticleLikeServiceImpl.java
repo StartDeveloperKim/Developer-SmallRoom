@@ -60,6 +60,11 @@ public class ArticleLikeServiceImpl implements ArticleLikeService{
         return new ArticleLikeResponse(false);
     }
 
+    @Override
+    public int countArticleLikeByArticleId(Long articleId) {
+        return articleLikeRepository.countByArticleId(articleId);
+    }
+
     private Article getArticleById(Long articleId) {
         return articleRepository.findById(articleId).orElseThrow(() -> new IllegalArgumentException("없는 게시물입니다."));
     }

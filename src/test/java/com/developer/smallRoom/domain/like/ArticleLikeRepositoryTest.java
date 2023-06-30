@@ -63,6 +63,19 @@ class ArticleLikeRepositoryTest {
         assertThat(articleLike.getId()).isEqualTo(findArticleLike.get().getId());
     }
 
+    @DisplayName("countArticleLikeByArticleId() : 게시글ID를 통해 좋아요 개수를 count할 수 있다")
+    @Test
+    void countArticleLikeByArticleId() {
+        //given
+        savedArticleLike();
+        savedArticleLike();
+        //when
+        int result = articleLikeRepository.countByArticleId(article.getId());
+
+        //then
+        assertThat(result).isEqualTo(2);
+    }
+
     private ArticleLike savedArticleLike() {
         return articleLikeRepository.save(new ArticleLike(article, member));
     }
