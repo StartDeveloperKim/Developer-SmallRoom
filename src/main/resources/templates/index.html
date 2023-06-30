@@ -55,174 +55,42 @@
 
     </div>
     <div class="flex flex-wrap justify-center overflow-x-auto">
-        <div class="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 mb-4 px-2">
+        <div class="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 mb-4 px-2" th:each="article : ${articles}">
             <div class="bg-white rounded-lg shadow-lg transition duration-500 transform hover:-translate-y-1 hover:shadow-xl">
                 <div
                         class="block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
-                    <a href="#!">
-                        <img class="rounded-t-lg" src="https://tecdn.b-cdn.net/img/new/standard/nature/184.jpg" alt="" />
+                    <a th:href="'/article/'+${article.articleId}">
+                        <img class="rounded-t-lg object-fill h-48 w-96" src="https://tecdn.b-cdn.net/img/new/standard/nature/184.jpg" alt="" th:src="${article.thumbnailUrl}"/>
                     </a>
                     <div class="p-6">
-                        <h5 class="mb-2 text-xl font-bold leading-normal text-neutral-800 dark:text-neutral-50 truncate">
+                        <h5 class="mb-2 text-xl font-bold leading-normal text-neutral-800 dark:text-neutral-50 truncate" th:text="${article.title}">
                             블로그 프로젝트
                         </h5>
-                        <p class="mb-4 text-base text-neutral-600 dark:text-neutral-200 truncate">
+                        <p class="mb-4 text-base text-neutral-600 dark:text-neutral-200 truncate" th:text="${article.subTitle}">
                             Some quick example text to build on the card title and make up the
                             bulk of the card's content.
                         </p>
-                        <a href="/">
+                        <a th:href="'https://github.com/'+${article.memberGithubId}">
                             <p class="text-black font-extralight">
                                 <i class="fab fa-brands fa-github"></i>
-                                <span>StartDeveloperKim</span>
+                                <span th:text="${article.memberGithubId}">StartDeveloperKim</span>
                             </p>
                         </a>
                         <div class="flex mt-2">
-                            <div class="flex-auto text-black font-light text-xs">
+                            <div class="flex-auto text-black font-light text-xs" th:text="${article.createAt}">
                                 2023월3월4일
                             </div>
                             <div class="flex-auto text-black font-thin text-sm flex items-center justify-end">
                                 <div class="flex">
                                     <div class="flex-auto items-center justify-end">
-                                        <i class="fas fa-regular fa-eye"></i><span> 10 </span>
+                                        <i class="fas fa-regular fa-eye"></i><span th:text="${article.hit}"> 10 </span>
                                     </div>
                                     <div class="flex-auto">
-                                        <i class="fas fa-thin fa-heart"></i><span> 15 </span>
+                                        <i class="fas fa-thin fa-heart"></i><span th:text="${article.likeCount}"> 15 </span>
                                     </div>
-                                    <div class="flex-auto">
-                                        <i class="fas fa-regular fa-comment fa-sm"></i><span> 255 </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 mb-4 px-2">
-            <div class="bg-white rounded-lg shadow-lg transition duration-300 transform hover:-translate-y-1 hover:shadow-xl">
-                <div
-                        class="block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
-                    <a href="#!">
-                        <img class="rounded-t-lg" src="https://tecdn.b-cdn.net/img/new/standard/nature/184.jpg" alt="" />
-                    </a>
-                    <div class="p-6">
-                        <h5 class="mb-2 text-xl font-bold leading-normal text-neutral-800 dark:text-neutral-50 truncate">
-                            블로그 프로젝트
-                        </h5>
-                        <p class="mb-4 text-base text-neutral-600 dark:text-neutral-200 truncate">
-                            Some quick example text to build on the card title and make up the
-                            bulk of the card's content.
-                        </p>
-                        <a href="/">
-                            <p class="text-black font-extralight">
-                                <i class="fab fa-brands fa-github"></i>
-                                <span>StartDeveloperKim</span>
-                            </p>
-                        </a>
-                        <div class="flex mt-2">
-                            <div class="flex-auto text-black font-light text-xs">
-                                2023월3월4일
-                            </div>
-                            <div class="flex-auto text-black font-thin text-sm flex items-center justify-end">
-                                <div class="flex">
-                                    <div class="flex-auto items-center justify-end">
-                                        <i class="fas fa-regular fa-eye"></i><span> 10 </span>
-                                    </div>
-                                    <div class="flex-auto">
-                                        <i class="fas fa-thin fa-heart"></i><span> 15 </span>
-                                    </div>
-                                    <div class="flex-auto">
-                                        <i class="fas fa-regular fa-comment fa-sm"></i><span> 255 </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 mb-4 px-2">
-            <div class="bg-white rounded-lg shadow-lg transition duration-300 transform hover:-translate-y-1 hover:shadow-xl">
-                <div
-                        class="block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
-                    <a href="#!">
-                        <img class="rounded-t-lg" src="https://tecdn.b-cdn.net/img/new/standard/nature/184.jpg" alt="" />
-                    </a>
-                    <div class="p-6">
-                        <h5 class="mb-2 text-xl font-bold leading-normal text-neutral-800 dark:text-neutral-50 truncate">
-                            블로그 프로젝트
-                        </h5>
-                        <p class="mb-4 text-base text-neutral-600 dark:text-neutral-200 truncate">
-                            Some quick example text to build on the card title and make up the
-                            bulk of the card's content.
-                        </p>
-                        <a href="/">
-                            <p class="text-black font-extralight">
-                                <i class="fab fa-brands fa-github"></i>
-                                <span>StartDeveloperKim</span>
-                            </p>
-                        </a>
-                        <div class="flex mt-2">
-                            <div class="flex-auto text-black font-light text-xs">
-                                2023월3월4일
-                            </div>
-                            <div class="flex-auto text-black font-thin text-sm flex items-center justify-end">
-                                <div class="flex">
-                                    <div class="flex-auto items-center justify-end">
-                                        <i class="fas fa-regular fa-eye"></i><span> 10 </span>
-                                    </div>
-                                    <div class="flex-auto">
-                                        <i class="fas fa-thin fa-heart"></i><span> 15 </span>
-                                    </div>
-                                    <div class="flex-auto">
-                                        <i class="fas fa-regular fa-comment fa-sm"></i><span> 255 </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 mb-4 px-2">
-            <div class="bg-white rounded-lg shadow-lg transition duration-300 transform hover:-translate-y-1 hover:shadow-xl">
-                <div
-                        class="block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
-                    <a href="#!">
-                        <img class="rounded-t-lg" src="https://tecdn.b-cdn.net/img/new/standard/nature/184.jpg" alt="" />
-                    </a>
-                    <div class="p-6">
-                        <h5 class="mb-2 text-xl font-bold leading-normal text-neutral-800 dark:text-neutral-50 truncate">
-                            블로그 프로젝트
-                        </h5>
-                        <p class="mb-4 text-base text-neutral-600 dark:text-neutral-200 truncate">
-                            Some quick example text to build on the card title and make up the
-                            bulk of the card's content.
-                        </p>
-                        <a href="/">
-                            <p class="text-black font-extralight">
-                                <i class="fab fa-brands fa-github"></i>
-                                <span>StartDeveloperKim</span>
-                            </p>
-                        </a>
-                        <div class="flex mt-2">
-                            <div class="flex-auto text-black font-light text-xs">
-                                2023월3월4일
-                            </div>
-                            <div class="flex-auto text-black font-thin text-sm flex items-center justify-end">
-                                <div class="flex">
-                                    <div class="flex-auto items-center justify-end">
-                                        <i class="fas fa-regular fa-eye"></i><span> 10 </span>
-                                    </div>
-                                    <div class="flex-auto">
-                                        <i class="fas fa-thin fa-heart"></i><span> 15 </span>
-                                    </div>
-                                    <div class="flex-auto">
-                                        <i class="fas fa-regular fa-comment fa-sm"></i><span> 255 </span>
-                                    </div>
+<!--                                    <div class="flex-auto">-->
+<!--                                        <i class="fas fa-regular fa-comment fa-sm"></i><span> 255 </span>-->
+<!--                                    </div>-->
                                 </div>
                             </div>
                         </div>
@@ -259,7 +127,7 @@
 
 
     <div id="content">
-<!--content 카드 목록 그림-->
+        <!--content 카드 목록 그림-->
     </div>
 
 </main>

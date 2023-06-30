@@ -24,4 +24,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     List<Article> findArticlesByTags(@Param("tags") List<String> tags, Pageable pageable);
 
     boolean existsByIdAndMember(Long id, Member member);
+
+    @Query(value = "SELECT * FROM ARTICLE ORDER BY RAND() LIMIT 4", nativeQuery = true)
+    List<Article> findArticlesRandom();
 }

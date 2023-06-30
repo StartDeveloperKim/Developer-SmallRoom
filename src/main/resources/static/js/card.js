@@ -1,5 +1,5 @@
 export function updateArticleList(article, tag) {
-    let $newArticle = $('<div>').addClass('w-full sm:w-1/2 md:w-1/2 lg:w-1/4 mb-4 px-2')
+    let $newArticle = $('<div>').addClass('w-full sm:w-1/2 md:w-1/2 lg:w-1/4 mb-4 px-2').attr('id', 'article' + article.articleId)
         .append($('<div>').addClass('bg-white rounded-lg shadow-lg transition duration-300 transform hover:-translate-y-1 hover:shadow-xl')
             .append($('<div>').addClass('block rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700')
                 .append($('<a>').attr('href', '/article/' + article.articleId).attr('target', '_blank')
@@ -36,6 +36,6 @@ export function updateArticleList(article, tag) {
                 )
             )
         );
-
+    
     tag.append($newArticle);
 }

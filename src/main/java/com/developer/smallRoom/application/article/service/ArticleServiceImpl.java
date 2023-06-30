@@ -65,6 +65,7 @@ public class ArticleServiceImpl implements ArticleService{
         return new ArticleResponse(findArticleByArticleAndMember(articleId, memberId));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<HomeArticleResponse> getHomeArticleResponses(int page, String standard) {
         Page<Article> result = articleRepository.findArticlesBy(PageRequest.of(page, 4, Sort.by(standard).descending()));
@@ -72,11 +73,19 @@ public class ArticleServiceImpl implements ArticleService{
                 .map(HomeArticleResponse::new).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<HomeArticleResponse> searchArticlesByTags(int page, List<String> tags) {
         List<Article> articles = articleRepository.
                 findArticlesByTags(tags, PageRequest.of(page, 4, Sort.by(Sort.Direction.DESC, "createAt")));
         return articles.stream().map(HomeArticleResponse::new).collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<HomeArticleResponse> getRandomArticles() {
+        return articleRepository.findArticlesRandom().stream()
+                .map(HomeArticleResponse::new).collect(Collectors.toList());
     }
 
     private Article findArticleByArticleAndMember(Long articleId, Long memberId) {

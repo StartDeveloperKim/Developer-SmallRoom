@@ -22,4 +22,6 @@ public interface ArticleService {
     List<HomeArticleResponse> getHomeArticleResponses(int page, String standard);
 
     List<HomeArticleResponse> searchArticlesByTags(int page, List<String> tags);
+
+    List<HomeArticleResponse> getRandomArticles();
 }

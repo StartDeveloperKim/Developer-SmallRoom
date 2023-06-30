@@ -29,4 +29,8 @@ public class HomeArticleResponse {
         this.hit = article.getHit();
         this.likeCount = 0;
     }
+
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount;
+    }
 }
