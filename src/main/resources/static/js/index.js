@@ -51,10 +51,17 @@ let dataLoadFlag = true;
 let isLoading = false; // 중복 요청 방지를 위한 플래그 변수
 let page = 0; // 초기 페이지 설정
 
+function replaceSpecialWord(query) {
+    query = query.replace('#', '%23');
+    query = query.replace('++', '%2B%2B');
+    console.log(query);
+    return query;
+}
+
 function loadSearchData(url, requestData) {
     $.ajax({
         type: "GET",
-        url: url + "&query=" + requestData,
+        url: url + "&query=" + replaceSpecialWord(requestData),
         timeout: 3000,
         async: false,
         success: function (data) {
