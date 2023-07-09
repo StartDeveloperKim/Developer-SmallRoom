@@ -25,7 +25,18 @@
                 </div>
             </div>
         </div>
-        <div class="flex flex-wrap justify-end items-center mx-auto max-w-screen-xl">
+        <div class="flex flex-wrap items-center mx-auto max-w-screen-xl">
+            <div class="flex items-center">
+                <a href="https://forms.gle/4Cw3zQnVVKevQNLX9" target="_blank">
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        <i class="fas fa-regular fa-envelope fa-2xl"></i>
+                        <span>게시글 작성요청</span>
+                    </button>
+                </a>
+            </div>
+
+            <div class="flex-1"></div>
+
             <div class="flex items-center lg:order-3">
                 <a href="/oauth2/authorization/github" sec:authorize="isAnonymous()"
                    class="text-gray-800 dark:text-white hover:bg-orange-50 focus:ring-4 focus:ring-orange-50 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
@@ -50,9 +61,9 @@
 <main class="container mx-auto px-10 mt-40">
     <div class="flex mb-4">
         <div class="grow h-14 items-center">
-            <h1 class="text-2xl font-semibold px-3  mt-2">이번 주 인기 프로젝트</h1>
+            <h1 class="text-2xl font-semibold px-3  mt-2">토이 프로젝트</h1>
+<!--            나중에 새로고침 버튼을 만들자 -->
         </div>
-
     </div>
     <div class="flex flex-wrap justify-center overflow-x-auto">
         <div class="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 mb-4 px-2" th:each="article : ${articles}">
