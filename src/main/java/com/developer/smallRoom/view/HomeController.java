@@ -27,10 +27,6 @@ public class HomeController {
         log.info("memberInfo : {}", memberPrincipal!=null ? memberPrincipal.toString() : "not memberPrincipal");
         // TODO :: 첫 Index 페이지는 0으로 고정 글의 개수가 늘어나면 8개씩 로딩으로 수정
         List<HomeArticleResponse> articles = articleService.getRandomArticles();
-        for (HomeArticleResponse article : articles) {
-            int count = articleLikeService.countArticleLikeByArticleId(article.getArticleId());
-            article.setLikeCount(count);
-        }
         model.addAttribute("articles", articles);
 
         return "index";

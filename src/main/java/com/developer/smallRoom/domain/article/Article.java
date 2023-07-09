@@ -60,13 +60,11 @@ public class Article {
     private List<BoardTag> boardTags = new ArrayList<>();
 
     // TODO :: 좋아요 수, 댓글 수 통계컬럼을 두고 성능을 최적화하자.
-//    @Column(name = "like_count", nullable = false)
-//    private int likeCount;
+    @Column(name = "like_count", nullable = false)
+    private int likeCount;
 
     @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<ArticleLike> articleLikes = new ArrayList<>();
-
-    // TODO :: 댓글관련 코드 삭제 필요 - 깃허브 이슈 기능 사용함
 
     @Builder
     public Article(String title, String subTitle, String content, String thumbnailUrl, String githubLink, String tags, Member member) {
@@ -78,8 +76,7 @@ public class Article {
         this.tags = tags;
         setMember(member);
         this.hit = 0;
-//        this.likeCount = 0;
-//        this.commentCount = 0;
+        this.likeCount = 0;
     }
 
     private void setMember(Member member) {
@@ -105,9 +102,17 @@ public class Article {
         this.articleLikes.add(articleLike);
     }
 
-//    public void addLikeCount() {
-//        this.likeCount++;
-//    }
+    public void increaseLikeCount() {
+        this.likeCount++;
+    }
+
+    public void decreaseLikeCount() {
+        this.likeCount--;
+    }
+
+    public void updateLikeCount(int likeCount) {
+        this.likeCount = likeCount;
+    }
 
     public List<String> getTags() {
         return this.boardTags.stream().map(BoardTag::getTagName)

@@ -41,6 +41,7 @@ public class ArticleLikeServiceImpl implements ArticleLikeService{
         boolean result = articleLikeRepository.existsArticleLikeByArticleAndMember(article, member);
         if (!result) {
             articleLikeRepository.save(new ArticleLike(article, member));
+            article.increaseLikeCount();
             return new ArticleLikeResponse(true);
         }
 
@@ -55,6 +56,7 @@ public class ArticleLikeServiceImpl implements ArticleLikeService{
         Optional<ArticleLike> articleLike = articleLikeRepository.findByArticleAndMember(article, member);
         if (articleLike.isPresent()) {
             articleLikeRepository.delete(articleLike.get());
+            article.decreaseLikeCount();
             return new ArticleLikeResponse(true);
         }
         return new ArticleLikeResponse(false);

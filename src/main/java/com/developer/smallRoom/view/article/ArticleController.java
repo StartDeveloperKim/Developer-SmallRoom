@@ -40,10 +40,6 @@ public class ArticleController {
     public ResponseEntity<List<HomeArticleResponse>> getaHomeArticle(@RequestParam(value = "page", required = true) int page,
                                                                @RequestParam(value = "standard", required = false) String standard) {
         List<HomeArticleResponse> homeArticleResponses = articleService.getHomeArticleResponses(page, "createAt");
-        for (HomeArticleResponse homeArticleResponse : homeArticleResponses) {
-            int count = articleLikeService.countArticleLikeByArticleId(homeArticleResponse.getArticleId());
-            homeArticleResponse.setLikeCount(count);
-        }
         return ResponseEntity.ok().body(homeArticleResponses);
     }
 
