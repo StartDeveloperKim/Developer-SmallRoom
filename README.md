@@ -29,6 +29,11 @@
 ### “Infra”
 
 -   AWS EC2, S3, CodeDeploy, GithubAction
+
+## 시스템 아키텍쳐
+
+![image](https://github.com/StartDeveloperKim/ToyProject-Storage/assets/97887047/b3a9cf43-fa49-408d-866b-5102bb0da122)
+
 ## 주요기능
 #### Github OAuth + JWT(AccessToken+RefreshToken)을 활용한 로그인 구현
 AWS 프리티어 사용자인 현 상황을 고려하여 OAuth와 JWT를 활용하여 로그인을 구현했습니다. 이전 블로그 프로젝트에서는 AccessToken만을 활용했는데 보안을 고려하여 RefreshToken도 함께 구현하였습니다.
@@ -102,3 +107,10 @@ AWS 프리티어 사용자인 현 상황을 고려하여 OAuth와 JWT를 활용�
 
 --------
 
+#### CI/CD 배포자동화
+Github Action, S3, CodeDeploy를 활용하여 배포자동화를 구축하였습니다. 개발자가 코드를 Push하면 Github Action은 빌드와 테스트 후 S3로 코드들의 압축파일을 전송합니다.
+그리고 CodeDeploy에게 배포 요청을 하여 S3에 있는 압축파일을 EC2 인스턴스로 전달한 후 배포 스크립트를 동작시켜 기존의 프로세스를 종료한 후 새로운 빌드파일(jar)를 실행합니다.
+
+![image](https://github.com/StartDeveloperKim/ToyProject-Storage/assets/97887047/d4750b5f-a27f-434a-bbbb-6eaa934e4761)
+
+현재는 배포 중에 사이트가 중단되는 문제가 존재하여 추후에 nginx를 사용하여 무중단 배포를 구현할 계획에 있습니다.
