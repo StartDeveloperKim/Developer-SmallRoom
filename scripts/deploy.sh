@@ -2,7 +2,7 @@ REPOSITORY=/home/ec2-user/app/toyproject
 PROJECT_NAME=ToyProject-Storage
 
 echo "> Build 파일 복사"
-cp $REPOSITORY/zip/build/lib/*jar $REPOSITORY/
+cp $REPOSITORY/zip/build/libs/*jar $REPOSITORY/
 
 echo "> 현재 구동 중인 애플리케이션 pid 확인"
 CURRENT_PID=$(pgrep -f $PROJECT_NAME)
