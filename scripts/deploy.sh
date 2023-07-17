@@ -1,5 +1,5 @@
 REPOSITORY=/home/ec2-user/app/toyproject
-PROJECT_NAME=ToyProject-Storage
+PROJECT_NAME=java
 
 echo "> Build 파일 복사"
 cp $REPOSITORY/zip/build/libs/*jar $REPOSITORY/
