@@ -59,7 +59,6 @@ public class Article {
     @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<BoardTag> boardTags = new ArrayList<>();
 
-    // TODO :: 좋아요 수, 댓글 수 통계컬럼을 두고 성능을 최적화하자.
     @Column(name = "like_count", nullable = false)
     private int likeCount;
 
@@ -93,7 +92,6 @@ public class Article {
         this.tags = request.tagsListToString();
     }
 
-    // TODO :: 어느정도 프론트엔드와 백엔드 모두가 구현되고 나면 Jmeter를 통해 성능을 측정해보고 최적화를 해보자
     public void increaseHit() {
         this.hit++;
     }

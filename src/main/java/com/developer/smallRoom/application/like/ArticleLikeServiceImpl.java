@@ -32,9 +32,6 @@ public class ArticleLikeServiceImpl implements ArticleLikeService{
 
     @Override
     public ArticleLikeResponse saveArticleLike(Long articleId, Long memberId) {
-        /*
-        * TODO :: 나중에 성능테스트를 하고 좋아요 개수 최적화 작업을 하자
-        * */
         Article article = getArticleById(articleId);
         Member member = getMemberById(memberId);
 
