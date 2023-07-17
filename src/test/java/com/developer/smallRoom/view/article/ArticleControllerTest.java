@@ -25,6 +25,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -184,6 +185,48 @@ class ArticleControllerTest {
         //then
         result.andExpect(status().is4xxClientError());
         result.andExpect(jsonPath("$.message").value("잘못된 접근입니다."));
+    }
+
+    @DisplayName("getaHomeArticleByCreateAt() : 사용자는 최신순으로 게시글을 조회할 수 있다.")
+    @Test
+    void getaHomeArticleByCreateAt() throws Exception {
+        //given
+        Article article1 = saveArticle("title1", "content", member);
+        Article article2 = saveArticle("title2", "content", member);
+        Article article3 = saveArticle("title3", "content", member);
+        Article article4 = saveArticle("title4", "content", member);
+
+        //when
+        String url = "/api/article?page=0&standard=createAt";
+        ResultActions result = mvc.perform(get(url));
+
+        //then
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].articleId").value(article4.getId()))
+                .andExpect(jsonPath("$[1].articleId").value(article3.getId()))
+                .andExpect(jsonPath("$[2].articleId").value(article2.getId()))
+                .andExpect(jsonPath("$[3].articleId").value(article1.getId()));
+    }
+
+    @DisplayName("getaHomeArticleByLikeCount() : 사용자는 좋아요순으로 게시글을 조회할 수 있다.")
+    @Test
+    void getaHomeArticleByLikeCount() throws Exception {
+        /*//given
+        Article article1 = saveArticle("title1", "content", member);
+        Article article2 = saveArticle("title2", "content", member);
+        Article article3 = saveArticle("title3", "content", member);
+        Article article4 = saveArticle("title4", "content", member);
+
+        //when
+        String url = "/api/article?page=0&standard=likeCount";
+        ResultActions result = mvc.perform(get(url));
+
+        //then
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].articleId").value(article4.getId()))
+                .andExpect(jsonPath("$[1].articleId").value(article3.getId()))
+                .andExpect(jsonPath("$[2].articleId").value(article2.getId()))
+                .andExpect(jsonPath("$[3].articleId").value(article1.getId()));*/
     }
 
     private Member getOtherMember() {
