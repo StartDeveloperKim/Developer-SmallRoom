@@ -73,7 +73,7 @@
             <div class="grow-0 text-right" th:text="${article.createAt}">2023월06월24일</div>
             <div class="flex-auto text-right" th:if="${article.updatable}">
                 <a th:href="'/article/post/' + ${article.articleId}"><span class="mr-2">수정</span></a>
-                <a th:onclick="articleRemove()" class="cursor-pointer hover:cursor-pointer">
+                <a th:attr="article-id=${article.articleId}" th:onclick="articleRemove(this.getAttribute('article-id'))" class="cursor-pointer hover:cursor-pointer">
                     <span>삭제</span>
                 </a>
             </div>
