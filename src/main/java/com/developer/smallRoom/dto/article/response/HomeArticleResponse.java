@@ -17,7 +17,7 @@ public class HomeArticleResponse {
     private final String memberGithubId;
     private final String createAt;
     private final int hit;
-    private int likeCount;
+    private final int likeCount;
 
     public HomeArticleResponse(Article article) {
         this.articleId = article.getId();

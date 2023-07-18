@@ -58,10 +58,10 @@ function replaceSpecialWord(query) {
     return query;
 }
 
-function loadSearchData(url, requestData) {
+function loadSearchData(url, requestData, standard) {
     $.ajax({
         type: "GET",
-        url: url + "&query=" + replaceSpecialWord(requestData),
+        url: url + "&query=" + replaceSpecialWord(requestData) + "&standard=" + standard,
         timeout: 3000,
         async: false,
         success: function (data) {
@@ -109,12 +109,13 @@ function addArticleCards(data) {
     }
 }
 
+let standard = "createAt";
 let searchFlag = false;
 let basicArticleUrl = "/api/article?page=";
 let searchArticleUrl = "/api/search?page=";
 
 $(document).ready(function () {
-    loadData(basicArticleUrl + "0");
+    loadData(basicArticleUrl + "0" + "&standard=" + standard);
     page++;
 });
 
@@ -125,15 +126,43 @@ $(window).scroll(function () {
     if (dataLoadFlag) {
         // let url = searchFlag === true ? searchArticleUrl + '?query=' + query : basicArticleUrl;
         if (scrollPosition >= scrollHeight - 200 && searchFlag === false) {
-            loadData(basicArticleUrl + page);
+            loadData(basicArticleUrl + page + "&standard=" + standard);
             page++;
         }
         if (scrollPosition >= scrollHeight - 200 && searchFlag === true) {
-            loadSearchData(searchArticleUrl + page, query);
+            loadSearchData(searchArticleUrl + page, query, standard);
             page++;
         }
     }
 });
 
+/*========================좋아요 순, 최신 순===============================*/
 
+window.reSortArticles = function (sortBy) {
+    if (standard === sortBy) {
+        return;
+    }
+    standard = sortBy;
+    dataLoadFlag = true;
+
+    const nowStandard = "text-blue-600";
+    const prevStandard = "text-gray-400";
+    if (standard === "createAt") {
+        $('#createAt-emoge').addClass(nowStandard);
+        $('#likeCount-emoge').removeClass(nowStandard);
+
+        $('#createAt').removeClass(prevStandard).addClass(nowStandard);
+        $('#likeCount').removeClass(nowStandard).addClass(prevStandard);
+    }else{
+        $('#likeCount-emoge').addClass(nowStandard);
+        $('#createAt-emoge').removeClass(nowStandard);
+
+        $('#likeCount').removeClass(prevStandard).addClass(nowStandard);
+        $('#createAt').removeClass(nowStandard).addClass(prevStandard);
+    }
+
+    $('#content').empty();
+    loadData(basicArticleUrl + "0" + "&standard=" + standard)
+    page=1
+}
 

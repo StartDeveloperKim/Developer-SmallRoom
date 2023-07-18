@@ -24,9 +24,10 @@ public class SearchController {
     // TODO :: 검색 쿼리를 수정할 필요가 있다. 만약 Java, SpringBoot 태그가 입력으로 주어졌다면 둘 다 포함되는 글이 조회되어야 한다.
     @GetMapping
     public ResponseEntity<List<HomeArticleResponse>> searchArticle(@RequestParam("page") int page,
-                                                                   @RequestParam("query") String query) {
+                                                                   @RequestParam("query") String query,
+                                                                   @RequestParam("standard") String standard) {
         List<String> tags = Arrays.asList(query.split(","));
-        List<HomeArticleResponse> articles = articleService.searchArticlesByTags(page, tags);
+        List<HomeArticleResponse> articles = articleService.searchArticlesByTags(page, tags, standard);
         return ResponseEntity.ok().body(articles);
     }
 }

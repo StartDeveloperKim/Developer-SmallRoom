@@ -75,9 +75,9 @@ public class ArticleServiceImpl implements ArticleService{
 
     @Transactional(readOnly = true)
     @Override
-    public List<HomeArticleResponse> searchArticlesByTags(int page, List<String> tags) {
+    public List<HomeArticleResponse> searchArticlesByTags(int page, List<String> tags, String standard) {
         List<Article> articles = articleRepository.
-                findArticlesByTags(tags, PageRequest.of(page, 4, Sort.by(Sort.Direction.DESC, "createAt")));
+                findArticlesByTags(tags, PageRequest.of(page, 4, Sort.by(Sort.Direction.DESC, standard)));
         return articles.stream().map(HomeArticleResponse::new).collect(Collectors.toList());
     }
 

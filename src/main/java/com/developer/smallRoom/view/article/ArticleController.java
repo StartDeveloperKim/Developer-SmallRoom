@@ -34,12 +34,11 @@ public class ArticleController {
     * TODO :: ControllerAdvice를 통해 다른사용자가 다른 사용자의 작성글에 접근하고자하면 이를 예외처리하여 막아야한다.
     * */
 
-    // TODO :: 무한스크롤로 데이터를 가져올 떄 standard(기준)을 쿼리스트링으로 받아와야 한다.
-
     @GetMapping
-    public ResponseEntity<List<HomeArticleResponse>> getaHomeArticle(@RequestParam(value = "page", required = true) int page,
-                                                               @RequestParam(value = "standard", required = false) String standard) {
-        List<HomeArticleResponse> homeArticleResponses = articleService.getHomeArticleResponses(page, "createAt");
+    public ResponseEntity<List<HomeArticleResponse>> getaHomeArticle(@RequestParam(value = "page") int page,
+                                                               @RequestParam(value = "standard") String standard) {
+        List<HomeArticleResponse> homeArticleResponses = articleService.getHomeArticleResponses(page, standard);
+        // TODO :: 최신순(createAt), 좋아요순(likeCount)
         return ResponseEntity.ok().body(homeArticleResponses);
     }
 
