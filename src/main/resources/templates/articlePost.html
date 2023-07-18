@@ -129,22 +129,23 @@
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
 <script th:inline="javascript">
-    const updateFlag = /*[[${article != null ? article.updatable : false}]]*/ false;
-    const tags = /*[[${article?.tags}]]*/ '[]';
-    const content = /*[[${article?.content}]]*/ '';
-    if (updateFlag) {
-        editor.setHTML(content);
-        const tagsInput = $('#tags-input');
+    $(document).ready(function() {
+        const updateFlag = /*[[${article != null ? article.updatable : false}]]*/ false;
+        const tags = /*[[${article?.tags}]]*/ '[]';
+        const content = /*[[${article?.content}]]*/ '';
+        if (updateFlag) {
+            editor.setHTML(content);
+            const tagsInput = $('#tags-input');
 
-        let tagValue = "";
-        for (let i = 0; i < tags.length; i++) {
-            tagValue += tags[i];
-            if (i !== tags.length - 1) {
-                tagValue += ", ";
+            let tagValue = "";
+            for (let i = 0; i < tags.length; i++) {
+                tagValue += tags[i];
+                if (i !== tags.length - 1) {
+                    tagValue += ", ";
+                }
             }
+            tagsInput.val(tagValue);
         }
-        tagsInput.val(tagValue);
-
-    }
+    });
 </script>
 </html>
