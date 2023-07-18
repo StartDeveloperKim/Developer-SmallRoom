@@ -131,21 +131,24 @@
 <script th:inline="javascript">
     $(document).ready(function() {
         const updateFlag = /*[[${article != null ? article.updatable : false}]]*/ false;
-        const tags = /*[[${article?.tags}]]*/ '[]';
         const content = /*[[${article?.content}]]*/ '';
         if (updateFlag) {
             editor.setHTML(content);
-            const tagsInput = $('#tags-input');
-
-            let tagValue = "";
-            for (let i = 0; i < tags.length; i++) {
-                tagValue += tags[i];
-                if (i !== tags.length - 1) {
-                    tagValue += ", ";
-                }
-            }
-            tagsInput.val(tagValue);
         }
     });
+    const updateFlag = /*[[${article != null ? article.updatable : false}]]*/ false;
+    const tags = /*[[${article?.tags}]]*/ '[]';
+    if (updateFlag) {
+        const tagsInput = $('#tags-input');
+
+        let tagValue = "";
+        for (let i = 0; i < tags.length; i++) {
+            tagValue += tags[i];
+            if (i !== tags.length - 1) {
+                tagValue += ", ";
+            }
+        }
+        tagsInput.val(tagValue);
+    }
 </script>
 </html>

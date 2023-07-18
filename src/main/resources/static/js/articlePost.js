@@ -41,8 +41,6 @@ let tagify = new Tagify(tag_input, {
     enforceWhitelist: true
 });
 
-
-window.tagify = tagify;
 window.editor = editor;
 
 
