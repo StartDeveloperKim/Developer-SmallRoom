@@ -107,6 +107,13 @@ AWS 프리티어 사용자인 현 상황을 고려하여 OAuth와 JWT를 활용�
 
 --------
 
+#### 최신 순, 좋아요 순 정렬
+게시글을 최신 순, 좋아요 순으로 정렬하여 조회할 수 있다.
+
+![2023-07-18 18;31;37](https://github.com/StartDeveloperKim/ToyProject-Storage/assets/97887047/b07ab3ff-24a0-47ff-bc06-927f9c50336a)
+
+--------
+
 #### CI/CD 배포자동화
 Github Action, S3, CodeDeploy를 활용하여 배포자동화를 구축하였습니다. 개발자가 코드를 Push하면 Github Action은 빌드와 테스트 후 S3로 코드들의 압축파일을 전송합니다.
 그리고 CodeDeploy에게 배포 요청을 하여 S3에 있는 압축파일을 EC2 인스턴스로 전달한 후 배포 스크립트를 동작시켜 기존의 프로세스를 종료한 후 새로운 빌드파일(jar)를 실행합니다.
