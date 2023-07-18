@@ -37,6 +37,8 @@ public class ArticleController {
     @GetMapping
     public ResponseEntity<List<HomeArticleResponse>> getaHomeArticle(@RequestParam(value = "page") int page,
                                                                @RequestParam(value = "standard") String standard) {
+        log.info("page = {} // standard = {}", page, standard);
+
         List<HomeArticleResponse> homeArticleResponses = articleService.getHomeArticleResponses(page, standard);
         // TODO :: 최신순(createAt), 좋아요순(likeCount)
         return ResponseEntity.ok().body(homeArticleResponses);
