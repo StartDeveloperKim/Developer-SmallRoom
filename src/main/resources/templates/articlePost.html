@@ -130,10 +130,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
 <script th:inline="javascript">
     const updateFlag = /*[[${article != null ? article.updatable : false}]]*/ false;
+    const tags = /*[[${article?.tags}]]*/ '[]';
+    const content = /*[[${article?.content}]]*/ '';
     if (updateFlag) {
-        const tags = /*[[${article?.tags}]]*/ '[]';
-        const content = /*[[${article?.content}]]*/ '';
-
         editor.setHTML(content);
         const tagsInput = $('#tags-input');
 
