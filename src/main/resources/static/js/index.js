@@ -119,6 +119,8 @@ $(document).ready(function () {
     page++;
 });
 
+/*========================무한스크롤===============================*/
+
 $(window).scroll(function () {
     let scrollHeight = $(document).height();
     let scrollPosition = $(window).height() + $(window).scrollTop();
