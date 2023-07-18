@@ -136,24 +136,23 @@
         </div>
     </div>
 
-<!--  최신 순, 좋아요 순 UI 개발 각 버튼을 클릭했을 때 요청 파라미터가 바뀌어야 한다.-->
+<!--  최신 순, 좋아요 순 UI 개발 각 버튼을 클릭했을 때 요청 파라미터가 바뀌어야 한다. -->
     <div class="border-b border-gray-200 dark:border-gray-700 mt-5">
         <ul class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
             <li class="mr-2">
-                <a href="#"
-                   class="inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
-                    <i class="fas fa-regular fa-clock">
-                        <span class="w-4 h-4 mr-2 text-gray-400 group-hover:text-blue-500">최신 순</span>
+                <a th:sortby="createAt" th:onclick="reSortArticles(this.getAttribute('sortby'))"
+                   class="cursor-pointer inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 group">
+                    <i class="text-blue-600 fas fa-regular fa-clock" id="createAt-emoge">
+                        <span class="w-4 h-4 mr-2 text-blue-600 group-hover:text-blue-500" id="createAt">최신 순</span>
                     </i>
                 </a>
             </li>
             <li class="mr-2">
                 <!-- a 태그와 span 태그에 text-blue-600가 들어가야 한다. a 태그 클래스에는 border-blue-600도 들어가야 한다.-->
-                <a href="#"
-                   class="inline-flex items-center justify-center p-4 border-b-2 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group"
-                   aria-current="page">
-                    <i class="fas fa-solid fa-thumbs-up">
-                        <span class="w-4 h-4 mr-2 text-gray-400 group-hover:text-blue-500">좋아요 순</span>
+                <a th:sortby="likeCount" th:onclick="reSortArticles(this.getAttribute('sortby'))"
+                   class="cursor-pointer inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 group">
+                    <i class="fas fa-solid fa-thumbs-up" id="likeCount-emoge">
+                        <span class="w-4 h-4 mr-2 text-gray-400 group-hover:text-blue-500" id="likeCount">좋아요 순</span>
                     </i>
                 </a>
             </li>
@@ -189,5 +188,4 @@
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="/js/index.js" type="module"></script>
 <script src="/js/scroll.js"></script>
-<!--<script src="/js/paging.js"  type="module"></script>-->
 </html>
