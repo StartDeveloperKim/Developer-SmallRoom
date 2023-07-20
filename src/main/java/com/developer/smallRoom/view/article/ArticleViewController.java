@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ArticleViewController {
 
     private final ArticleService articleService;
-    private final BoardTagService boardTagService;
     private final ArticleLikeService articleLikeService;
 
     @GetMapping("/{id}")
@@ -28,11 +27,7 @@ public class ArticleViewController {
                                   @LoginMember MemberPrincipal memberPrincipal,
                                   Model model) {
         ArticleResponse article = articleService.getArticleById(id);
-
         article.setUpdatable(memberPrincipal);
-
-//        List<String> tags = boardTagService.findBoardTagByArticleId(id);
-//        article.setTags(tags);
 
         model.addAttribute("article", article);
 
@@ -45,8 +40,8 @@ public class ArticleViewController {
     }
 
     @GetMapping("/post")
-    public String articlePostingView(@LoginMember MemberPrincipal memberPrincipal) {
-        validMember(memberPrincipal);
+    public String articlePostingView() {
+
         return "articlePost";
     }
 
@@ -54,17 +49,10 @@ public class ArticleViewController {
     public String articleUpdateView(@PathVariable("id") Long id,
                                     @LoginMember MemberPrincipal memberPrincipal,
                                     Model model) {
-        validMember(memberPrincipal);
         ArticleResponse article = articleService.getArticleByIdAndMember(id, memberPrincipal.getMemberId());
         article.setUpdatable(memberPrincipal);
 
         model.addAttribute("article", article);
         return "articlePost";
-    }
-
-    private void validMember(MemberPrincipal memberPrincipal) {
-        if (memberPrincipal == null) {
-            throw new NotAuthorizationException("인증된 사용자가 아닙니다.");
-        }
     }
 }

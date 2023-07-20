@@ -40,14 +40,12 @@ public class ArticleController {
         log.info("page = {} // standard = {}", page, standard);
 
         List<HomeArticleResponse> homeArticleResponses = articleService.getHomeArticleResponses(page, standard);
-        // TODO :: 최신순(createAt), 좋아요순(likeCount)
         return ResponseEntity.ok().body(homeArticleResponses);
     }
 
     @PostMapping
     public ResponseEntity<ArticleRetouchResponse<Long>> postArticle(@Validated @RequestBody ArticleRequest articleRequest,
                                                               @LoginMember MemberPrincipal memberPrincipal) {
-        validMember(memberPrincipal);
         log.info("ArticleRequest : {} / {}", articleRequest.getTitle(), articleRequest.getTags());
         Long savedArticleId = articleService.saveArticle(memberPrincipal.getMemberId(), articleRequest);
         boardTagService.saveBoardTag(savedArticleId, articleRequest.getTags());
@@ -58,7 +56,6 @@ public class ArticleController {
     @PutMapping
     public ResponseEntity<ArticleRetouchResponse<Long>> updateArticle(@Validated @RequestBody ArticleUpdateRequest request,
                                                                       @LoginMember MemberPrincipal memberPrincipal) {
-        validMember(memberPrincipal);
         try {
             Long articleId = articleService.updateArticle(request, memberPrincipal.getMemberId());
             log.info("ArticleUpdateRequest : {} / {}", request.getTitle(), request.getTags());
@@ -74,18 +71,11 @@ public class ArticleController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ArticleRetouchResponse<Void>> removeArticle(@PathVariable("id") Long id,
                                                 @LoginMember MemberPrincipal memberPrincipal) {
-        validMember(memberPrincipal);
         try {
             articleService.deleteArticle(id, memberPrincipal.getMemberId());
             return ResponseEntity.ok().body(new ArticleRetouchResponse<>("게시글이 삭제되었습니다."));
         } catch (NotAuthorizationException e) {
             return ResponseEntity.badRequest().body(new ArticleRetouchResponse<>(e.getMessage()));
-        }
-    }
-
-    private void validMember(MemberPrincipal memberPrincipal) {
-        if (memberPrincipal == null) {
-            throw new NotAuthorizationException("인증된 사용자가 아닙니다.");
         }
     }
 }

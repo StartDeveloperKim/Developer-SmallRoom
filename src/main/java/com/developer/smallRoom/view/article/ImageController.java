@@ -28,8 +28,6 @@ public class ImageController {
     @PostMapping
     public ResponseEntity<String> imageUpload(@ModelAttribute ImageRequest request,
                                                      @LoginMember MemberPrincipal memberPrincipal) {
-        if (memberPrincipal == null) throw new NotAuthorizationException(); // TODO :: 나중에 수정 필요 중복된 코드가 계속 발생함
-
         try {
             String imageUrl = imageStore.saveImage(request.getImage(), memberPrincipal.getUsername());
             log.info("ImageUrl : {}", imageUrl);
