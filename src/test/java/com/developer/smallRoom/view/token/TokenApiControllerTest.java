@@ -17,6 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -25,6 +29,10 @@ import org.springframework.web.context.WebApplicationContext;
 import java.time.Duration;
 
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.cookies.CookieDocumentation.*;
+import static org.springframework.restdocs.headers.HeaderDocumentation.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -43,8 +51,10 @@ class TokenApiControllerTest extends ControllerTestBase {
     private String testRefreshToken;
 
     @BeforeEach
-    void setUp() {
-        this.mvc = MockMvcBuilders.webAppContextSetup(context).build();
+    void setUp(RestDocumentationContextProvider restDocumentationContextProvider) {
+        this.mvc = MockMvcBuilders.webAppContextSetup(context)
+                .apply(documentationConfiguration(restDocumentationContextProvider))
+                .build();
 
         refreshTokenRepository.deleteAll();
         TestJwtProperties testJwtProperties = new TestJwtProperties();
@@ -63,12 +73,19 @@ class TokenApiControllerTest extends ControllerTestBase {
         //given
         Cookie refreshTokenCookie = new Cookie("refresh_token", testRefreshToken);
 
-        //when
-        ResultActions result = mvc.perform(get("/api/token")
-                .cookie(refreshTokenCookie));
-        //then
-        result.andExpect(status().is3xxRedirection())
+        //when, then
+        ResultActions result = mvc.perform(RestDocumentationRequestBuilders.get("/api/token")
+                .cookie(refreshTokenCookie))
+                .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"))
                 .andExpect(cookie().exists("access_token"));
+        result.andDo(document("get-new-accessToken",
+                requestCookies(
+                        cookieWithName("refresh_token").description("refresh_token")
+                ),
+                responseCookies(
+                        cookieWithName("access_token").description("access_token")
+                )
+        ));
     }
 }

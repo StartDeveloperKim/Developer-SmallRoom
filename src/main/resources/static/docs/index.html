@@ -449,9 +449,21 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel1">
 <li><a href="#_article_api">Article-API</a>
 <ul class="sectlevel2">
+<li><a href="#_게시글_목록_조회">게시글 목록 조회</a></li>
 <li><a href="#_게시글_등록">게시글 등록</a></li>
 <li><a href="#_게시글_수정">게시글 수정</a></li>
 <li><a href="#_게시글_삭제">게시글 삭제</a></li>
+</ul>
+</li>
+<li><a href="#_articlelike_api">ArticleLike-API</a>
+<ul class="sectlevel2">
+<li><a href="#_게시글_좋아요_등록">게시글 좋아요 등록</a></li>
+<li><a href="#_게시글_좋아요_취소">게시글 좋아요 취소</a></li>
+</ul>
+</li>
+<li><a href="#_token_api">Token-API</a>
+<ul class="sectlevel2">
+<li><a href="#_accesstoken_재발급">AccessToken 재발급</a></li>
 </ul>
 </li>
 </ul>
@@ -462,18 +474,120 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_article_api">Article-API</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_게시글_등록">게시글 등록</h3>
+<h3 id="_게시글_목록_조회">게시글 목록 조회</h3>
 <div class="sect3">
-<h4 id="_게시글_등록_curl_request">Curl request</h4>
+<h4 id="_게시글_목록_조회_http_request">HTTP request</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/api/article' -i -X POST \
-    -H 'Content-Type: application/json' \
-    --cookie 'access_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0R2l0aHViSWQiLCJpc3MiOiJpc3N1ZXIiLCJpYXQiOjE2OTAwMjQ0MDcsImV4cCI6MTY5MTIzNDAwNywicm9sZSI6IlJPTEVfVVNFUiIsIm5hbWUiOiJ0ZXN0TmFtZSIsImlkIjo2fQ.NL_rbtGQHJ-b8q0DNu2DafzECWYsnsBQ5lsiCfLxmEg' \
-    -d '{"title":"title","subTitle":"subTitle","content":"content","gitHubLink":"githubLink","thumbnailUrl":"thumbnail","tags":["tag1","tag2"]}'</code></pre>
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/article?page=0&amp;standard=createAt HTTP/1.1
+Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_게시글_목록_조회_http_response">HTTP response</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 681
+
+[{"articleId":9,"title":"title4","subTitle":"subTitle","thumbnailUrl":"thumbnailUrl","memberGithubId":"testGithubId","createAt":"2023년07월22일","hit":0,"likeCount":0},{"articleId":8,"title":"title3","subTitle":"subTitle","thumbnailUrl":"thumbnailUrl","memberGithubId":"testGithubId","createAt":"2023년07월22일","hit":0,"likeCount":0},{"articleId":7,"title":"title2","subTitle":"subTitle","thumbnailUrl":"thumbnailUrl","memberGithubId":"testGithubId","createAt":"2023년07월22일","hit":0,"likeCount":0},{"articleId":6,"title":"title1","subTitle":"subTitle","thumbnailUrl":"thumbnailUrl","memberGithubId":"testGithubId","createAt":"2023년07월22일","hit":0,"likeCount":0}]</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_게시글_목록_조회_query_parameters">Query parameters</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">페이지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>standard</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">정렬기준</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_게시글_목록_조회_response_fields">Response fields</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">게시글 목록</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].articleId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">게시글 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].title</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">제목</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].subTitle</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">부제목</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].thumbnailUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">썸네일 URL</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].memberGithubId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 GitHub ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].createAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성일시</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].hit</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">조회수</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].likeCount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">좋아요 수</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_게시글_등록">게시글 등록</h3>
 <div class="sect3">
 <h4 id="_게시글_등록_http_request">HTTP request</h4>
 <div class="listingblock">
@@ -482,7 +596,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 Content-Type: application/json
 Content-Length: 135
 Host: localhost:8080
-Cookie: access_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0R2l0aHViSWQiLCJpc3MiOiJpc3N1ZXIiLCJpYXQiOjE2OTAwMjQ0MDcsImV4cCI6MTY5MTIzNDAwNywicm9sZSI6IlJPTEVfVVNFUiIsIm5hbWUiOiJ0ZXN0TmFtZSIsImlkIjo2fQ.NL_rbtGQHJ-b8q0DNu2DafzECWYsnsBQ5lsiCfLxmEg
+Cookie: access_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0R2l0aHViSWQiLCJpc3MiOiJpc3N1ZXIiLCJpYXQiOjE2OTAwMjk4OTMsImV4cCI6MTY5MTIzOTQ5Mywicm9sZSI6IlJPTEVfVVNFUiIsIm5hbWUiOiJ0ZXN0TmFtZSIsImlkIjo2fQ.ITjBT_UbfrS6aqKiYovSpOiCZwPmxwiNeDp4szvnhbo
 
 {"title":"title","subTitle":"subTitle","content":"content","gitHubLink":"githubLink","thumbnailUrl":"thumbnail","tags":["tag1","tag2"]}</code></pre>
 </div>
@@ -497,24 +611,6 @@ Content-Type: application/json
 Content-Length: 66
 
 {"message":"게시글이 등록되었습니다.","responseData":5}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_게시글_등록_httpie_request">HTTPie request</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ echo '{"title":"title","subTitle":"subTitle","content":"content","gitHubLink":"githubLink","thumbnailUrl":"thumbnail","tags":["tag1","tag2"]}' | http POST 'http://localhost:8080/api/article' \
-    'Content-Type:application/json' \
-    'Cookie:access_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0R2l0aHViSWQiLCJpc3MiOiJpc3N1ZXIiLCJpYXQiOjE2OTAwMjQ0MDcsImV4cCI6MTY5MTIzNDAwNywicm9sZSI6IlJPTEVfVVNFUiIsIm5hbWUiOiJ0ZXN0TmFtZSIsImlkIjo2fQ.NL_rbtGQHJ-b8q0DNu2DafzECWYsnsBQ5lsiCfLxmEg'</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_게시글_등록_request_body">Request body</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{"title":"title","subTitle":"subTitle","content":"content","gitHubLink":"githubLink","thumbnailUrl":"thumbnail","tags":["tag1","tag2"]}</code></pre>
 </div>
 </div>
 </div>
@@ -568,14 +664,6 @@ Content-Length: 66
 </table>
 </div>
 <div class="sect3">
-<h4 id="_게시글_등록_response_body">Response body</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{"message":"게시글이 등록되었습니다.","responseData":5}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
 <h4 id="_게시글_등록_response_fields">Response fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -608,17 +696,6 @@ Content-Length: 66
 <div class="sect2">
 <h3 id="_게시글_수정">게시글 수정</h3>
 <div class="sect3">
-<h4 id="_게시글_수정_curl_request">Curl request</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/api/article' -i -X PUT \
-    -H 'Content-Type: application/json' \
-    --cookie 'access_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0R2l0aHViSWQiLCJpc3MiOiJpc3N1ZXIiLCJpYXQiOjE2OTAwMjQ0MDcsImV4cCI6MTY5MTIzNDAwNywicm9sZSI6IlJPTEVfVVNFUiIsIm5hbWUiOiJ0ZXN0TmFtZSIsImlkIjo5fQ.Ck5IMKWoPgPoXL4G_xeOuviFKqJy1JFppx4-JLHbjzM' \
-    -d '{"articleId":10,"title":"updateTitle","subTitle":"subTitle","content":"gitHubLink","gitHubLink":"updateContent","thumbnailUrl":"","tags":["태그1","태그2"]}'</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
 <h4 id="_게시글_수정_http_request">HTTP request</h4>
 <div class="listingblock">
 <div class="content">
@@ -626,7 +703,7 @@ Content-Length: 66
 Content-Type: application/json
 Content-Length: 159
 Host: localhost:8080
-Cookie: access_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0R2l0aHViSWQiLCJpc3MiOiJpc3N1ZXIiLCJpYXQiOjE2OTAwMjQ0MDcsImV4cCI6MTY5MTIzNDAwNywicm9sZSI6IlJPTEVfVVNFUiIsIm5hbWUiOiJ0ZXN0TmFtZSIsImlkIjo5fQ.Ck5IMKWoPgPoXL4G_xeOuviFKqJy1JFppx4-JLHbjzM
+Cookie: access_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0R2l0aHViSWQiLCJpc3MiOiJpc3N1ZXIiLCJpYXQiOjE2OTAwMjk4OTMsImV4cCI6MTY5MTIzOTQ5Mywicm9sZSI6IlJPTEVfVVNFUiIsIm5hbWUiOiJ0ZXN0TmFtZSIsImlkIjo5fQ.vZ9kpqZWPv1Jrl3kf1sGfGbDWlup842TVm7AfyswXP0
 
 {"articleId":10,"title":"updateTitle","subTitle":"subTitle","content":"gitHubLink","gitHubLink":"updateContent","thumbnailUrl":"","tags":["태그1","태그2"]}</code></pre>
 </div>
@@ -641,24 +718,6 @@ Content-Type: application/json
 Content-Length: 67
 
 {"message":"게시글이 수정되었습니다.","responseData":10}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_게시글_수정_httpie_request">HTTPie request</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ echo '{"articleId":10,"title":"updateTitle","subTitle":"subTitle","content":"gitHubLink","gitHubLink":"updateContent","thumbnailUrl":"","tags":["태그1","태그2"]}' | http PUT 'http://localhost:8080/api/article' \
-    'Content-Type:application/json' \
-    'Cookie:access_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0R2l0aHViSWQiLCJpc3MiOiJpc3N1ZXIiLCJpYXQiOjE2OTAwMjQ0MDcsImV4cCI6MTY5MTIzNDAwNywicm9sZSI6IlJPTEVfVVNFUiIsIm5hbWUiOiJ0ZXN0TmFtZSIsImlkIjo5fQ.Ck5IMKWoPgPoXL4G_xeOuviFKqJy1JFppx4-JLHbjzM'</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_게시글_수정_request_body">Request body</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{"articleId":10,"title":"updateTitle","subTitle":"subTitle","content":"gitHubLink","gitHubLink":"updateContent","thumbnailUrl":"","tags":["태그1","태그2"]}</code></pre>
 </div>
 </div>
 </div>
@@ -717,14 +776,6 @@ Content-Length: 67
 </table>
 </div>
 <div class="sect3">
-<h4 id="_게시글_수정_response_body">Response body</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{"message":"게시글이 수정되었습니다.","responseData":10}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
 <h4 id="_게시글_수정_response_fields">Response fields</h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -757,21 +808,12 @@ Content-Length: 67
 <div class="sect2">
 <h3 id="_게시글_삭제">게시글 삭제</h3>
 <div class="sect3">
-<h4 id="_게시글_삭제_curl_request">Curl request</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/api/article/2' -i -X DELETE \
-    --cookie 'access_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0R2l0aHViSWQiLCJpc3MiOiJpc3N1ZXIiLCJpYXQiOjE2OTAwMjQ0MDcsImV4cCI6MTY5MTIzNDAwNywicm9sZSI6IlJPTEVfVVNFUiIsIm5hbWUiOiJ0ZXN0TmFtZSIsImlkIjozfQ.Pss5AbHUBwltbcd9GlBbz3N-ICsQrdD0E8eUZHVWhn4'</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
 <h4 id="_게시글_삭제_http_request">HTTP request</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/article/2 HTTP/1.1
 Host: localhost:8080
-Cookie: access_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0R2l0aHViSWQiLCJpc3MiOiJpc3N1ZXIiLCJpYXQiOjE2OTAwMjQ0MDcsImV4cCI6MTY5MTIzNDAwNywicm9sZSI6IlJPTEVfVVNFUiIsIm5hbWUiOiJ0ZXN0TmFtZSIsImlkIjozfQ.Pss5AbHUBwltbcd9GlBbz3N-ICsQrdD0E8eUZHVWhn4</code></pre>
+Cookie: access_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0R2l0aHViSWQiLCJpc3MiOiJpc3N1ZXIiLCJpYXQiOjE2OTAwMjk4OTIsImV4cCI6MTY5MTIzOTQ5Miwicm9sZSI6IlJPTEVfVVNFUiIsIm5hbWUiOiJ0ZXN0TmFtZSIsImlkIjozfQ.DBmw1D5SR88Fawy5GVzvk_A9FddIQWHbZ5AkPFolPqs</code></pre>
 </div>
 </div>
 </div>
@@ -784,15 +826,6 @@ Content-Type: application/json
 Content-Length: 69
 
 {"message":"게시글이 삭제되었습니다.","responseData":null}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_게시글_삭제_httpie_request">HTTPie request</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ http DELETE 'http://localhost:8080/api/article/2' \
-    'Cookie:access_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0R2l0aHViSWQiLCJpc3MiOiJpc3N1ZXIiLCJpYXQiOjE2OTAwMjQ0MDcsImV4cCI6MTY5MTIzNDAwNywicm9sZSI6IlJPTEVfVVNFUiIsIm5hbWUiOiJ0ZXN0TmFtZSIsImlkIjozfQ.Pss5AbHUBwltbcd9GlBbz3N-ICsQrdD0E8eUZHVWhn4'</code></pre>
 </div>
 </div>
 </div>
@@ -817,22 +850,6 @@ Content-Length: 69
 </tr>
 </tbody>
 </table>
-</div>
-<div class="sect3">
-<h4 id="_게시글_삭제_request_body">Request body</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-none hljs"></code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_게시글_삭제_response_body">Response body</h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{"message":"게시글이 삭제되었습니다.","responseData":null}</code></pre>
-</div>
-</div>
 </div>
 <div class="sect3">
 <h4 id="_게시글_삭제_response_fields">Response fields</h4>
@@ -866,11 +883,231 @@ Content-Length: 69
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_articlelike_api">ArticleLike-API</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_게시글_좋아요_등록">게시글 좋아요 등록</h3>
+<div class="sect3">
+<h4 id="_게시글_좋아요_등록_http_request">HTTP request</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/like/12 HTTP/1.1
+Content-Type: application/json
+Host: localhost:8080
+Cookie: access_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0R2l0aHViSWQiLCJpc3MiOiJpc3N1ZXIiLCJpYXQiOjE2OTAwMjk4OTMsImV4cCI6MTY5MTIzOTQ5Mywicm9sZSI6IlJPTEVfVVNFUiIsIm5hbWUiOiJ0ZXN0TmFtZSIsImlkIjoxMX0.5UiztFRGBGtfbZIfhzQjrtV31z39VH4ycqL1Xz-Sk1E</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_게시글_좋아요_등록_http_response">HTTP response</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 15
+
+{"result":true}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_게시글_좋아요_등록_path_parameters">Path parameters</h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. /api/like/{id}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">게시글 ID</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_게시글_좋아요_등록_response_fields">Response fields</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">좋아요저장 결과</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_게시글_좋아요_취소">게시글 좋아요 취소</h3>
+<div class="sect3">
+<h4 id="_게시글_좋아요_취소_http_request">HTTP request</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/like/11 HTTP/1.1
+Content-Type: application/json
+Host: localhost:8080
+Cookie: access_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0R2l0aHViSWQiLCJpc3MiOiJpc3N1ZXIiLCJpYXQiOjE2OTAwMjk4OTMsImV4cCI6MTY5MTIzOTQ5Mywicm9sZSI6IlJPTEVfVVNFUiIsIm5hbWUiOiJ0ZXN0TmFtZSIsImlkIjoxMH0.bGfYvTkaCaykjgZQl-1uYog-VIXkmyEvOEbgqBSoNKE</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_게시글_좋아요_취소_http_response">HTTP response</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 15
+
+{"result":true}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_게시글_좋아요_취소_path_parameters">Path parameters</h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. /api/like/{id}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">게시글 ID</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_게시글_좋아요_취소_response_fields">Response fields</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">좋아요취소 결과</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_token_api">Token-API</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_accesstoken_재발급">AccessToken 재발급</h3>
+<div class="sect3">
+<h4 id="_accesstoken_재발급_http_request">HTTP request</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/token HTTP/1.1
+Host: localhost:8080
+Cookie: refresh_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJpc3N1ZXIiLCJpYXQiOjE2OTAwMjk4OTMsImV4cCI6MTY5MTIzOTQ5Mywic3ViIjoidGVzdEdpdGh1YklkIiwiaWQiOjEyLCJuYW1lIjoidGVzdE5hbWUiLCJyb2xlIjoiUk9MRV9VU0VSIn0.hpno86L97CJq6KoXE9e13ItaMA_1zAITZI_1MKyeUHw</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_accesstoken_재발급_http_response">HTTP response</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 302 Found
+Set-Cookie: access_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJpc3N1ZXIiLCJpYXQiOjE2OTAwMjk4OTMsImV4cCI6MTY5MDAzNzA5Mywic3ViIjoidGVzdEdpdGh1YklkIiwiaWQiOjEyLCJuYW1lIjoidGVzdE5hbWUiLCJyb2xlIjoiUk9MRV9VU0VSIn0.2p3y-9qRTpnvhv2mJcSTZKQkzregp61k56E4fPyutrw; Path=/; Max-Age=7200; Expires=Sat, 22 Jul 2023 14:44:53 GMT; HttpOnly
+Content-Language: en
+Location: /</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_accesstoken_재발급_request_cookies">Request cookies</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>refresh_token</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">refresh_token</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_accesstoken_재발급_response_cookies">Response cookies</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>access_token</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">access_token</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-07-22 20:12:48 +0900
+Last updated 2023-07-22 21:44:11 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
