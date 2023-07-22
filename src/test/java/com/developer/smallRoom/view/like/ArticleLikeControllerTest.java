@@ -24,12 +24,20 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -44,7 +52,6 @@ class ArticleLikeControllerTest extends ControllerTestBase {
     @Autowired
     private ArticleLikeRepository articleLikeRepository;
 
-
     @Autowired
     private TokenProvider tokenProvider;
     @MockBean
@@ -56,8 +63,9 @@ class ArticleLikeControllerTest extends ControllerTestBase {
     private String accessToken;
 
     @BeforeEach
-    void setup() {
+    void setup(RestDocumentationContextProvider restDocumentationContextProvider) {
         this.mvc = MockMvcBuilders.webAppContextSetup(context)
+                .apply(documentationConfiguration(restDocumentationContextProvider))
                 .addFilter(new TokenAuthenticationFilter(tokenProvider, refreshTokenRepository)).build();
         articleRepository.deleteAll();
         memberRepository.deleteAll();
@@ -79,13 +87,20 @@ class ArticleLikeControllerTest extends ControllerTestBase {
     void saveLikeLoginMember() throws Exception {
         //given
         Long articleId = article.getId();
-        //when
-        ResultActions result = mvc.perform(post("/api/like/" + articleId)
+        //when, then
+        ResultActions result = mvc.perform(RestDocumentationRequestBuilders.post("/api/like/{id}", articleId)
                 .cookie(getAccessTokenCookie(accessToken))
-                .contentType(MediaType.APPLICATION_JSON_VALUE));
-        //then
-        result.andExpect(status().isOk());
-        result.andExpect(jsonPath("$.result").value(true));
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result").value(true));
+
+        result.andDo(document("save-like",
+                pathParameters(
+                        parameterWithName("id").description("게시글 ID")
+                ), responseFields(
+                        fieldWithPath("result").description("좋아요저장 결과")
+                )
+        ));
     }
 
     @DisplayName("로그인한 Member는 좋아요를 취소할 수 있다.")
@@ -94,13 +109,20 @@ class ArticleLikeControllerTest extends ControllerTestBase {
         //given
         articleLikeRepository.save(new ArticleLike(article, member));
         Long articleId = article.getId();
-        //when
-        ResultActions result = mvc.perform(delete("/api/like/" + articleId)
+        //when, then
+        ResultActions result = mvc.perform(RestDocumentationRequestBuilders.delete("/api/like/{id}", articleId)
                 .cookie(getAccessTokenCookie(accessToken))
-                .contentType(MediaType.APPLICATION_JSON_VALUE));
-        //then
-        result.andExpect(status().isOk());
-        result.andExpect(jsonPath("$.result").value(true));
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk()).
+                andExpect(jsonPath("$.result").value(true));
+
+        result.andDo(document("cancel-like",
+                pathParameters(
+                        parameterWithName("id").description("게시글 ID")
+                ), responseFields(
+                        fieldWithPath("result").description("좋아요취소 결과")
+                )
+        ));
     }
 
     private Cookie getAccessTokenCookie(String accessToken) {
