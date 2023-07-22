@@ -45,8 +45,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -68,6 +67,8 @@ class ArticleControllerTest extends ControllerTestBase {
     private Member member;
     private String accessToken;
 
+    private static final String ARTICLE_API = "/api/article";
+
     @BeforeEach
     void setup(RestDocumentationContextProvider restDocumentationContextProvider) {
         this.mvc = MockMvcBuilders.webAppContextSetup(context)
@@ -86,6 +87,45 @@ class ArticleControllerTest extends ControllerTestBase {
                 .build().createToken(testJwtProperties);
     }
 
+    @DisplayName("getaHomeArticleByCreateAt() : 사용자는 최신순으로 게시글을 조회할 수 있다.")
+    @Test
+    void getaHomeArticleByCreateAt() throws Exception {
+        //given
+        Article article1 = saveArticle("title1", "content", member);
+        Article article2 = saveArticle("title2", "content", member);
+        Article article3 = saveArticle("title3", "content", member);
+        Article article4 = saveArticle("title4", "content", member);
+
+        //when, then
+        ResultActions result = mvc.perform(RestDocumentationRequestBuilders.get(ARTICLE_API)
+                        .param("page", "0")
+                        .param("standard", "createAt"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].articleId").value(article4.getId()))
+                .andExpect(jsonPath("$[1].articleId").value(article3.getId()))
+                .andExpect(jsonPath("$[2].articleId").value(article2.getId()))
+                .andExpect(jsonPath("$[3].articleId").value(article1.getId()));
+
+        result.andDo(print())
+                .andDo(document("get-article",
+                        queryParameters(
+                                parameterWithName("page").description("페이지"),
+                                parameterWithName("standard").description("정렬기준")
+                        ),
+                        responseFields(
+                                fieldWithPath("[]").description("게시글 목록"),
+                                fieldWithPath("[].articleId").description("게시글 ID"),
+                                fieldWithPath("[].title").description("제목"),
+                                fieldWithPath("[].subTitle").description("부제목"),
+                                fieldWithPath("[].thumbnailUrl").description("썸네일 URL"),
+                                fieldWithPath("[].memberGithubId").description("작성자 GitHub ID"),
+                                fieldWithPath("[].createAt").description("작성일시"),
+                                fieldWithPath("[].hit").description("조회수"),
+                                fieldWithPath("[].likeCount").description("좋아요 수")
+                        )
+                ));
+    }
+
     @DisplayName("postArticle() : 로그인한 사용자는 게시글 등록이 가능하다")
     @Test
     void postArticle() throws Exception {
@@ -96,7 +136,7 @@ class ArticleControllerTest extends ControllerTestBase {
         String requestBody = objectMapper.writeValueAsString(articleRequest);
 
         //when
-        ResultActions result = mvc.perform(RestDocumentationRequestBuilders.post("/api/article")
+        ResultActions result = mvc.perform(RestDocumentationRequestBuilders.post(ARTICLE_API)
                 .cookie(getAccessTokenCookie(accessToken))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestBody))
@@ -136,7 +176,7 @@ class ArticleControllerTest extends ControllerTestBase {
         String requestBody = objectMapper.writeValueAsString(articleUpdateRequest);
 
         //when, then
-        ResultActions result = mvc.perform(RestDocumentationRequestBuilders.put("/api/article")
+        ResultActions result = mvc.perform(RestDocumentationRequestBuilders.put(ARTICLE_API)
                 .cookie(getAccessTokenCookie(accessToken))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestBody))
@@ -179,7 +219,7 @@ class ArticleControllerTest extends ControllerTestBase {
 
         String otherMemberAccessToken = getOtherMemberAccessToken(otherMember);
         //when
-        ResultActions result = mvc.perform(put("/api/article")
+        ResultActions result = mvc.perform(put(ARTICLE_API)
                 .cookie(getAccessTokenCookie(otherMemberAccessToken))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestBody));
@@ -222,32 +262,11 @@ class ArticleControllerTest extends ControllerTestBase {
         Member otherMember = getOtherMember();
         String otherMemberAccessToken = getOtherMemberAccessToken(otherMember);
         //when
-        ResultActions result = mvc.perform(delete("/api/article/"+memberArticle.getId())
+        ResultActions result = mvc.perform(RestDocumentationRequestBuilders.delete("/api/article/{id}", memberArticle.getId())
                 .cookie(getAccessTokenCookie(otherMemberAccessToken)));
         //then
         result.andExpect(status().is4xxClientError());
         result.andExpect(jsonPath("$.message").value("잘못된 접근입니다."));
-    }
-
-    @DisplayName("getaHomeArticleByCreateAt() : 사용자는 최신순으로 게시글을 조회할 수 있다.")
-    @Test
-    void getaHomeArticleByCreateAt() throws Exception {
-        //given
-        Article article1 = saveArticle("title1", "content", member);
-        Article article2 = saveArticle("title2", "content", member);
-        Article article3 = saveArticle("title3", "content", member);
-        Article article4 = saveArticle("title4", "content", member);
-
-        //when
-        String url = "/api/article?page=0&standard=createAt";
-        ResultActions result = mvc.perform(get(url));
-
-        //then
-        result.andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].articleId").value(article4.getId()))
-                .andExpect(jsonPath("$[1].articleId").value(article3.getId()))
-                .andExpect(jsonPath("$[2].articleId").value(article2.getId()))
-                .andExpect(jsonPath("$[3].articleId").value(article1.getId()));
     }
 
     @DisplayName("getaHomeArticleByLikeCount() : 사용자는 좋아요순으로 게시글을 조회할 수 있다.")
