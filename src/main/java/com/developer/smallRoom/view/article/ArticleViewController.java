@@ -40,8 +40,7 @@ public class ArticleViewController {
     }
 
     @GetMapping("/post")
-    public String articlePostingView() {
-
+    public String articlePostingView(@LoginMember MemberPrincipal memberPrincipal) {
         return "articlePost";
     }
 
