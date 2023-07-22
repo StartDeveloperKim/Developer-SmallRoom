@@ -6,6 +6,9 @@
 :toclevels: 2
 :seclinks:
 
+== Member-API
+=== 로그아웃
+operation::logout[snippets='http-request,http-response,request-cookies']
 
 == Article-API
 === 게시글 목록 조회
