@@ -1,0 +1,16 @@
+= 토이프로젝트 저장소 API 문서
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:seclinks:
+
+
+== Article-API
+=== 게시글 등록
+operation::post-article[snippets='http-request,http-response,request-fields,response-fields']
+=== 게시글 수정
+operation::update-article[snippets='http-request,http-response,request-fields,response-fields']
+=== 게시글 삭제
+operation::delete-article[snippets='http-request,http-response,request-fields,response-fields']

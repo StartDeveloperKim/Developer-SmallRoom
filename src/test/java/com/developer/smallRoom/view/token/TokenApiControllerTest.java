@@ -8,6 +8,7 @@ import com.developer.smallRoom.domain.member.Member;
 import com.developer.smallRoom.domain.member.repository.MemberRepository;
 import com.developer.smallRoom.factory.MemberFactory;
 import com.developer.smallRoom.jwt.TestJwtProperties;
+import com.developer.smallRoom.view.ControllerTestBase;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,24 +29,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
-@AutoConfigureMockMvc
-class TokenApiControllerTest {
+class TokenApiControllerTest extends ControllerTestBase {
 
-
-    @Autowired
-    private MockMvc mvc;
     @Autowired
     private WebApplicationContext context;
 
-    @Autowired
-    private RefreshTokenRepository refreshTokenRepository;
+
     @Autowired
     private TokenProvider tokenProvider;
     @MockBean
     private JwtProperties jwtProperties;
-
-    @Autowired
-    private MemberRepository memberRepository;
 
     private String testRefreshToken;
 

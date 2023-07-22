@@ -14,6 +14,7 @@ import com.developer.smallRoom.factory.ArticleFactory;
 import com.developer.smallRoom.factory.MemberFactory;
 import com.developer.smallRoom.jwt.JwtFactory;
 import com.developer.smallRoom.jwt.TestJwtProperties;
+import com.developer.smallRoom.view.ControllerTestBase;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,22 +36,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@AutoConfigureMockMvc
-class ArticleLikeControllerTest {
+class ArticleLikeControllerTest extends ControllerTestBase {
 
-    @Autowired
-    protected MockMvc mvc;
     @Autowired
     private WebApplicationContext context;
 
     @Autowired
-    private MemberRepository memberRepository;
-    @Autowired
-    private ArticleRepository articleRepository;
-    @Autowired
     private ArticleLikeRepository articleLikeRepository;
-    @Autowired
-    private RefreshTokenRepository refreshTokenRepository;
+
 
     @Autowired
     private TokenProvider tokenProvider;

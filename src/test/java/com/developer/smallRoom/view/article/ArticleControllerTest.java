@@ -14,19 +14,27 @@ import com.developer.smallRoom.factory.ArticleFactory;
 import com.developer.smallRoom.factory.MemberFactory;
 import com.developer.smallRoom.jwt.JwtFactory;
 import com.developer.smallRoom.jwt.TestJwtProperties;
+import com.developer.smallRoom.view.ControllerTestBase;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -34,27 +42,22 @@ import java.util.*;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@AutoConfigureMockMvc
-class ArticleControllerTest {
+class ArticleControllerTest extends ControllerTestBase {
 
-    @Autowired
-    protected MockMvc mvc;
-    @Autowired
-    private ObjectMapper objectMapper;
     @Autowired
     private WebApplicationContext context;
 
-    @Autowired
-    private MemberRepository memberRepository;
-    @Autowired
-    private ArticleRepository articleRepository;
-    @Autowired
-    private RefreshTokenRepository refreshTokenRepository;
 
     @Autowired
     private TokenProvider tokenProvider;
@@ -66,8 +69,9 @@ class ArticleControllerTest {
     private String accessToken;
 
     @BeforeEach
-    void setup() {
+    void setup(RestDocumentationContextProvider restDocumentationContextProvider) {
         this.mvc = MockMvcBuilders.webAppContextSetup(context)
+                .apply(documentationConfiguration(restDocumentationContextProvider))
                 .addFilter(new TokenAuthenticationFilter(tokenProvider, refreshTokenRepository)).build();
         articleRepository.deleteAll();
         memberRepository.deleteAll();
@@ -92,16 +96,31 @@ class ArticleControllerTest {
         String requestBody = objectMapper.writeValueAsString(articleRequest);
 
         //when
-        ResultActions result = mvc.perform(post("/api/article")
+        ResultActions result = mvc.perform(RestDocumentationRequestBuilders.post("/api/article")
                 .cookie(getAccessTokenCookie(accessToken))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(requestBody));
+                .content(requestBody))
+                .andDo(print())
+                .andExpect(status().isOk());
 
         //then
-        result.andExpect(status().isOk());
-
         List<Article> articles = articleRepository.findAll();
         assertThat(articles.get(0).getTitle()).isEqualTo(articleRequest.getTitle());
+
+        result.andDo(document("post-article",
+                requestFields(
+                        fieldWithPath("title").description("제목"),
+                        fieldWithPath("subTitle").description("부제목"),
+                        fieldWithPath("content").description("본문"),
+                        fieldWithPath("gitHubLink").description("깃허브 링크"),
+                        fieldWithPath("thumbnailUrl").description("썸네일 링크"),
+                        fieldWithPath("tags").description("태그")
+                ),
+                responseFields(
+                        fieldWithPath("message").description("결과 메시지"),
+                        fieldWithPath("responseData").description("등록 게시글 ID")
+                )
+        ));
     }
 
     @DisplayName("updateArticle() : 글의 작성자는 글의 수정할 수 있다.")
@@ -116,16 +135,31 @@ class ArticleControllerTest {
                 updateContent, "", Arrays.asList("태그1", "태그2"));
         String requestBody = objectMapper.writeValueAsString(articleUpdateRequest);
 
-        //when
-        ResultActions result = mvc.perform(put("/api/article")
+        //when, then
+        ResultActions result = mvc.perform(RestDocumentationRequestBuilders.put("/api/article")
                 .cookie(getAccessTokenCookie(accessToken))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(requestBody));
+                .content(requestBody))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.responseData").value(article.getId()))
+                .andExpect(jsonPath("$.message").value("게시글이 수정되었습니다."));
 
-        //then
-        result.andExpect(status().isOk());
-        result.andExpect(jsonPath("$.responseData").value(article.getId()));
-        result.andExpect(jsonPath("$.message").value("게시글이 수정되었습니다."));
+        result.andDo(document("update-article",
+                requestFields(
+                        fieldWithPath("articleId").description("게시글ID"),
+                        fieldWithPath("title").description("제목"),
+                        fieldWithPath("subTitle").description("부제목"),
+                        fieldWithPath("content").description("본문"),
+                        fieldWithPath("gitHubLink").description("깃허브 링크"),
+                        fieldWithPath("thumbnailUrl").description("썸네일 링크"),
+                        fieldWithPath("tags").description("태그")
+                ),
+                responseFields(
+                        fieldWithPath("message").description("결과 메시지"),
+                        fieldWithPath("responseData").description("수정 게시글 ID")
+                )
+        ));
     }
 
     @DisplayName("notAuthorizationUpdate() : 다른 작성자의 글을 수정할 수 없다.")
@@ -160,15 +194,23 @@ class ArticleControllerTest {
     void deleteArticle() throws Exception {
         //given
         Article memberArticle = saveArticle("title", "content", member);
-        //when
-        ResultActions result = mvc.perform(delete("/api/article/"+memberArticle.getId())
-                .cookie(getAccessTokenCookie(accessToken)));
-        //then
-        result.andExpect(status().isOk());
-        result.andExpect(jsonPath("$.message").value("게시글이 삭제되었습니다."));
+        //when, then
+        ResultActions result = mvc.perform(RestDocumentationRequestBuilders.delete("/api/article/{id}", memberArticle.getId())
+                .cookie(getAccessTokenCookie(accessToken)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("게시글이 삭제되었습니다."));
 
         List<Article> articles = articleRepository.findAll();
         assertThat(articles.size()).isEqualTo(0);
+
+        result.andDo(document("delete-article",
+                pathParameters(
+                        parameterWithName("id").description("게시글ID")
+                ),responseFields(
+                        fieldWithPath("message").description("결과 메시지"),
+                        fieldWithPath("responseData").description("응답 데이터 (null이 될 수 있음)")
+                )
+        ));
     }
 
     @DisplayName("notAuthorizationDelete() : 다른 작성자의 게시글을 삭제할 수 없다.")

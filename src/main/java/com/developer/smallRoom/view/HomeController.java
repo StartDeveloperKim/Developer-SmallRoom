@@ -20,11 +20,9 @@ import java.util.List;
 public class HomeController {
 
     private final ArticleService articleService;
-    private final ArticleLikeService articleLikeService;
 
     @GetMapping("/")
-    public String index(@LoginMember MemberPrincipal memberPrincipal, Model model) {
-        log.info("memberInfo : {}", memberPrincipal!=null ? memberPrincipal.toString() : "not memberPrincipal");
+    public String index(Model model) {
         // TODO :: 첫 Index 페이지는 0으로 고정 글의 개수가 늘어나면 8개씩 로딩으로 수정
         List<HomeArticleResponse> articles = articleService.getRandomArticles();
         model.addAttribute("articles", articles);
