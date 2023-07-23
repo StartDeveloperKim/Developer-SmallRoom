@@ -26,6 +26,10 @@ operation::save-like[snippets='http-request,http-response,path-parameters,respon
 === 게시글 좋아요 취소
 operation::cancel-like[snippets='http-request,http-response,path-parameters,response-fields']
 
+== Article-Search-API
+=== 태그 이름 게시글 검색
+operation::article-search[snippets='http-request,http-response,query-parameters,response-fields']
+
 == Token-API
 === AccessToken 재발급
 operation::get-new-accessToken[snippets='http-request,http-response,request-cookies,response-cookies']
