@@ -32,7 +32,7 @@ public class ArticleRequest {
     private String gitHubLink;
     private String thumbnailUrl;
 
-    @NotNull(message = "하나 이상의 태그를 등록해주세요.")
+    @Size(min = 1, max = 20, message = "태그는 1개이상 20개까지 등록가능합니다.")
     private List<String> tags;
 
     public ArticleRequest(String title, String subTitle, String content, String gitHubLink, String thumbnailUrl, List<String> tags) {

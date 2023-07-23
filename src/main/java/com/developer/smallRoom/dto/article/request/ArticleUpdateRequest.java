@@ -30,6 +30,8 @@ public class ArticleUpdateRequest {
 
     private String gitHubLink;
     private String thumbnailUrl;
+
+    @Size(min = 1, max = 20, message = "태그는 1개이상 20개까지 등록가능합니다.")
     private List<String> tags;
 
     public String tagsListToString() {

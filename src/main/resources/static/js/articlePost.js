@@ -104,11 +104,27 @@ function getRequestData() {
     const tempTags = tagify.value
     const tags = tempTags.map(obj => obj.value);
 
+    const tags_input = $('#tags-input').val();
+    if (tags_input.length === 0) {
+        alert("태그는 1개이상 입력해주세요");
+        return false;
+    }
+    const tags_length = JSON.parse(tags_input).length;
+    if (tags_length === 0 || tags_length > 20) {
+        alert("태그는 1개이상 20개이하로 등록가능합니다.");
+        return false;
+    }
+
+    if (title.length === 0 || subTitle.length === 0 || content.length === 0) {
+        alert("제목, 부제목, 본문을 입력해주세요");
+        return false;
+    }
+
     return {
         articleId: articleId,
         title: title,
         subTitle: subTitle,
-        content: content, // You'll need to provide the content data
+        content: content,
         gitHubLink: gitHubLink,
         thumbnailUrl: thumbnail,
         tags: tags
@@ -117,11 +133,17 @@ function getRequestData() {
 
 function saveArticle() {
     const requestData = getRequestData();
+    if (requestData === false) {
+        return;
+    }
     toServer(requestData, 'POST');
 }
 
 function updateArticle() {
     const requestData = getRequestData();
+    if (requestData === false) {
+        return;
+    }
     toServer(requestData, 'PUT');
 }
 
