@@ -10,6 +10,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import java.util.Optional;
+
 @Component
 public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolver {
 
@@ -19,11 +21,15 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
                 parameter.getParameterType().equals(MemberPrincipal.class);
     }
 
+    /**
+    * Nullable 함
+    * */
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof String && principal.equals("anonymousUser")) {
-            throw new NotAuthorizationException("인증된 사용자가 아닙니다.");
+//            throw new NotAuthorizationException("인증된 사용자가 아닙니다.");
+            return null;
         }
         return (MemberPrincipal) principal;
     }
