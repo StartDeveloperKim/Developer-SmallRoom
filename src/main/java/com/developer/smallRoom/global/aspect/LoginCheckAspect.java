@@ -1,8 +1,5 @@
 package com.developer.smallRoom.global.aspect;
 
-import com.developer.smallRoom.application.auth.jwt.MemberPrincipal;
-import com.developer.smallRoom.application.member.LoginMember;
-import com.developer.smallRoom.global.exception.auth.NotAuthorizationException;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

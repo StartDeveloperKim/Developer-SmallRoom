@@ -53,6 +53,8 @@ public class ArticleController {
         return ResponseEntity.ok().body(new ArticleRetouchResponse<>("게시글이 등록되었습니다.", savedArticleId));
     }
 
+    // TODO :: 관리자가 게시글을 수정 및 삭제를 가능하게 하려면 분기처리하여 다른 서비스 코드를 생성해야 할 것 같다.
+    //  현재는 전달된 게시글 ID와 Member ID를 통해 게시글을 가져오는 로직이라서 변경이 필요한 듯 하다.
     @PutMapping
     public ResponseEntity<ArticleRetouchResponse<Long>> updateArticle(@Validated @RequestBody ArticleUpdateRequest request,
                                                                       @LoginMember MemberPrincipal memberPrincipal) {

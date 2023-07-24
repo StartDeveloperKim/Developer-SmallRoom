@@ -1,6 +1,6 @@
 INSERT INTO member (MEMBER_ID, CREATE_AT, GIT_HUB_ID, IMAGE_URL, NAME, ROLE)
 VALUES
-(1, '2023-06-26 15:39:11.054002', 'StartDeveloperKim', 'https://avatars.githubusercontent.com/u/97887047?v=4', 'Kims', 'USER');
+(1, '2023-06-26 15:39:11.054002', 'StartDeveloperKim', 'https://avatars.githubusercontent.com/u/97887047?v=4', 'Kims', 'ADMIN');
 
 INSERT INTO article (ARTICLE_ID, CONTENT, CREATE_AT, GITHUB_LINK, HIT, SUB_TITLE, TAGS, THUMBNAIL_URL, TITLE, MEMBER_ID, LIKE_COUNT)
 VALUES
