@@ -2,6 +2,7 @@ package com.developer.smallRoom.dto.article.response;
 
 import com.developer.smallRoom.application.auth.jwt.MemberPrincipal;
 import com.developer.smallRoom.domain.article.Article;
+import com.developer.smallRoom.domain.member.Role;
 import lombok.Getter;
 
 import java.time.format.DateTimeFormatter;
@@ -40,7 +41,9 @@ public class ArticleResponse {
     }
 
     public void setUpdatable(MemberPrincipal memberPrincipal) {
-        this.updatable = memberPrincipal != null && this.membergithubId.equals(memberPrincipal.getUsername());
+        this.updatable = memberPrincipal != null
+                && (this.membergithubId.equals(memberPrincipal.getUsername())
+                || memberPrincipal.getRole().equals(Role.ADMIN.getKey()));
     }
 
     private void setTags(String tags) {
