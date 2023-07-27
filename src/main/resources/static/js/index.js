@@ -32,13 +32,13 @@ function setSearchResult() {
         searchFlag = false;
         dataLoadFlag = true;
         page = 0;
-        loadData(basicArticleUrl + page,);
+        loadData(basicArticleUrl + page + "&standard=" + standard);
         page++;
     }else{
         searchFlag = true;
         dataLoadFlag = true;
         page = 0;
-        loadSearchData(searchArticleUrl + page, tags.join(','));
+        loadSearchData(searchArticleUrl + page, tags.join(','), standard);
         page++;
         query = tags.join(',');
         console.log('추가 전체 검색어:', tags);
