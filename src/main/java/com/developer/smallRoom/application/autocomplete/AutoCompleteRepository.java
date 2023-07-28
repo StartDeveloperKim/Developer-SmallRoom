@@ -5,6 +5,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 @Repository
 public class AutoCompleteRepository {
 
@@ -19,7 +23,20 @@ public class AutoCompleteRepository {
         zSetOps.add(key, value, score);
     }
 
-    public Long findIndexByValue(String key, String value) {
-        return zSetOps.rank(key, value);
+    public void bulkSave(String key, List<String> values, double score) {
+        for (String value : values) {
+            this.save(key, value, score);
+        }
     }
+
+    public Optional<Long> findIndexByValue(String key, String value) {
+        return Optional.ofNullable(zSetOps.rank(key, value));
+    }
+
+    public Set<String> findWordsListByIndex(String key, long start, long end) {
+        return zSetOps.range(key, start, end);
+    }
+
+
+
 }
