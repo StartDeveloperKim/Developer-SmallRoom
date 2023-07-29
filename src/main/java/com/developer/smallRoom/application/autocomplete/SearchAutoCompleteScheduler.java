@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ public class SearchAutoCompleteScheduler {
         this.suffix = suffix;
     }
 
-    @PostConstruct
+    @Scheduled(cron = "0 0 3 * * *", zone = "Asia/Seoul")
     public void setAutoCompleteWords() {
         final double SCORE = 0.0;
 
