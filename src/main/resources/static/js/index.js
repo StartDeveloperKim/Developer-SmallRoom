@@ -1,26 +1,40 @@
 import {updateArticleList} from "./card.js";
-import {data} from '/js/stack.js'
-
-const allTechStack = data.techStack;
+import {getAutoComplete} from "./autoComplete.js";
 
 const tag_input = document.getElementById("default-search");
 let tagify = new Tagify(tag_input, {
-    whitelist: allTechStack,
+    whitelist: [],
     dropdown: {
         maxItems: 20,
         classname: "tags-look",
         enabled: 0,
         closeOnSelect: false
     },
-}); // initialize Tagify
+});
 
-// 태그가 추가될 떄 마다 AJAX 통신을 활용해서 태그 기반 검색을 하자
 tagify.on('add', function (e) {
     setSearchResult();
 });
 
 tagify.on('remove', function(e) {
     setSearchResult();
+});
+
+tagify.on('input', async function(e) {
+    tagify.whitelist = null;
+    const inputWord = e.detail.value;
+    console.log("입력문자 : " + inputWord);
+    if (inputWord.length === 0) {
+        tagify.whitelist = null;
+        tagify.dropdown.hide();
+    }
+    try {
+        tagify.whitelist = await getAutoComplete(inputWord);
+        tagify.dropdown.show();
+        console.log("Tagify 자동완성 : "+tagify.whitelist);
+    } catch (err) {
+        alert("오류가 발생했습니다.");
+    }
 });
 
 let query;
