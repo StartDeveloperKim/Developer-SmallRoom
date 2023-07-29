@@ -30,6 +30,10 @@ operation::cancel-like[snippets='http-request,http-response,path-parameters,resp
 === 태그 이름 게시글 검색
 operation::article-search[snippets='http-request,http-response,query-parameters,response-fields']
 
+== Auto-Complete-API
+=== 검색어 자동완성
+operation::auto-complete[snippets='http-request,http-response,query-parameters,response-fields']
+
 == Token-API
 === AccessToken 재발급
 operation::get-new-accessToken[snippets='http-request,http-response,request-cookies,response-cookies']
