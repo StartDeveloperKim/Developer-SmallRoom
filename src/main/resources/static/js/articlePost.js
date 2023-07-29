@@ -1,3 +1,5 @@
+import {getAutoComplete} from "./autoComplete.js";
+
 let editor = new toastui.Editor({
     el: document.querySelector('#editor'),
     previewStyle: 'vertical',
@@ -35,8 +37,22 @@ let tagify = new Tagify(tag_input, {
         classname: "tags-look",
         enabled: 0,
         closeOnSelect: false
-    },
-    enforceWhitelist: true
+    }
+});
+
+tagify.on('input', async function(e) {
+    tagify.whitelist = null;
+    const inputWord = e.detail.value;
+    if (inputWord.length === 0) {
+        tagify.whitelist = null;
+        tagify.dropdown.hide();
+    }
+    try {
+        tagify.whitelist = await getAutoComplete(inputWord);
+        tagify.dropdown.show();
+    } catch (err) {
+        alert("오류가 발생했습니다.");
+    }
 });
 
 window.editor = editor;

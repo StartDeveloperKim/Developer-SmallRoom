@@ -41,8 +41,16 @@ public class BoardTagServiceImpl implements BoardTagService {
     private void saveBoardTags(List<String> tags, Article article) {
         for (String tag : tags) {
             Optional<Tag> findTag = tagRepository.findTagByName(tag);
-            findTag.ifPresent(value -> boardTagRepository.save(new BoardTag(article, value)));
+            if (findTag.isEmpty()) {
+                Tag newTag = tagRepository.save(new Tag(tag));
+                saveBoardTag(article, newTag);
+            } else {
+                saveBoardTag(article, findTag.get());
+            }
         }
+    }
+    private void saveBoardTag(Article article, Tag newTag) {
+        boardTagRepository.save(new BoardTag(article, newTag));
     }
 
     private Article getArticle(Long articleId) {
