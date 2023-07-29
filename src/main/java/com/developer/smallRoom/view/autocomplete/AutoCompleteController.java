@@ -19,7 +19,6 @@ public class AutoCompleteController {
 
     private final AutoCompleteService autoCompleteService;
 
-    // TODO :: 현재 Response 스펙을 정하지 못하였다. Redis에서 반환되는 데이터를 확인하고 결정하자.
     @GetMapping
     public ResponseEntity<List<String>> getAutoCompleteWords(@RequestParam(name = "query") String query) {
         List<String> autoCompleteWords = autoCompleteService.findAutoCompleteWords(query);

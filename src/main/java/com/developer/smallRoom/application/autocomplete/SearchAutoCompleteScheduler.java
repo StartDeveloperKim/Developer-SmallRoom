@@ -4,6 +4,7 @@ import com.developer.smallRoom.domain.tag.Tag;
 import com.developer.smallRoom.domain.tag.repository.TagRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -26,8 +27,9 @@ public class SearchAutoCompleteScheduler {
 
     // TODO :: 지금은 PostConstruct로 설정했다.
     //  나중에는 PostConstruct 보다는 스케쥴러를 사용하자
-    //  매일 밤 12시로 지정하자
+    //  매일 새벽 3시로 지정하자
 
+    @Autowired
     public SearchAutoCompleteScheduler(AutoCompleteRepository autoCompleteRepository,
                                        TagRepository tagRepository,
                                        @Value("${autocomplete.key}") String key,

@@ -27,7 +27,6 @@ public class AutoCompleteService {
         this.suffix = suffix;
     }
 
-    // TODO :: key, suffix 를 한 곳에서 관리할 수 있도록 하자. "AUTO_COMPLETE"
     public List<String> findAutoCompleteWords(String query) {
         final long limit = 100;
 
