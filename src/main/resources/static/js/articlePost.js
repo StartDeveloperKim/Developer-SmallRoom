@@ -1,5 +1,3 @@
-import {data} from '/js/stack.js'
-
 let editor = new toastui.Editor({
     el: document.querySelector('#editor'),
     previewStyle: 'vertical',
@@ -31,7 +29,7 @@ let editor = new toastui.Editor({
 
 const tag_input = document.getElementById("tags-input");
 let tagify = new Tagify(tag_input, {
-    whitelist: data.techStack,
+    whitelist: [],
     dropdown: {
         maxItems: 20,
         classname: "tags-look",
