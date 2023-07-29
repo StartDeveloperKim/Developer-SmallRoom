@@ -35,13 +35,28 @@
 ![image](https://github.com/StartDeveloperKim/ToyProject-Storage/assets/97887047/98c2f1cf-7ab1-47db-9c65-6f79e6ddf771)
 
 ## 주요기능
-- [Github OAuth + JWT(AccessToken+RefreshToken)을 활용한 로그인]([https://github.com/StartDeveloperKim/ToyProject-Storage/edit/main/README.md#github-oauth--jwtaccesstokenrefreshtoken%EC%9D%84-%ED%99%9C%EC%9A%A9%ED%95%9C-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EA%B5%AC%ED%98%84](https://github.com/StartDeveloperKim/ToyProject-Storage#github-oauth--jwtaccesstokenrefreshtoken%EC%9D%84-%ED%99%9C%EC%9A%A9%ED%95%9C-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EA%B5%AC%ED%98%84))
+- [Github OAuth + JWT(AccessToken+RefreshToken)을 활용한 로그인](https://github.com/StartDeveloperKim/ToyProject-Storage#github-oauth--jwtaccesstokenrefreshtoken%EC%9D%84-%ED%99%9C%EC%9A%A9%ED%95%9C-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EA%B5%AC%ED%98%84)
+- [게시글 CRUD](https://github.com/StartDeveloperKim/ToyProject-Storage#%EA%B2%8C%EC%8B%9C%EA%B8%80-crud)
+- [S3를 이미지 저장소로 사용](https://github.com/StartDeveloperKim/ToyProject-Storage#s3%EB%A5%BC-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%A0%80%EC%9E%A5%EC%86%8C%EB%A1%9C-%EC%82%AC%EC%9A%A9)
+- [태그 등록](https://github.com/StartDeveloperKim/ToyProject-Storage#%ED%83%9C%EA%B7%B8)
+    - [태그 이름 반정규화를 통한 조회 성능 향상](https://github.com/StartDeveloperKim/ToyProject-Storage#%ED%83%9C%EA%B7%B8-%EC%9D%B4%EB%A6%84-%EB%B0%98%EC%A0%95%EA%B7%9C%ED%99%94%EB%A5%BC-%ED%86%B5%ED%95%9C-%EC%A1%B0%ED%9A%8C-%EC%84%B1%EB%8A%A5-%ED%96%A5%EC%83%81)
+- [깃허브 댓글 기능 활용](https://github.com/StartDeveloperKim/ToyProject-Storage#%EB%8C%93%EA%B8%80)
+- [좋아요 기능](https://github.com/StartDeveloperKim/ToyProject-Storage#%EC%A2%8B%EC%95%84%EC%9A%94)
+    - [좋아요 개수 반정규화를 통한 성능 향상](https://github.com/StartDeveloperKim/ToyProject-Storage#%EC%A2%8B%EC%95%84%EC%9A%94-%EA%B0%9C%EC%88%98-db%EB%B0%98%EC%A0%95%EA%B7%9C%ED%99%94%EC%99%80-%EC%8A%A4%ED%94%84%EB%A7%81-%EC%8A%A4%EC%BC%80%EC%A5%B4%EB%9F%AC%EB%A5%BC-%ED%86%B5%ED%95%9C-%EC%84%B1%EB%8A%A5-%ED%96%A5%EC%83%81)
+- [무한스크롤](https://github.com/StartDeveloperKim/ToyProject-Storage#%EB%AC%B4%ED%95%9C%EC%8A%A4%ED%81%AC%EB%A1%A4)
+- [검색](https://github.com/StartDeveloperKim/ToyProject-Storage#%EA%B2%80%EC%83%89)
+    - [태그기반 검색](https://github.com/StartDeveloperKim/ToyProject-Storage#%ED%83%9C%EA%B7%B8%EA%B8%B0%EB%B0%98-%EA%B2%80%EC%83%89)
+    - [검색어 자동완성](https://github.com/StartDeveloperKim/ToyProject-Storage#%EA%B2%80%EC%83%89%EC%96%B4-%EC%9E%90%EB%8F%99%EC%99%84%EC%84%B1)
+- [조건별 정렬](https://github.com/StartDeveloperKim/ToyProject-Storage#%EC%B5%9C%EC%8B%A0-%EC%88%9C-%EC%A2%8B%EC%95%84%EC%9A%94-%EC%88%9C-%EC%A0%95%EB%A0%AC)
+- [CI/CD 배포자동화](https://github.com/StartDeveloperKim/ToyProject-Storage#cicd-%EB%B0%B0%ED%8F%AC%EC%9E%90%EB%8F%99%ED%99%94)
 
 ## 주요기능 설명 및 동작화면
 ### Github OAuth + JWT(AccessToken+RefreshToken)을 활용한 로그인 구현
-AWS 프리티어 사용자인 현 상황을 고려하여 OAuth와 JWT를 활용하여 로그인을 구현했습니다. 이전 블로그 프로젝트에서는 AccessToken만을 활용했는데 보안을 고려하여 RefreshToken도 함께 구현하였습니다.
+AWS 프리티어 사용자인 현 상황을 고려하여 OAuth와 JWT를 활용하여 로그인을 구현했습니다. 
 
-프론트엔드가 SSR이기 때문에 쿠키로서 클라이언트에게 전달했습니다. 또한 HttpOnly 설정을 활성화해서 자바스크립트를 통한 쿠키 탈취문제를 예방했습니다.
+블로그 프로젝트에서는 AccessToken만을 활용했지만 보안을 고려하여 RefreshToken도 함께 구현하였습니다.
+
+프론트엔드가 SSR이기 때문에 쿠키로서 클라이언트에게 전달했고 HttpOnly 설정을 활성화해서 자바스크립트를 통한 쿠키 탈취문제를 예방했습니다.
 
 ![로그인](https://github.com/StartDeveloperKim/Developer-SmallRoom/assets/97887047/18a014ca-4463-4ba4-a0a3-c27b06e27264)
 
@@ -55,27 +70,34 @@ AWS 프리티어 사용자인 현 상황을 고려하여 OAuth와 JWT를 활용�
 --------
 
 ### S3를 이미지 저장소로 사용
-썸네일 또는 게시글에 포함되는 이미지를 AWS의 S3 서버에 저장하도록하여 DB에는 이미지의 URL만 저장되도록 구성하였습니다.
+이미지를 서버내에 저장하면 서버 자원을 효율적으로 사용하지 못할 것이기에 이미지 저장서버를 분리했습니다.
+
+썸네일 또는 게시글에 포함되는 이미지를 AWS의 S3에 저장하도록하여 DB에는 이미지의 URL만 저장되도록 구성하였습니다.
 
 ![이미지](https://github.com/StartDeveloperKim/Developer-SmallRoom/assets/97887047/98f89a25-3c21-452e-abfa-e5ea9d948d15)
 
 #### [Toast Editor 이미지 저장 문제]
-토스트 에디터의 경우 이미지를 게시글에 함께 첨부해버리면 이미지가 Base64의 형태로 인코딩 되어버려 게시글의 사이즈가 엄청커지기에 문제가 발생한다.
+토스트 에디터의 경우 이미지를 게시글에 함께 첨부해버리면 이미지가 Base64의 형태로 인코딩 되어버려 게시글의 사이즈가 엄청커지기에 문제가 발생합니다.
+
 따라서 Toast Editor의 Hook 기능을 활용하여 이미지 첨부하면 AJAX를 활용하여 이미지를 multipart/form-data 형식으로 전달하여 S3에 저장한 후 
-해당 이미지의 링크를 전송하는 방식으로 해당 문제를 해결하였다.
+해당 이미지의 링크를 전송하는 방식으로 해당 문제를 해결했습니다.
 
 --------
 
 ### 태그
-프론트엔드 단에서는 Tagify를 사용하여 태그를 등록할 수 있도록하였고 지정된 태그가 아니면 사용자는 임의로 태그를 등록할 수 없습니다.
+프론트엔드 단에서는 Tagify를 사용하여 태그를 등록할 수 있도록하였습니다.
 
 ![2023-07-11 14;01;17](https://github.com/StartDeveloperKim/Developer-SmallRoom/assets/97887047/ec3a2fcd-114e-4974-bbe4-9335cb983386)
 
 
 #### [태그 이름 반정규화를 통한 조회 성능 향상]
-태그와 게시글은 다대다 관계로서 데이터의 중복을 줄이고자 BoardTag 테이블을 두었다. 이 때 게시글을 하나 조회하면 게시글과 BoardTag와의 Join
-그리고 BoardTag와 Tag와의 Join 총 2번의 Join이 필요했다. 그래서 태그의 수가 많을 수록 조회의 성능을 떨어질 것이라고 판단했다.
-게시글 테이블 컬럼에 태그리스트를 ','로 구분하여 문자열 형태로 삽입하는 반정규화를 진행하였고 조회성능을 2.9ms에서 1.0ms로 약 2.9배의 성능향상을 이뤄냈다.
+태그와 게시글은 다대다 관계로서 데이터의 중복을 줄이고자 BoardTag 테이블을 두었습니다.
+
+이 때 게시글을 하나 조회하면 게시글과 BoardTag와의 Join 그리고 BoardTag와 Tag와의 Join 총 2번의 Join이 필요했습니다.
+
+그래서 태그의 수가 많을 수록 조회의 성능을 떨어질 것이라고 판단했습니다.
+
+게시글 테이블 컬럼에 태그리스트를 ','로 구분하여 문자열 형태로 삽입하는 반정규화를 진행하였고 조회성능을 2.9ms에서 1.0ms로 약 2.9배의 성능향상을 이뤄냈습니다.
 
 --------
 
@@ -94,7 +116,9 @@ AWS 프리티어 사용자인 현 상황을 고려하여 OAuth와 JWT를 활용�
 #### [좋아요 개수 DB반정규화와 스프링 스케쥴러를 통한 성능 향상]
 
 좋아요개수를 게시글을 조회할 때 마다 count하는 것은 성능상 문제가 있다고 생각했습니다. 그래서 좋아요개수 컬럼을 두는 반정규화를 통해 성능향상을 했습니다.
+
 이 떄 JPA의 변경감지로 인해 발생하는 업데이트 무시가 때문에 두 데이터간의 동기화가 필요했습니다. 
+
 그래서 스프링 스케쥴러를 사용해 특정 시간마다 두 데이터간의 정합성을 맞추는 작업을 했습니다.
 
 ---------
@@ -114,7 +138,11 @@ AWS 프리티어 사용자인 현 상황을 고려하여 OAuth와 JWT를 활용�
 
 #### 검색어 자동완성
 검색창에 문자를 입력하면 해당 문자를 접두사로 가진 단어를 dropdown 방식으로 보여줍니다.  
-RDB에서 검색을 하면 오버헤드가 심하다고 판단되어 Redis를 활용했습니다. 그리고 특정 시간이되면 Redis의 자동완성을 위한 데이터셋을 갱신하는 로직이 동작되도록 했습니다.
+
+RDB에서 검색을 하면 오버헤드가 심하다고 판단되어 Redis를 활용했습니다. 
+
+그리고 특정 시간이되면 Redis의 자동완성을 위한 데이터셋을 갱신하는 로직이 동작되도록 했습니다.
+
 ![2023-07-29 22;07;49](https://github.com/StartDeveloperKim/ToyProject-Storage/assets/97887047/142ded77-6fc4-4f75-93b5-a8fd00df60bf)
 
 --------
@@ -127,7 +155,10 @@ RDB에서 검색을 하면 오버헤드가 심하다고 판단되어 Redis를 �
 --------
 
 ### CI/CD 배포자동화
-Github Action, S3, CodeDeploy를 활용하여 배포자동화를 구축하였습니다. 개발자가 코드를 Push하면 Github Action은 빌드와 테스트 후 S3로 코드들의 압축파일을 전송합니다.
+Github Action, S3, CodeDeploy를 활용하여 배포자동화를 구축하였습니다. 
+
+개발자가 코드를 Push하면 Github Action은 빌드와 테스트 후 S3로 코드들의 압축파일을 전송합니다.
+
 그리고 CodeDeploy에게 배포 요청을 하여 S3에 있는 압축파일을 EC2 인스턴스로 전달한 후 배포 스크립트를 동작시켜 기존의 프로세스를 종료한 후 새로운 빌드파일(jar)를 실행합니다.
 
 ![image](https://github.com/StartDeveloperKim/ToyProject-Storage/assets/97887047/d4750b5f-a27f-434a-bbbb-6eaa934e4761)
