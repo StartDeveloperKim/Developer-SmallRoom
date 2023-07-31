@@ -20,21 +20,28 @@ tagify.on('remove', function(e) {
     setSearchResult();
 });
 
-tagify.on('input', async function(e) {
-    tagify.whitelist = null;
-    const inputWord = e.detail.value;
-    console.log("입력문자 : " + inputWord);
-    if (inputWord.length === 0) {
+let debounceTimer;
+tagify.on('input', function(e) {
+    if (debounceTimer) {
+        clearTimeout(debounceTimer);
+    }
+    let inputData = e.detail.value;
+    debounceTimer = setTimeout(async function (e) {
         tagify.whitelist = null;
-        tagify.dropdown.hide();
-    }
-    try {
-        tagify.whitelist = await getAutoComplete(inputWord);
-        tagify.dropdown.show();
-        console.log("Tagify 자동완성 : "+tagify.whitelist);
-    } catch (err) {
-        alert("오류가 발생했습니다.");
-    }
+        const inputWord = inputData;
+        console.log("입력문자 : " + inputWord);
+        if (inputWord.length === 0) {
+            tagify.whitelist = null;
+            tagify.dropdown.hide();
+        }
+        try {
+            tagify.whitelist = await getAutoComplete(inputWord);
+            tagify.dropdown.show();
+            console.log("Tagify 자동완성 : " + tagify.whitelist);
+        } catch (err) {
+            alert("오류가 발생했습니다.");
+        }
+    }, 300);
 });
 
 let query;
