@@ -156,6 +156,15 @@
                     </i>
                 </a>
             </li>
+            <li class="mr-2">
+                <!-- a 태그와 span 태그에 text-blue-600가 들어가야 한다. a 태그 클래스에는 border-blue-600도 들어가야 한다.-->
+                <a th:sortby="hit" th:onclick="reSortArticles(this.getAttribute('sortby'))"
+                   class="cursor-pointer inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 group">
+                    <i class="fas fa-solid fa-regular fa-eye" style="color: #111212;"  id="hit-emoge">
+                        <span class="w-4 h-4 mr-2 text-gray-400 group-hover:text-blue-500" id="hit">조회 순</span>
+                    </i>
+                </a>
+            </li>
         </ul>
     </div>
 

@@ -159,7 +159,7 @@ $(window).scroll(function () {
     }
 });
 
-/*========================좋아요 순, 최신 순===============================*/
+/*========================좋아요 순, 최신 순, 조회 순===============================*/
 
 window.reSortArticles = function (sortBy) {
     if (standard === sortBy) {
@@ -173,15 +173,26 @@ window.reSortArticles = function (sortBy) {
     if (standard === "createAt") {
         $('#createAt-emoge').addClass(nowStandard);
         $('#likeCount-emoge').removeClass(nowStandard);
+        $('#hit-emoge').removeClass(nowStandard);
 
         $('#createAt').removeClass(prevStandard).addClass(nowStandard);
         $('#likeCount').removeClass(nowStandard).addClass(prevStandard);
-    }else{
+        $('#hit').removeClass(nowStandard).addClass(prevStandard);
+    }else if(standard === "likeCount"){
         $('#likeCount-emoge').addClass(nowStandard);
         $('#createAt-emoge').removeClass(nowStandard);
 
         $('#likeCount').removeClass(prevStandard).addClass(nowStandard);
         $('#createAt').removeClass(nowStandard).addClass(prevStandard);
+        $('#hit').removeClass(nowStandard).addClass(prevStandard);
+    }else{
+        $('#hit-emoge').addClass(nowStandard);
+        $('#createAt-emoge').removeClass(nowStandard);
+        $('#likeCount-emoge').removeClass(nowStandard);
+
+        $('#hit').removeClass(prevStandard).addClass(nowStandard);
+        $('#createAt').removeClass(nowStandard).addClass(prevStandard);
+        $('#likeCount').removeClass(nowStandard).addClass(prevStandard);
     }
 
     $('#content').empty();
