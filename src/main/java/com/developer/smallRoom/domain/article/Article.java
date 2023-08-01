@@ -11,9 +11,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -112,16 +112,7 @@ public class Article {
         this.likeCount = likeCount;
     }
 
-    public List<String> getTags() {
-        return this.boardTags.stream().map(BoardTag::getTagName)
-                .collect(Collectors.toList());
-    }
-
-    public String getTagsString() {
-        return this.tags;
-    }
-
-    public boolean isMemberArticle(Member member) {
-        return Objects.equals(this.member.getId(), member.getId());
+    public List<String> getTagsStringToList() {
+        return this.tags == null ? new ArrayList<>() : new ArrayList<>(Arrays.asList(tags.split(",")));
     }
 }
