@@ -59,7 +59,7 @@ public class WebSecurityConfig {
         http
                 .oauth2Login()
                 .redirectionEndpoint()
-                .baseUri("/oauth2/callback/*")
+                .baseUri("/oauth2/callback/**")
                 .and()
                 .successHandler(oAuth2SuccessHandler)
                 .userInfoEndpoint()
