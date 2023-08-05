@@ -9,6 +9,9 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -71,7 +74,7 @@ public class Article {
         this.content = content;
         this.subTitle = subTitle;
         this.thumbnailUrl = thumbnailUrl.isEmpty() ? "https://yozm.wishket.com/media/news/1674/image001.png" : thumbnailUrl;
-        this.githubLink = githubLink;
+        this.githubLink = isValidURL(githubLink) ? githubLink : "";
         this.tags = tags;
         setMember(member);
         this.hit = 0;
@@ -83,13 +86,22 @@ public class Article {
         member.getArticles().add(this);
     }
 
-    public void update(ArticleUpdateRequest request) {
+    public void update(ArticleUpdateRequest request){
         this.title = request.getTitle();
         this.subTitle = request.getSubTitle();
-        this.githubLink = request.getGitHubLink();
+        this.githubLink = isValidURL(request.getGitHubLink()) ? request.getGitHubLink() : "";
         this.content = request.getContent();
         this.thumbnailUrl = request.getThumbnailUrl();
         this.tags = request.tagsListToString();
+    }
+
+    private boolean isValidURL(String url) {
+        try {
+            new URL(url).toURI();
+            return true;
+        } catch (MalformedURLException | URISyntaxException e) {
+            return false;
+        }
     }
 
     public void increaseHit() {
