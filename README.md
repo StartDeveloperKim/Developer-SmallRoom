@@ -33,10 +33,11 @@
 ### “Infra”
 
 -   AWS EC2, S3, CodeDeploy, Elastic Cache, GithubAction
+-   Route53, Gabia, ELB
 
 ## 시스템 아키텍쳐
 
-![image](https://github.com/StartDeveloperKim/ToyProject-Storage/assets/97887047/98c2f1cf-7ab1-47db-9c65-6f79e6ddf771)
+![image](https://github.com/StartDeveloperKim/ToyProject-Storage/assets/97887047/ff206d48-ea83-4ffa-815b-09840898c547)
 
 ## 주요기능
 - [Github OAuth + JWT(AccessToken+RefreshToken)을 활용한 로그인](https://github.com/StartDeveloperKim/ToyProject-Storage#github-oauth--jwtaccesstokenrefreshtoken%EC%9D%84-%ED%99%9C%EC%9A%A9%ED%95%9C-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EA%B5%AC%ED%98%84)
@@ -53,6 +54,7 @@
     - [검색어 자동완성](https://github.com/StartDeveloperKim/ToyProject-Storage#%EA%B2%80%EC%83%89%EC%96%B4-%EC%9E%90%EB%8F%99%EC%99%84%EC%84%B1)
 - [조건별 정렬](https://github.com/StartDeveloperKim/ToyProject-Storage#%EC%B5%9C%EC%8B%A0-%EC%88%9C-%EC%A2%8B%EC%95%84%EC%9A%94-%EC%88%9C-%EC%A0%95%EB%A0%AC)
 - [CI/CD 배포자동화](https://github.com/StartDeveloperKim/ToyProject-Storage#cicd-%EB%B0%B0%ED%8F%AC%EC%9E%90%EB%8F%99%ED%99%94)
+- [HTTPS를 통한 보안성 증대]()
 - [Spring Rest Docs를 활용한 API문서 관리](https://github.com/StartDeveloperKim/ToyProject-Storage#spring-rest-docs%EB%A5%BC-%ED%99%9C%EC%9A%A9%ED%95%9C-api-%EB%AC%B8%EC%84%9C%EA%B4%80%EB%A6%AC)
 
 ## 주요기능 설명 및 동작화면
@@ -174,7 +176,14 @@ Github Action, S3, CodeDeploy를 활용하여 배포자동화를 구축하였습
 
 ![image](https://github.com/StartDeveloperKim/ToyProject-Storage/assets/97887047/d4750b5f-a27f-434a-bbbb-6eaa934e4761)
 
-현재는 배포 중에 사이트가 중단되는 문제가 존재하여 추후에 nginx를 사용하여 무중단 배포를 구현할 계획에 있습니다.
+---------
+
+### HTTPS를 사용하여 보안성 증가
+기존의 HTTP의 경우 평문통신이기 때문에 중간에 악의적인 사용자가 패킷을 탈취하면 문제가 발생할 수도 있습니다.
+
+특히 해당 서비스의 경우 JWT를 활용하여 인증/인가를 하기 때문에 패킷의 보안성은 더욱 중요하다고 생각했습니다.
+
+AWS에서 Certificate Manager와 Route53, ELB(Elastic Load Balancer)를 활용하여 HTTPS 통신을 하도록 했습니다.
 
 ---------
 
