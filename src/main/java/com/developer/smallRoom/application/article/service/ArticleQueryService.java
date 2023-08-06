@@ -1,5 +1,6 @@
 package com.developer.smallRoom.application.article.service;
 
+import com.developer.smallRoom.application.auth.jwt.MemberPrincipal;
 import com.developer.smallRoom.dto.article.response.ArticleResponse;
 import com.developer.smallRoom.dto.article.response.HomeArticleResponse;
 
@@ -9,7 +10,7 @@ public interface ArticleQueryService {
 
     ArticleResponse getArticleById(Long articleId);
 
-    ArticleResponse getArticleByIdAndMember(Long articleId, Long memberId);
+    ArticleResponse getArticleByIdAndMember(Long articleId, MemberPrincipal memberPrincipal);
 
     List<HomeArticleResponse> getHomeArticleResponses(int page, String standard);
 

@@ -35,13 +35,16 @@ public class ArticleRequest {
     @Size(min = 1, max = 20, message = "태그는 1개이상 20개까지 등록가능합니다.")
     private List<String> tags;
 
-    public ArticleRequest(String title, String subTitle, String content, String gitHubLink, String thumbnailUrl, List<String> tags) {
+    private String githubId;
+
+    public ArticleRequest(String title, String subTitle, String content, String gitHubLink, String thumbnailUrl, List<String> tags, String githubId) {
         this.title = title;
         this.subTitle = subTitle;
         this.content = content;
         this.gitHubLink = gitHubLink;
         this.thumbnailUrl = thumbnailUrl;
         this.tags = tags;
+        this.githubId = githubId;
     }
 
     public Article toArticle(Member member) {

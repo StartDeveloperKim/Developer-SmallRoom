@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>글 작성</title>
@@ -73,6 +74,10 @@
                         </div>
                         <!-- Modal body -->
                         <div class="p-6 space-y-6">
+                            <div class="mb-4" sec:authorize="hasRole('ROLE_ADMIN')" th:if="${article == null}">
+                                <input type="text" class="w-full p-2 border border-gray-300 rounded-md" placeholder="작성자 깃허브 아이디를 입력해주세요" id="githubId" required>
+                            </div>
+
                             <h6 class="font-bold">[제목]</h6>
                             <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400" id="temp-title">
 

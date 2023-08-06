@@ -1,5 +1,6 @@
 package com.developer.smallRoom.application.article.service;
 
+import com.developer.smallRoom.application.auth.jwt.MemberPrincipal;
 import com.developer.smallRoom.domain.article.Article;
 import com.developer.smallRoom.domain.article.repository.ArticleRepository;
 import com.developer.smallRoom.dto.article.response.ArticleResponse;
@@ -31,8 +32,11 @@ public class ArticleQueryServiceImpl implements ArticleQueryService {
     }
 
     @Override
-    public ArticleResponse getArticleByIdAndMember(Long articleId, Long memberId) {
-        return new ArticleResponse(findArticleByArticleAndMember(articleId, memberId));
+    public ArticleResponse getArticleByIdAndMember(Long articleId, MemberPrincipal memberPrincipal) {
+        if (memberPrincipal.isAdmin()) {
+            return new ArticleResponse(findArticleById(articleId));
+        }
+        return new ArticleResponse(findArticleByArticleAndMember(articleId, memberPrincipal.getMemberId()));
     }
 
     @Override

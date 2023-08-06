@@ -46,7 +46,7 @@ public class ArticleViewController {
     public String articleUpdateView(@PathVariable("id") Long id,
                                     @LoginMember MemberPrincipal memberPrincipal,
                                     Model model) {
-        ArticleResponse article = articleService.getArticleByIdAndMember(id, memberPrincipal.getMemberId());
+        ArticleResponse article = articleService.getArticleByIdAndMember(id, memberPrincipal);
         article.setUpdatable(memberPrincipal);
 
         model.addAttribute("article", article);

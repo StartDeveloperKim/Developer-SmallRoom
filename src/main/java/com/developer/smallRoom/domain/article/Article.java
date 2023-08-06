@@ -66,7 +66,7 @@ public class Article {
     private int likeCount;
 
     @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<ArticleLike> articleLikes = new ArrayList<>();
+    private final List<ArticleLike> articleLikes = new ArrayList<>();
 
     @Builder
     public Article(String title, String subTitle, String content, String thumbnailUrl, String githubLink, String tags, Member member) {

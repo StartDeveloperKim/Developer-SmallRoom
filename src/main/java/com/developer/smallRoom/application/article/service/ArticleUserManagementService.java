@@ -1,5 +1,6 @@
 package com.developer.smallRoom.application.article.service;
 
+import com.developer.smallRoom.application.auth.jwt.MemberPrincipal;
 import com.developer.smallRoom.domain.article.Article;
 import com.developer.smallRoom.domain.article.repository.ArticleRepository;
 import com.developer.smallRoom.domain.member.Member;
@@ -8,27 +9,29 @@ import com.developer.smallRoom.dto.article.request.ArticleRequest;
 import com.developer.smallRoom.dto.article.request.ArticleUpdateRequest;
 import com.developer.smallRoom.global.exception.auth.NotAuthorizationException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Transactional
 @Service
-public class ArticleManagementServiceImpl implements ArticleManagementService{
+@Qualifier("ArticleUserManagement")
+public class ArticleUserManagementService implements ArticleManagementService{
 
     private final ArticleRepository articleRepository;
     private final MemberRepository memberRepository;
 
     @Override
-    public Long saveArticle(Long memberId, ArticleRequest request) {
-        Member member = findMemberById(memberId);
+    public Long saveArticle(MemberPrincipal memberPrincipal, ArticleRequest request) {
+        Member member = findMemberById(memberPrincipal.getMemberId());
         Article savedArticle = articleRepository.save(request.toArticle(member));
         return savedArticle.getId();
     }
 
     @Override
-    public Long updateArticle(ArticleUpdateRequest request, Long memberId) {
-        Article article = articleRepository.findByIdAndMemberId(request.getArticleId(), memberId)
+    public Long updateArticle(ArticleUpdateRequest request, MemberPrincipal memberPrincipal) {
+        Article article = articleRepository.findByIdAndMemberId(request.getArticleId(), memberPrincipal.getMemberId())
                 .orElseThrow(() -> new NotAuthorizationException("잘못된 접근입니다."));
         article.update(request);
 
@@ -36,8 +39,8 @@ public class ArticleManagementServiceImpl implements ArticleManagementService{
     }
 
     @Override
-    public void deleteArticle(Long articleId, Long memberId) {
-        Member member = findMemberById(memberId);
+    public void deleteArticle(Long articleId, MemberPrincipal memberPrincipal) {
+        Member member = findMemberById(memberPrincipal.getMemberId());
         if (articleRepository.existsByIdAndMember(articleId, member)) {
             articleRepository.deleteById(articleId);
         }else{

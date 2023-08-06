@@ -114,6 +114,7 @@ function getRequestData() {
     const content = editor.getHTML();
     const subTitle = $('#sub-title').val();
     const thumbnail = $('#image-url').val();
+    const githubId = $('#githubId').val();
 
     const tempTags = tagify.value
     const tags = tempTags.map(obj => obj.value);
@@ -141,7 +142,8 @@ function getRequestData() {
         content: content,
         gitHubLink: gitHubLink,
         thumbnailUrl: thumbnail,
-        tags: tags
+        tags: tags,
+        githubId: githubId
     };
 }
 

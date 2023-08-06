@@ -33,6 +33,7 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
             customOAuth2Member.setMemberId(savedMember.getId());
         }else{
             // TODO :: 만약 사용자가 깃허브에서 닉네임을 변경했다면 여기서 Update 쿼리를 날려야 수정이 가능하다.
+
             customOAuth2Member.setRole(member.get().getRole());
             customOAuth2Member.setMemberId(member.get().getId());
         }

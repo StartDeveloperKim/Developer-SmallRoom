@@ -43,7 +43,7 @@ public class ArticleResponse {
     public void setUpdatable(MemberPrincipal memberPrincipal) {
         this.updatable = memberPrincipal != null
                 && (this.membergithubId.equals(memberPrincipal.getUsername())
-                || memberPrincipal.getRole().equals(Role.ADMIN.getKey()));
+                || memberPrincipal.isAdmin());
     }
 
 }

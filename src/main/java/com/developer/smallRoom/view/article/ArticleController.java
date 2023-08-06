@@ -2,6 +2,7 @@ package com.developer.smallRoom.view.article;
 
 import com.developer.smallRoom.application.article.service.ArticleManagementService;
 import com.developer.smallRoom.application.article.service.ArticleQueryService;
+import com.developer.smallRoom.application.article.service.ArticleServiceFactory;
 import com.developer.smallRoom.application.auth.jwt.MemberPrincipal;
 import com.developer.smallRoom.application.boardTag.BoardTagService;
 import com.developer.smallRoom.application.member.LoginMember;
@@ -25,7 +26,7 @@ import java.util.List;
 public class ArticleController {
 
     private final ArticleQueryService articleQueryService;
-    private final ArticleManagementService articleManagementService;
+    private final ArticleServiceFactory articleServiceFactory;
     private final BoardTagService boardTagService;
 
     @GetMapping
@@ -42,19 +43,19 @@ public class ArticleController {
                                                               @LoginMember MemberPrincipal memberPrincipal) {
         log.info("ArticleRequest : {} / {}", articleRequest.getTitle(), articleRequest.getTags());
 
-        Long savedArticleId = articleManagementService.saveArticle(memberPrincipal.getMemberId(), articleRequest);
+        ArticleManagementService articleManagementService = getArticleManagementService(memberPrincipal);
+        Long savedArticleId = articleManagementService.saveArticle(memberPrincipal, articleRequest);
         boardTagService.saveBoardTag(savedArticleId, articleRequest.getTags());
 
         return ResponseEntity.ok().body(new ArticleRetouchResponse<>("게시글이 등록되었습니다.", savedArticleId));
     }
 
-    // TODO :: 관리자가 게시글을 수정 및 삭제를 가능하게 하려면 분기처리하여 다른 서비스 코드를 생성해야 할 것 같다.
-    //  현재는 전달된 게시글 ID와 Member ID를 통해 게시글을 가져오는 로직이라서 변경이 필요한 듯 하다.
     @PutMapping
     public ResponseEntity<ArticleRetouchResponse<Long>> updateArticle(@Validated @RequestBody ArticleUpdateRequest request,
                                                                       @LoginMember MemberPrincipal memberPrincipal) {
         try {
-            Long articleId = articleManagementService.updateArticle(request, memberPrincipal.getMemberId());
+            ArticleManagementService articleManagementService = getArticleManagementService(memberPrincipal);
+            Long articleId = articleManagementService.updateArticle(request, memberPrincipal);
 
             log.info("ArticleUpdateRequest : {} / {}", request.getTitle(), request.getTags());
 
@@ -71,10 +72,15 @@ public class ArticleController {
     public ResponseEntity<ArticleRetouchResponse<Void>> removeArticle(@PathVariable("id") Long id,
                                                 @LoginMember MemberPrincipal memberPrincipal) {
         try {
-            articleManagementService.deleteArticle(id, memberPrincipal.getMemberId());
+            ArticleManagementService articleManagementService = getArticleManagementService(memberPrincipal);
+            articleManagementService.deleteArticle(id, memberPrincipal);
             return ResponseEntity.ok().body(new ArticleRetouchResponse<>("게시글이 삭제되었습니다."));
         } catch (NotAuthorizationException e) {
             return ResponseEntity.badRequest().body(new ArticleRetouchResponse<>(e.getMessage()));
         }
+    }
+
+    private ArticleManagementService getArticleManagementService(MemberPrincipal memberPrincipal) {
+        return articleServiceFactory.getArticleManagementService(memberPrincipal.isAdmin());
     }
 }

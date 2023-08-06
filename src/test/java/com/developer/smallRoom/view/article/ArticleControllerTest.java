@@ -121,7 +121,7 @@ class ArticleControllerTest extends ControllerTestBase {
         //given
         List<String> tags = Arrays.asList("tag1", "tag2");
 
-        ArticleRequest articleRequest = new ArticleRequest("title", "subTitle", "content", "githubLink", "thumbnail", tags);
+        ArticleRequest articleRequest = new ArticleRequest("title", "subTitle", "content", "githubLink", "thumbnail", tags, "githubId");
         String requestBody = objectMapper.writeValueAsString(articleRequest);
 
         //when
@@ -143,7 +143,8 @@ class ArticleControllerTest extends ControllerTestBase {
                         fieldWithPath("content").description("본문"),
                         fieldWithPath("gitHubLink").description("깃허브 링크"),
                         fieldWithPath("thumbnailUrl").description("썸네일 링크"),
-                        fieldWithPath("tags").description("태그")
+                        fieldWithPath("tags").description("태그"),
+                        fieldWithPath("githubId").description("깃허브 아이디")
                 ),
                 responseFields(
                         fieldWithPath("message").description("결과 메시지"),
