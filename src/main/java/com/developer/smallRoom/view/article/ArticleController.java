@@ -1,5 +1,7 @@
 package com.developer.smallRoom.view.article;
 
+import com.developer.smallRoom.application.article.service.ArticleManagementService;
+import com.developer.smallRoom.application.article.service.ArticleQueryService;
 import com.developer.smallRoom.application.article.service.ArticleService;
 import com.developer.smallRoom.application.auth.jwt.MemberPrincipal;
 import com.developer.smallRoom.application.boardTag.BoardTagService;
@@ -26,20 +28,16 @@ import java.util.List;
 @RequestMapping("/api/article")
 public class ArticleController {
 
-    private final ArticleService articleService;
+    private final ArticleQueryService articleQueryService;
+    private final ArticleManagementService articleManagementService;
     private final BoardTagService boardTagService;
-    private final ArticleLikeService articleLikeService;
-
-    /*
-    * TODO :: ControllerAdvice를 통해 다른사용자가 다른 사용자의 작성글에 접근하고자하면 이를 예외처리하여 막아야한다.
-    * */
 
     @GetMapping
     public ResponseEntity<List<HomeArticleResponse>> getaHomeArticle(@RequestParam(value = "page") int page,
                                                                @RequestParam(value = "standard") String standard) {
         log.info("page = {} // standard = {}", page, standard);
 
-        List<HomeArticleResponse> homeArticleResponses = articleService.getHomeArticleResponses(page, standard);
+        List<HomeArticleResponse> homeArticleResponses = articleQueryService.getHomeArticleResponses(page, standard);
         return ResponseEntity.ok().body(homeArticleResponses);
     }
 
@@ -47,7 +45,8 @@ public class ArticleController {
     public ResponseEntity<ArticleRetouchResponse<Long>> postArticle(@Validated @RequestBody ArticleRequest articleRequest,
                                                               @LoginMember MemberPrincipal memberPrincipal) {
         log.info("ArticleRequest : {} / {}", articleRequest.getTitle(), articleRequest.getTags());
-        Long savedArticleId = articleService.saveArticle(memberPrincipal.getMemberId(), articleRequest);
+
+        Long savedArticleId = articleManagementService.saveArticle(memberPrincipal.getMemberId(), articleRequest);
         boardTagService.saveBoardTag(savedArticleId, articleRequest.getTags());
 
         return ResponseEntity.ok().body(new ArticleRetouchResponse<>("게시글이 등록되었습니다.", savedArticleId));
@@ -59,8 +58,10 @@ public class ArticleController {
     public ResponseEntity<ArticleRetouchResponse<Long>> updateArticle(@Validated @RequestBody ArticleUpdateRequest request,
                                                                       @LoginMember MemberPrincipal memberPrincipal) {
         try {
-            Long articleId = articleService.updateArticle(request, memberPrincipal.getMemberId());
+            Long articleId = articleManagementService.updateArticle(request, memberPrincipal.getMemberId());
+
             log.info("ArticleUpdateRequest : {} / {}", request.getTitle(), request.getTags());
+
             boardTagService.updateBoardTag(request.getArticleId(), request.getTags());
             return ResponseEntity.ok().body(new ArticleRetouchResponse<>("게시글이 수정되었습니다.", articleId));
         } catch (NotAuthorizationException e) {
@@ -74,7 +75,7 @@ public class ArticleController {
     public ResponseEntity<ArticleRetouchResponse<Void>> removeArticle(@PathVariable("id") Long id,
                                                 @LoginMember MemberPrincipal memberPrincipal) {
         try {
-            articleService.deleteArticle(id, memberPrincipal.getMemberId());
+            articleManagementService.deleteArticle(id, memberPrincipal.getMemberId());
             return ResponseEntity.ok().body(new ArticleRetouchResponse<>("게시글이 삭제되었습니다."));
         } catch (NotAuthorizationException e) {
             return ResponseEntity.badRequest().body(new ArticleRetouchResponse<>(e.getMessage()));

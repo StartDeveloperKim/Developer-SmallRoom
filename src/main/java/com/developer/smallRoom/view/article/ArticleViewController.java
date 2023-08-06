@@ -1,5 +1,6 @@
 package com.developer.smallRoom.view.article;
 
+import com.developer.smallRoom.application.article.service.ArticleQueryService;
 import com.developer.smallRoom.application.article.service.ArticleService;
 import com.developer.smallRoom.application.auth.jwt.MemberPrincipal;
 import com.developer.smallRoom.application.boardTag.BoardTagService;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/article")
 public class ArticleViewController {
 
-    private final ArticleService articleService;
+    private final ArticleQueryService articleService;
     private final ArticleLikeService articleLikeService;
 
     @GetMapping("/{id}")

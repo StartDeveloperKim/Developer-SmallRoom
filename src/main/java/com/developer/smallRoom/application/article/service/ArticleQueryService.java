@@ -1,19 +1,11 @@
 package com.developer.smallRoom.application.article.service;
 
-import com.developer.smallRoom.dto.article.request.ArticleRequest;
-import com.developer.smallRoom.dto.article.request.ArticleUpdateRequest;
 import com.developer.smallRoom.dto.article.response.ArticleResponse;
 import com.developer.smallRoom.dto.article.response.HomeArticleResponse;
 
 import java.util.List;
 
-public interface ArticleService {
-
-    Long saveArticle(Long memberId, ArticleRequest request);
-
-    Long updateArticle(ArticleUpdateRequest request, Long memberId);
-
-    void deleteArticle(Long articleId, Long memberId);
+public interface ArticleQueryService {
 
     ArticleResponse getArticleById(Long articleId);
 
