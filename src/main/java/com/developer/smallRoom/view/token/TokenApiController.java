@@ -1,6 +1,5 @@
 package com.developer.smallRoom.view.token;
 
-import com.developer.smallRoom.application.auth.jwt.TokenInfo;
 import com.developer.smallRoom.application.auth.jwt.TokenService;
 import com.developer.smallRoom.global.util.CookieUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,9 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.time.Duration;
-
-import static com.developer.smallRoom.application.auth.jwt.TokenInfo.*;
+import static com.developer.smallRoom.application.auth.jwt.TokenInfo.ACCESS_TOKEN;
+import static com.developer.smallRoom.application.auth.jwt.TokenInfo.REFRESH_TOKEN;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -26,12 +24,17 @@ public class TokenApiController {
     @GetMapping
     public String generateNewAccessToken(HttpServletRequest request,
                                          HttpServletResponse response) {
-        String refreshToken = CookieUtil.getCookie(request, REFRESH_TOKEN.getCookieName());
-        String newAccessToken = tokenService.createNewAccessToken(refreshToken);
+        try {
+            String refreshToken = CookieUtil.getCookie(request, REFRESH_TOKEN.getCookieName());
+            String newAccessToken = tokenService.createNewAccessToken(refreshToken);
 
-        int cookieMaxAge = (int) ACCESS_TOKEN.getExpireDuration().toSeconds();
-        CookieUtil.addCookie(response, ACCESS_TOKEN.getCookieName(), newAccessToken, cookieMaxAge);
+            int cookieMaxAge = (int) ACCESS_TOKEN.getExpireDuration().toSeconds();
+            CookieUtil.addCookie(response, ACCESS_TOKEN.getCookieName(), newAccessToken, cookieMaxAge);
 
-        return "redirect:/";
+            return "redirect:/";
+        } catch (IllegalArgumentException e) {
+            return "redirect:/logout";
+        }
+
     }
 }
