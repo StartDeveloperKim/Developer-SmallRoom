@@ -37,7 +37,8 @@
 
 ## 시스템 아키텍쳐
 
-![image](https://github.com/StartDeveloperKim/ToyProject-Storage/assets/97887047/ff206d48-ea83-4ffa-815b-09840898c547)
+![image](https://github.com/StartDeveloperKim/ToyProject-Storage/assets/97887047/cced5337-f082-449d-b0ad-1e4af0ef7879)
+
 
 ## 주요기능
 - [Github OAuth + JWT(AccessToken+RefreshToken)을 활용한 로그인](https://github.com/StartDeveloperKim/ToyProject-Storage#github-oauth--jwtaccesstokenrefreshtoken%EC%9D%84-%ED%99%9C%EC%9A%A9%ED%95%9C-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EA%B5%AC%ED%98%84)
