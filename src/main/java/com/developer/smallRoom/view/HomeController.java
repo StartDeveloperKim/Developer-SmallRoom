@@ -1,10 +1,5 @@
 package com.developer.smallRoom.view;
 
-import com.developer.smallRoom.application.article.service.ArticleService;
-import com.developer.smallRoom.application.auth.jwt.MemberPrincipal;
-import com.developer.smallRoom.application.like.ArticleLikeService;
-import com.developer.smallRoom.application.member.LoginMember;
-import com.developer.smallRoom.domain.like.ArticleLikeRepository;
 import com.developer.smallRoom.dto.article.response.HomeArticleResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

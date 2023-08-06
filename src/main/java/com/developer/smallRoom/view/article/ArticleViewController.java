@@ -1,13 +1,10 @@
 package com.developer.smallRoom.view.article;
 
 import com.developer.smallRoom.application.article.service.ArticleQueryService;
-import com.developer.smallRoom.application.article.service.ArticleService;
 import com.developer.smallRoom.application.auth.jwt.MemberPrincipal;
-import com.developer.smallRoom.application.boardTag.BoardTagService;
 import com.developer.smallRoom.application.like.ArticleLikeService;
 import com.developer.smallRoom.application.member.LoginMember;
 import com.developer.smallRoom.dto.article.response.ArticleResponse;
-import com.developer.smallRoom.global.exception.auth.NotAuthorizationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

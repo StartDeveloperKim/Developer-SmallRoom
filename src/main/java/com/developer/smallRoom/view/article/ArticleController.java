@@ -2,18 +2,14 @@ package com.developer.smallRoom.view.article;
 
 import com.developer.smallRoom.application.article.service.ArticleManagementService;
 import com.developer.smallRoom.application.article.service.ArticleQueryService;
-import com.developer.smallRoom.application.article.service.ArticleService;
 import com.developer.smallRoom.application.auth.jwt.MemberPrincipal;
 import com.developer.smallRoom.application.boardTag.BoardTagService;
-import com.developer.smallRoom.application.like.ArticleLikeService;
 import com.developer.smallRoom.application.member.LoginMember;
-import com.developer.smallRoom.domain.like.ArticleLike;
 import com.developer.smallRoom.dto.article.request.ArticleRequest;
 import com.developer.smallRoom.dto.article.request.ArticleUpdateRequest;
 import com.developer.smallRoom.dto.article.response.ArticleRetouchResponse;
 import com.developer.smallRoom.dto.article.response.HomeArticleResponse;
 import com.developer.smallRoom.global.exception.auth.NotAuthorizationException;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
