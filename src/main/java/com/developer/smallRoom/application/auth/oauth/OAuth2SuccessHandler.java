@@ -4,6 +4,7 @@ import com.developer.smallRoom.application.auth.jwt.TokenInfo;
 import com.developer.smallRoom.application.auth.jwt.TokenProvider;
 import com.developer.smallRoom.application.auth.jwt.refreshToken.RefreshToken;
 import com.developer.smallRoom.application.auth.jwt.refreshToken.RefreshTokenRepository;
+import com.developer.smallRoom.config.RedirectPathProperties;
 import com.developer.smallRoom.global.util.CookieUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,12 +24,10 @@ import static com.developer.smallRoom.application.auth.jwt.TokenInfo.*;
 
 @Slf4j
 @RequiredArgsConstructor
-@PropertySource("classpath:application.properties")
 @Component
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    @Value("${redirect.uri}")
-    private String REDIRECT_PATH;
+    private final RedirectPathProperties REDIRECT_PATH;
 
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -46,7 +45,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         addAccessTokenToCookie(request, response, accessToken);
 
         clearAuthenticationAttributes(request, response);
-        getRedirectStrategy().sendRedirect(request, response, REDIRECT_PATH);
+        getRedirectStrategy().sendRedirect(request, response, REDIRECT_PATH.getIndex());
     }
 
     private void saveRefreshToken(Long memberId, String newRefreshToken) {

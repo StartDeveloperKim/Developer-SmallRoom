@@ -2,6 +2,7 @@ package com.developer.smallRoom.application.auth.jwt;
 
 import com.developer.smallRoom.application.auth.jwt.refreshToken.RefreshToken;
 import com.developer.smallRoom.application.auth.jwt.refreshToken.RefreshTokenRepository;
+import com.developer.smallRoom.config.RedirectPathProperties;
 import com.developer.smallRoom.global.util.CookieUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
@@ -24,17 +25,12 @@ import static com.developer.smallRoom.application.auth.jwt.TokenInfo.*;
 
 @Slf4j
 @RequiredArgsConstructor
-@PropertySource("classpath:application.properties")
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
-    @Value("${redirect.logout.uri}")
-    private String LOGOUT_URL;
-
-    @Value("${redirect.token.uri}")
-    private String TOKEN_URL;
+    private final RedirectPathProperties REDIRECT_URI;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -66,12 +62,12 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             Optional<RefreshToken> refreshTokenEntity = refreshTokenRepository.findByRefreshToken(refreshToken);
             if (refreshTokenEntity.isPresent() && tokenProvider.validToken(refreshToken)) {
                 log.info("valid refreshToken / redirect /api/token");
-                response.sendRedirect(TOKEN_URL);
+                response.sendRedirect(REDIRECT_URI.getToken());
             } else {
-                response.sendRedirect(LOGOUT_URL);
+                response.sendRedirect(REDIRECT_URI.getLogout());
             }
         }else{
-            response.sendRedirect(LOGOUT_URL);
+            response.sendRedirect(REDIRECT_URI.getLogout());
         }
     }
 

@@ -27,6 +27,7 @@ public class WebSecurityConfig {
     private final OAuth2UserCustomService oAuth2UserCustomService;
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final RedirectPathProperties redirectPathProperties;
 
     @Bean
     public WebSecurityCustomizer configure() {
@@ -65,7 +66,7 @@ public class WebSecurityConfig {
                 .userInfoEndpoint()
                 .userService(oAuth2UserCustomService);
 
-        http.addFilterBefore(new TokenAuthenticationFilter(tokenProvider, refreshTokenRepository), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new TokenAuthenticationFilter(tokenProvider, refreshTokenRepository, redirectPathProperties), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
