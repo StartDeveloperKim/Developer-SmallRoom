@@ -4,6 +4,7 @@ import com.developer.smallRoom.application.auth.jwt.JwtProperties;
 import com.developer.smallRoom.application.auth.jwt.TokenAuthenticationFilter;
 import com.developer.smallRoom.application.auth.jwt.TokenProvider;
 import com.developer.smallRoom.application.auth.jwt.refreshToken.RefreshTokenRepository;
+import com.developer.smallRoom.config.RedirectPathProperties;
 import com.developer.smallRoom.domain.article.Article;
 import com.developer.smallRoom.domain.article.repository.ArticleRepository;
 import com.developer.smallRoom.domain.like.ArticleLike;
@@ -54,6 +55,8 @@ class ArticleLikeControllerTest extends ControllerTestBase {
 
     @Autowired
     private TokenProvider tokenProvider;
+    @Autowired
+    private RedirectPathProperties redirectPathProperties;
     @MockBean
     private JwtProperties jwtProperties;
     private final TestJwtProperties testJwtProperties = new TestJwtProperties();
@@ -66,7 +69,7 @@ class ArticleLikeControllerTest extends ControllerTestBase {
     void setup(RestDocumentationContextProvider restDocumentationContextProvider) {
         this.mvc = MockMvcBuilders.webAppContextSetup(context)
                 .apply(documentationConfiguration(restDocumentationContextProvider))
-                .addFilter(new TokenAuthenticationFilter(tokenProvider, refreshTokenRepository)).build();
+                .addFilter(new TokenAuthenticationFilter(tokenProvider, refreshTokenRepository, redirectPathProperties)).build();
         articleRepository.deleteAll();
         memberRepository.deleteAll();
         articleLikeRepository.deleteAll();
