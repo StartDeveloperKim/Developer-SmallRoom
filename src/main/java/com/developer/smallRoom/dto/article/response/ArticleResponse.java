@@ -41,9 +41,11 @@ public class ArticleResponse {
     }
 
     public void setUpdatable(MemberPrincipal memberPrincipal) {
-        this.updatable = memberPrincipal != null
-                && (this.membergithubId.equals(memberPrincipal.getUsername())
-                || memberPrincipal.isAdmin());
+        this.updatable = isUpdatable(memberPrincipal);
+    }
+
+    private boolean isUpdatable(MemberPrincipal memberPrincipal) {
+        return memberPrincipal != null && (this.membergithubId.equals(memberPrincipal.getUsername()) || memberPrincipal.isAdmin());
     }
 
 }

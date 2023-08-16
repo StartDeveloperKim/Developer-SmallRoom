@@ -27,11 +27,11 @@ public class ArticleViewController {
         ArticleResponse article = articleService.getArticleById(id);
         article.setUpdatable(memberPrincipal);
 
-        model.addAttribute("article", article);
+        addModel("article", model, article);
 
         if (memberPrincipal != null) {
             boolean isLike = articleLikeService.existArticleLike(id, memberPrincipal.getMemberId());
-            model.addAttribute("isLike", isLike);
+            addModel("isLike", model, isLike);
         }
 
         return "articleDetail";
@@ -49,7 +49,11 @@ public class ArticleViewController {
         ArticleResponse article = articleService.getArticleByIdAndMember(id, memberPrincipal);
         article.setUpdatable(memberPrincipal);
 
-        model.addAttribute("article", article);
+        addModel("article", model, article);
         return "articlePost";
+    }
+
+    private <T> void addModel(String key, Model model, T object) {
+        model.addAttribute(key, object);
     }
 }

@@ -31,21 +31,27 @@ public class ArticleUserManagementService implements ArticleManagementService{
 
     @Override
     public Long updateArticle(ArticleUpdateRequest request, MemberPrincipal memberPrincipal) {
-        Article article = articleRepository.findByIdAndMemberId(request.getArticleId(), memberPrincipal.getMemberId())
-                .orElseThrow(() -> new NotAuthorizationException("잘못된 접근입니다."));
+        Article article = getArticleByUpdateRequest(request, memberPrincipal);
         article.update(request);
 
         return article.getId();
     }
 
+    private Article getArticleByUpdateRequest(ArticleUpdateRequest request, MemberPrincipal memberPrincipal) {
+        return articleRepository.findByIdAndMemberId(request.getArticleId(), memberPrincipal.getMemberId())
+                .orElseThrow(() -> new NotAuthorizationException("잘못된 접근입니다."));
+    }
+
     @Override
     public void deleteArticle(Long articleId, MemberPrincipal memberPrincipal) {
         Member member = findMemberById(memberPrincipal.getMemberId());
-        if (articleRepository.existsByIdAndMember(articleId, member)) {
+        if (isExistsByIdAndMember(articleId, member))
             articleRepository.deleteById(articleId);
-        }else{
+        else
             throw new NotAuthorizationException("잘못된 접근입니다.");
-        }
+    }
+    private boolean isExistsByIdAndMember(Long articleId, Member member) {
+        return articleRepository.existsByIdAndMember(articleId, member);
     }
 
     private Member findMemberById(Long memberId) {

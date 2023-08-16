@@ -28,11 +28,11 @@ public class ArticleAdminManagementService implements ArticleManagementService{
         Optional<Member> findMember = memberRepository.findByGitHubId(request.getGithubId());
 
         Member member;
-        if (findMember.isEmpty()) {
+        if (findMember.isEmpty())
             member = memberRepository.save(Member.builder().gitHubId(request.getGithubId()).build());
-        } else {
+        else
             member = findMember.get();
-        }
+
         return articleRepository.save(request.toArticle(member)).getId();
     }
 

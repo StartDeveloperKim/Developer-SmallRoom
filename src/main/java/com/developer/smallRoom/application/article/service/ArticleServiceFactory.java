@@ -18,10 +18,9 @@ public class ArticleServiceFactory {
     }
 
     public ArticleManagementService getArticleManagementService(boolean isAdmin) {
-        if (isAdmin) {
+        if (isAdmin)
             return this.articleAdminManagementService;
-        } else {
+        else
             return this.articleUserManagementService;
-        }
     }
 }
